@@ -15,10 +15,10 @@ import { CommonModule } from '@angular/common';
           <div class="space-y-4 md:col-span-1">
             <div class="flex flex-col">
               <span class="font-serif text-2xl font-bold tracking-tight text-[#CFEFC0]">MOI SPECIAL</span>
-              <span class="label-caps text-[9px] text-[#B87333] tracking-[0.2em]">Şanlıurfa • Artisan Patisserie</span>
+              <span class="label-caps text-[9px] text-[#B87333] tracking-[0.2em]">Şanlıurfa • Artisan Patisserie & Bakery</span>
             </div>
             <p class="font-sans text-xs text-[#D6C9B6]/80 leading-relaxed">
-              Tarihin ve lezzetin buluştuğu nokta. Geleneksel taş fırın ustalığı ve Fransız patisserie zarafeti.
+              Tarihin ve lezzetin buluştuğu nokta. Geleneksel odun taş fırın ustalığı ve Fransız patisserie zarafeti.
             </p>
           </div>
 
@@ -47,8 +47,8 @@ import { CommonModule } from '@angular/common';
           <div class="space-y-3">
             <h4 class="label-caps text-xs text-[#CFEFC0]">İletişim & Konum</h4>
             <p class="text-xs text-[#D6C9B6]/80 leading-relaxed">
-              Karaköprü / Şanlıurfa<br />
-              Rezervasyon: +90 (414) 000 00 00<br />
+              <strong>Sırrın Karşıyaka Mah., Kanalboyu</strong><br />
+              Haliliye / Şanlıurfa<br />
               info&#64;moispecial.com
             </p>
 
@@ -69,11 +69,11 @@ import { CommonModule } from '@angular/common';
 
         <!-- Copyright Bottom -->
         <div class="pt-8 flex flex-col sm:flex-row items-center justify-between text-[11px] text-[#D6C9B6]/50">
-          <p>© 2026 Moi Special Artisan Patisserie. Tüm hakları saklıdır.</p>
+          <p>© 2026 Moi Special (Moi Fırın). Tüm hakları saklıdır.</p>
           <div class="flex space-x-6 mt-4 sm:mt-0">
             <a href="#" class="hover:text-white transition-colors">Gizlilik Politikası</a>
             <a href="#" class="hover:text-white transition-colors">Kullanım Şartları</a>
-            <a href="#" class="hover:text-white transition-colors">Instagram</a>
+            <a href="https://share.google/P5BMtr0gzI00D3TQj" target="_blank" class="hover:text-white transition-colors">Google Haritalar</a>
           </div>
         </div>
 
