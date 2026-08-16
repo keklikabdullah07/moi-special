@@ -1,7 +1,9 @@
-import { Component, inject, signal, effect, OnDestroy } from '@angular/core';
+import { Component, inject, OnDestroy, effect } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { StoryService } from '../../services/story.service';
+import { ImageUploadService } from '../../services/image-upload.service';
+import { ToastService } from '../../services/toast.service';
 
 @Component({
   selector: 'app-story-modal',
@@ -137,20 +139,31 @@ import { StoryService } from '../../services/story.service';
                 class="w-full px-4 py-2.5 rounded-xl bg-[#EDE4D8]/50 border border-[#D6C9B6] text-xs text-[#1F1B14]"></textarea>
             </div>
 
-            <div>
-              <label class="block label-caps text-[10px] text-[#434840] mb-1">Görsel URL (İsteğe Bağlı)</label>
-              <input 
-                type="text" 
-                [(ngModel)]="imageUrl" 
-                name="imageUrl" 
-                placeholder="assets/croissant.jpg"
-                class="w-full px-4 py-2.5 rounded-xl bg-[#EDE4D8]/50 border border-[#D6C9B6] text-xs text-[#1F1B14]" />
+            <!-- STORY IMAGE UPLOADER -->
+            <div class="space-y-2 p-3 rounded-2xl bg-[#EDE4D8]/60 border border-[#D6C9B6]">
+              <label class="label-caps text-[10px] text-[#B87333] font-bold block">
+                📁 Hikaye Fotoğrafı Yükle
+              </label>
+              
+              <div class="flex items-center gap-3">
+                @if (imageUrl) {
+                  <div class="w-14 h-14 rounded-xl overflow-hidden border border-[#D6C9B6] shrink-0 bg-white shadow-xs">
+                    <img [src]="imageUrl" alt="Önizleme" class="w-full h-full object-cover" />
+                  </div>
+                }
+                <div class="flex-1">
+                  <label class="px-4 py-2 rounded-full bg-[#526E48] hover:bg-[#3B5532] text-white text-[11px] font-bold uppercase tracking-wider shadow-sm inline-block cursor-pointer active:scale-95 transition-all">
+                    <span>📁 Galeriden Fotoğraf Seç</span>
+                    <input type="file" accept="image/*" (change)="onStoryFileSelected($event)" class="hidden" />
+                  </label>
+                </div>
+              </div>
             </div>
 
             <button 
               type="submit"
-              class="w-full py-3 rounded-full bg-[#B87333] hover:bg-[#784000] text-white font-semibold text-xs uppercase tracking-wider shadow-md">
-              Hikayeyi Yayınla 🚀
+              class="w-full py-3 rounded-full bg-[#B87333] hover:bg-[#784000] text-white font-semibold text-xs uppercase tracking-wider shadow-md cursor-pointer">
+              Hikayeyi Canlı Yayınla 🚀
             </button>
           </form>
 
@@ -161,6 +174,8 @@ import { StoryService } from '../../services/story.service';
 })
 export class StoryModalComponent implements OnDestroy {
   public readonly storyService = inject(StoryService);
+  public readonly imageUploadService = inject(ImageUploadService);
+  public readonly toastService = inject(ToastService);
 
   public groupName = 'Günün Tazesi';
   public title = 'Sıcak Çıkarım';
@@ -189,6 +204,17 @@ export class StoryModalComponent implements OnDestroy {
     return group.stories[this.storyService.activeStoryIndex()] || null;
   }
 
+  public async onStoryFileSelected(event: Event): Promise<void> {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files[0]) {
+      try {
+        const base64 = await this.imageUploadService.fileToBase64(input.files[0]);
+        this.imageUrl = base64;
+        this.toastService.show('📁 Hikaye Fotoğrafı Seçildi! 📸');
+      } catch (e) {}
+    }
+  }
+
   public startAutoTimer(): void {
     this.clearTimer();
     this.timer = setTimeout(() => {
@@ -206,6 +232,7 @@ export class StoryModalComponent implements OnDestroy {
   public onAddStorySubmit(): void {
     if (this.groupName && this.title) {
       this.storyService.addStory(this.groupName, this.title, this.caption, this.imageUrl);
+      this.toastService.show('Yeni Hikaye Başarıyla Yayınlandı! 📸');
     }
   }
 

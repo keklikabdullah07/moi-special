@@ -1,9 +1,10 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { SiteAssetService } from '../../services/site-asset.service';
-import { ProductService, Product } from '../../services/product.service';
+import { ProductService } from '../../services/product.service';
 import { ToastService } from '../../services/toast.service';
+import { ImageUploadService } from '../../services/image-upload.service';
 
 @Component({
   selector: 'app-live-section-editor-modal',
@@ -28,7 +29,7 @@ import { ToastService } from '../../services/toast.service';
           <div class="flex items-center justify-between border-b border-[#D6C9B6]/60 pb-4">
             <div class="space-y-0.5">
               <span class="label-caps text-[9px] text-[#B87333] font-bold">
-                👑 Abdullah Keklik • WebCMS Modül Editörü
+                👑 Abdullah Keklik • Görsel Yüklemeli WebCMS Editörü
               </span>
               <h3 class="font-serif text-2xl font-bold text-[#1F1B14]">
                 @if (assetService.activeSectionEditing() === 'header') {
@@ -89,7 +90,7 @@ import { ToastService } from '../../services/toast.service';
             </form>
           }
 
-          <!-- SECTION 2: MENU PRODUCT EDIT / ADD FORM -->
+          <!-- SECTION 2: MENU PRODUCT EDIT / ADD FORM WITH FILE UPLOADER -->
           @if (assetService.activeSectionEditing() === 'menu') {
             <form (ngSubmit)="saveProductForm()" class="space-y-4">
               <div class="space-y-1">
@@ -113,14 +114,45 @@ import { ToastService } from '../../services/toast.service';
                 </div>
               </div>
 
-              <div class="space-y-1">
-                <label class="label-caps text-[10px] text-[#434840]">Ürün Görsel Yolu (URL)</label>
-                <input type="text" [(ngModel)]="prodImage" name="prodImage" class="w-full px-4 py-2.5 rounded-2xl bg-[#EDE4D8]/50 border border-[#D6C9B6] text-xs text-[#1F1B14]" />
+              <!-- IMAGE FILE UPLOADER WIDGET -->
+              <div class="space-y-2 p-3 rounded-2xl bg-[#EDE4D8]/60 border border-[#D6C9B6]">
+                <label class="label-caps text-[10px] text-[#B87333] font-bold block">
+                  📁 Görsel Yükle (Cihazınızdan Seçin)
+                </label>
+                
+                <div class="flex items-center gap-3">
+                  @if (prodImage) {
+                    <div class="w-16 h-16 rounded-xl overflow-hidden border border-[#D6C9B6] shrink-0 bg-white shadow-xs">
+                      <img [src]="prodImage" alt="Önizleme" class="w-full h-full object-cover" />
+                    </div>
+                  }
+                  <div class="flex-1 space-y-1">
+                    <label class="px-4 py-2 rounded-full bg-[#526E48] hover:bg-[#3B5532] text-white text-[11px] font-bold uppercase tracking-wider shadow-sm inline-block cursor-pointer active:scale-95 transition-all">
+                      <span>📁 Fotoğraf Seç</span>
+                      <input type="file" accept="image/*" (change)="onFileSelected($event, 'product')" class="hidden" />
+                    </label>
+                    <span class="text-[9px] text-[#434840] block">Format: JPG, PNG, WEBP, AVIF</span>
+                  </div>
+                </div>
+
+                <div class="pt-1">
+                  <span class="label-caps text-[9px] text-[#434840] block mb-1">Veya Hazır Galeriden Seçin:</span>
+                  <div class="flex gap-1.5 overflow-x-auto no-scrollbar">
+                    @for (preset of imageUploadService.presetGallery; track preset.id) {
+                      <button 
+                        type="button" 
+                        (click)="prodImage = preset.url" 
+                        class="px-2.5 py-1 rounded-full bg-white border border-[#D6C9B6] text-[9px] font-medium text-[#1F1B14] hover:bg-[#CFEFC0] transition-colors cursor-pointer whitespace-nowrap">
+                        {{ preset.title }}
+                      </button>
+                    }
+                  </div>
+                </div>
               </div>
 
               <div class="space-y-1">
                 <label class="label-caps text-[10px] text-[#434840]">Açıklama</label>
-                <textarea [(ngModel)]="prodDesc" name="prodDesc" rows="3" class="w-full px-4 py-2.5 rounded-2xl bg-[#EDE4D8]/50 border border-[#D6C9B6] text-xs text-[#1F1B14]"></textarea>
+                <textarea [(ngModel)]="prodDesc" name="prodDesc" rows="2" class="w-full px-4 py-2.5 rounded-2xl bg-[#EDE4D8]/50 border border-[#D6C9B6] text-xs text-[#1F1B14]"></textarea>
               </div>
 
               <button 
@@ -131,7 +163,7 @@ import { ToastService } from '../../services/toast.service';
             </form>
           }
 
-          <!-- SECTION 3: HERO EDIT FORM -->
+          <!-- SECTION 3: HERO EDIT FORM WITH FILE UPLOADER -->
           @if (assetService.activeSectionEditing() === 'hero') {
             <form (ngSubmit)="saveHeroSection()" class="space-y-4">
               <div class="space-y-1">
@@ -149,9 +181,25 @@ import { ToastService } from '../../services/toast.service';
                 <textarea [(ngModel)]="heroSubtitle" name="heroSubtitle" rows="3" class="w-full px-4 py-2.5 rounded-2xl bg-[#EDE4D8]/50 border border-[#D6C9B6] text-xs text-[#1F1B14]"></textarea>
               </div>
 
-              <div class="space-y-1">
-                <label class="label-caps text-[10px] text-[#434840]">Öne Çıkan Croissant Görsel Yolu</label>
-                <input type="text" [(ngModel)]="heroImg" name="heroImg" class="w-full px-4 py-2.5 rounded-2xl bg-[#EDE4D8]/50 border border-[#D6C9B6] text-xs text-[#1F1B14]" />
+              <!-- HERO IMAGE FILE UPLOADER -->
+              <div class="space-y-2 p-3 rounded-2xl bg-[#EDE4D8]/60 border border-[#D6C9B6]">
+                <label class="label-caps text-[10px] text-[#B87333] font-bold block">
+                  📁 Hero Croissant Görseli Yükle
+                </label>
+                
+                <div class="flex items-center gap-3">
+                  @if (heroImg) {
+                    <div class="w-16 h-16 rounded-xl overflow-hidden border border-[#D6C9B6] shrink-0 bg-white shadow-xs">
+                      <img [src]="heroImg" alt="Önizleme" class="w-full h-full object-cover" />
+                    </div>
+                  }
+                  <div class="flex-1 space-y-1">
+                    <label class="px-4 py-2 rounded-full bg-[#526E48] hover:bg-[#3B5532] text-white text-[11px] font-bold uppercase tracking-wider shadow-sm inline-block cursor-pointer active:scale-95 transition-all">
+                      <span>📁 Hero Fotoğrafı Seç</span>
+                      <input type="file" accept="image/*" (change)="onFileSelected($event, 'hero')" class="hidden" />
+                    </label>
+                  </div>
+                </div>
               </div>
 
               <button 
@@ -162,7 +210,7 @@ import { ToastService } from '../../services/toast.service';
             </form>
           }
 
-          <!-- SECTION 4: ABOUT EDIT FORM -->
+          <!-- SECTION 4: ABOUT EDIT FORM WITH FILE UPLOADER -->
           @if (assetService.activeSectionEditing() === 'about') {
             <form (ngSubmit)="saveAboutSection()" class="space-y-4">
               <div class="space-y-1">
@@ -175,9 +223,25 @@ import { ToastService } from '../../services/toast.service';
                 <textarea [(ngModel)]="aboutBody" name="aboutBody" rows="4" class="w-full px-4 py-2.5 rounded-2xl bg-[#EDE4D8]/50 border border-[#D6C9B6] text-xs text-[#1F1B14]"></textarea>
               </div>
 
-              <div class="space-y-1">
-                <label class="label-caps text-[10px] text-[#434840]">Fırın Fotoğraf Görsel Yolu</label>
-                <input type="text" [(ngModel)]="aboutImg" name="aboutImg" class="w-full px-4 py-2.5 rounded-2xl bg-[#EDE4D8]/50 border border-[#D6C9B6] text-xs text-[#1F1B14]" />
+              <!-- ABOUT IMAGE FILE UPLOADER -->
+              <div class="space-y-2 p-3 rounded-2xl bg-[#EDE4D8]/60 border border-[#D6C9B6]">
+                <label class="label-caps text-[10px] text-[#B87333] font-bold block">
+                  📁 Taş Fırın Görseli Yükle
+                </label>
+                
+                <div class="flex items-center gap-3">
+                  @if (aboutImg) {
+                    <div class="w-16 h-16 rounded-xl overflow-hidden border border-[#D6C9B6] shrink-0 bg-white shadow-xs">
+                      <img [src]="aboutImg" alt="Önizleme" class="w-full h-full object-cover" />
+                    </div>
+                  }
+                  <div class="flex-1 space-y-1">
+                    <label class="px-4 py-2 rounded-full bg-[#526E48] hover:bg-[#3B5532] text-white text-[11px] font-bold uppercase tracking-wider shadow-sm inline-block cursor-pointer active:scale-95 transition-all">
+                      <span>📁 Fırın Fotoğrafı Seç</span>
+                      <input type="file" accept="image/*" (change)="onFileSelected($event, 'about')" class="hidden" />
+                    </label>
+                  </div>
+                </div>
               </div>
 
               <button 
@@ -229,6 +293,7 @@ export class LiveSectionEditorModalComponent {
   public readonly assetService = inject(SiteAssetService);
   public readonly productService = inject(ProductService);
   public readonly toastService = inject(ToastService);
+  public readonly imageUploadService = inject(ImageUploadService);
 
   public brandName = this.assetService.brandName();
   public navHome = this.assetService.navHome();
@@ -258,7 +323,6 @@ export class LiveSectionEditorModalComponent {
   public prodDesc = '';
 
   constructor() {
-    // Populate product fields if editing an existing product
     const editing = this.productService.editingProduct();
     if (editing) {
       this.prodName = editing.name;
@@ -266,6 +330,22 @@ export class LiveSectionEditorModalComponent {
       this.prodCategory = editing.category;
       this.prodImage = editing.imageUrl;
       this.prodDesc = editing.description;
+    }
+  }
+
+  public async onFileSelected(event: Event, target: 'product' | 'hero' | 'about'): Promise<void> {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files[0]) {
+      const file = input.files[0];
+      try {
+        const base64 = await this.imageUploadService.fileToBase64(file);
+        if (target === 'product') this.prodImage = base64;
+        if (target === 'hero') this.heroImg = base64;
+        if (target === 'about') this.aboutImg = base64;
+        this.toastService.show('📁 Fotoğraf Yüklendi ve Canlı Önizlendi! 📸');
+      } catch (e) {
+        this.toastService.show('Fotoğraf işlenirken hata oluştu.');
+      }
     }
   }
 
