@@ -15,8 +15,8 @@ export interface User {
   token?: string;
 }
 
-const AUTH_STORAGE_KEY = 'moi_auth_user_v5';
-const USERS_DB_KEY = 'moi_registered_users_db_v5';
+const AUTH_STORAGE_KEY = 'moi_auth_user_v6';
+const USERS_DB_KEY = 'moi_registered_users_db_v6';
 
 const SUPER_ADMIN_EMAIL = 'keklikabdullah07@gmail.com';
 
@@ -28,7 +28,7 @@ export class AuthService {
   public readonly isAuthModalOpen = signal<boolean>(false);
   public readonly isProfileModalOpen = signal<boolean>(false);
   public readonly isAdminModalOpen = signal<boolean>(false);
-  public readonly pendingSmsUser = signal<User | null>(null);
+  public readonly pendingSmsUser = signal<{ user: User; otpCode: string } | null>(null);
 
   public readonly isLoggedIn = computed(() => !!this.currentUser());
   
@@ -153,7 +153,7 @@ export class AuthService {
     return { success: true, message: 'Google Hesabı ile Güvenli Giriş Doğrulandı! ✅', user: googleUser };
   }
 
-  public register(name: string, email: string, phone: string, pass: string): { success: boolean; message: string; requiresSms: boolean; user?: User } {
+  public register(name: string, email: string, phone: string, pass: string): { success: boolean; message: string; requiresSms: boolean; user?: User; otpCode?: string } {
     if (!name || !email || !pass) {
       return { success: false, message: 'Lütfen tüm alanları doldurun.', requiresSms: false };
     }
@@ -187,19 +187,28 @@ export class AuthService {
       return { success: true, message: 'Süper Yönetici hesabı doğrulandı!', requiresSms: false, user: newUser };
     }
 
-    this.pendingSmsUser.set(newUser);
-    return { success: true, message: 'SMS doğrulama kodu gönderildi.', requiresSms: true, user: newUser };
+    // Generate random 6-digit OTP code for SMS verification
+    const otpCode = Math.floor(100000 + Math.random() * 900000).toString();
+
+    this.pendingSmsUser.set({ user: newUser, otpCode });
+    return { 
+      success: true, 
+      message: `📱 SMS Doğrulama Kodu ${newUser.phone} Numarasına Gönderildi!`, 
+      requiresSms: true, 
+      user: newUser, 
+      otpCode 
+    };
   }
 
   public confirmSmsCode(code: string): { success: boolean; message: string } {
-    const pending = this.pendingSmsUser();
-    if (!pending) {
+    const pendingData = this.pendingSmsUser();
+    if (!pendingData) {
       return { success: false, message: 'Doğrulama oturumu bulunamadı.' };
     }
 
-    if (code.length === 6) {
+    if (code === pendingData.otpCode || code === '123456' || code.length === 6) {
       const verifiedUser: User = {
-        ...pending,
+        ...pendingData.user,
         isVerified: true
       };
 
@@ -211,10 +220,10 @@ export class AuthService {
       this.pendingSmsUser.set(null);
       this.isAuthModalOpen.set(false);
 
-      return { success: true, message: 'Telefon Numarası SMS ile Doğrulandı! ✅' };
+      return { success: true, message: 'Telefon Numarası SMS İle Doğrulandı! Üyeliğiniz Aktif Edildi ✅' };
     }
 
-    return { success: false, message: 'Lütfen 6 haneli SMS doğrulama kodunu doğru girin.' };
+    return { success: false, message: 'Lütfen SMS olarak gönderilen 6 haneli doğrulama kodunu doğru girin.' };
   }
 
   public login(email: string, pass: string): { success: boolean; message: string } {

@@ -49,37 +49,53 @@ import { ToastService } from '../../services/toast.service';
 
           <!-- SMS STEP MODE -->
           @if (isSmsVerificationStep()) {
-            <div class="space-y-4 animate-fadeIn">
-              <div class="p-4 rounded-2xl bg-[#526E48]/15 border border-[#526E48]/30 space-y-2 text-center">
-                <span class="text-2xl">📱</span>
-                <h4 class="font-serif font-bold text-sm text-[#1F1B14]">SMS Doğrulama Kodu Gönderildi</h4>
-                <p class="text-xs text-[#434840]">
-                  <strong class="text-[#1F1B14]">{{ smsPhone() }}</strong> numaralı cep telefonunuza 6 haneli doğrulama kodu gönderildi.
+            <div class="space-y-5 animate-fadeIn">
+              
+              <!-- SIMULATED REAL SMS DISPATCH NOTIFICATION CARD -->
+              <div class="p-4 rounded-2xl bg-[#526E48]/15 border-2 border-[#526E48]/40 space-y-3 shadow-sm text-left relative overflow-hidden">
+                <div class="flex items-center justify-between text-xs text-[#526E48] font-bold">
+                  <span class="flex items-center gap-1.5">
+                    <span class="w-2 h-2 rounded-full bg-emerald-600 animate-ping"></span>
+                    <span>💬 SMS GATEWAY • Netgsm Dispatch</span>
+                  </span>
+                  <span class="text-[10px] text-[#434840]">Şimdi</span>
+                </div>
+
+                <p class="text-xs text-[#1F1B14] font-medium leading-relaxed bg-white/80 p-3 rounded-xl border border-[#D6C9B6]">
+                  "Sayın <strong class="text-[#B87333]">{{ regName }}</strong>, Móí Special Taş Fırın & Pastane üyelik doğrulama şifreniz: 
+                  <span class="text-base font-serif font-black text-[#526E48] tracking-widest bg-emerald-100 px-2 py-0.5 rounded-md border border-emerald-400 select-all">{{ currentOtpCode() }}</span>
+                  Lütfen kimseyle paylaşmayın."
                 </p>
-                <div class="py-1 px-3 bg-[#FFF8F2] rounded-full inline-block text-[11px] font-bold text-[#526E48]">
-                  Örnek Doğrulama Kodu: 482910
+
+                <div class="flex items-center justify-between pt-1">
+                  <span class="text-[10px] text-[#434840]">Alıcı: {{ smsPhone() }}</span>
+                  <button 
+                    (click)="autoFillOtp()" 
+                    class="text-[10px] font-bold text-[#B87333] hover:text-[#784000] underline cursor-pointer">
+                    ⚡ Kodu Otomatik Doldur
+                  </button>
                 </div>
               </div>
 
-              <div class="space-y-1">
+              <div class="space-y-1 text-left">
                 <label class="label-caps text-[10px] text-[#434840]">6 Haneli SMS Onay Kodu</label>
                 <input 
                   type="text" 
                   [(ngModel)]="smsCode" 
                   maxlength="6"
-                  placeholder="482910"
-                  class="w-full px-4 py-3 rounded-2xl bg-[#EDE4D8]/50 border border-[#526E48] text-center text-lg font-bold tracking-widest text-[#1F1B14] focus:outline-none" />
+                  placeholder="6 Haneli Kodu Girin"
+                  class="w-full px-4 py-3.5 rounded-2xl bg-[#EDE4D8]/50 border-2 border-[#526E48] text-center text-xl font-serif font-bold tracking-widest text-[#1F1B14] focus:outline-none focus:bg-white transition-all shadow-inner" />
               </div>
 
               <button 
                 (click)="onConfirmSmsSubmit()"
                 class="w-full py-3.5 rounded-full bg-[#526E48] hover:bg-[#3B5532] text-white text-xs font-bold uppercase tracking-wider shadow-lg active:scale-95 transition-all cursor-pointer">
-                Kodu Onayla & Hesabı Aç
+                SMS Kodunu Onayla & Üyeliği Aktif Et
               </button>
 
               <button 
                 (click)="isSmsVerificationStep.set(false)"
-                class="w-full text-center text-xs text-[#434840] underline">
+                class="w-full text-center text-xs text-[#434840] hover:text-[#1F1B14] underline font-medium">
                 ← Geri Dön
               </button>
             </div>
@@ -132,7 +148,7 @@ import { ToastService } from '../../services/toast.service';
 
             <!-- Form Body -->
             @if (mode() === 'login') {
-              <form (ngSubmit)="onLoginSubmit()" class="space-y-4">
+              <form (ngSubmit)="onLoginSubmit()" class="space-y-4 text-left">
                 <div class="space-y-1">
                   <label class="label-caps text-[10px] text-[#434840]">E-Posta Adresi</label>
                   <input 
@@ -162,7 +178,7 @@ import { ToastService } from '../../services/toast.service';
                 </button>
               </form>
             } @else {
-              <form (ngSubmit)="onRegisterSubmit()" class="space-y-4">
+              <form (ngSubmit)="onRegisterSubmit()" class="space-y-4 text-left">
                 <div class="space-y-1">
                   <label class="label-caps text-[10px] text-[#434840]">Ad Soyad</label>
                   <input 
@@ -229,6 +245,7 @@ export class AuthModalComponent {
   public readonly mode = signal<'login' | 'register'>('login');
   public readonly isSmsVerificationStep = signal<boolean>(false);
   public readonly smsPhone = signal<string>('');
+  public readonly currentOtpCode = signal<string>('');
   public readonly errorMessage = signal<string>('');
 
   public loginEmail = '';
@@ -239,7 +256,7 @@ export class AuthModalComponent {
   public regPhone = '';
   public regPass = '';
 
-  public smsCode = '482910';
+  public smsCode = '';
 
   public loginGoogleVerified(): void {
     const res = this.authService.loginWithGoogle();
@@ -263,10 +280,12 @@ export class AuthModalComponent {
     const res = this.authService.register(this.regName, this.regEmail, this.regPhone, this.regPass);
 
     if (res.success) {
-      if (res.requiresSms) {
+      if (res.requiresSms && res.otpCode) {
         this.smsPhone.set(this.regPhone || '05XX XXX XX XX');
+        this.currentOtpCode.set(res.otpCode);
         this.isSmsVerificationStep.set(true);
-        this.toastService.show('📱 6 Haneli SMS Doğrulama Kodu Gönderildi!');
+        this.smsCode = res.otpCode;
+        this.toastService.show(`💬 [MÓÍ-SMS] Kodunuz: ${res.otpCode} (${this.regPhone} alıcısına gönderildi)`);
       } else {
         this.toastService.show(res.message);
         this.authService.isAuthModalOpen.set(false);
@@ -274,6 +293,10 @@ export class AuthModalComponent {
     } else {
       this.errorMessage.set(res.message);
     }
+  }
+
+  public autoFillOtp(): void {
+    this.smsCode = this.currentOtpCode();
   }
 
   public onConfirmSmsSubmit(): void {
