@@ -66,7 +66,7 @@ import { ScrollToTopComponent } from '../../components/scroll-to-top/scroll-to-t
       </div>
 
       <!-- SHARED INTERACTIVE MODALS & DRAWER -->
-      <app-cart-drawer></app-[#FFF8F2] drawer>
+      <app-cart-drawer></app-cart-drawer>
       <app-reservation-modal></app-reservation-modal>
       <app-story-modal></app-story-modal>
       <app-auth-modal></app-auth-modal>
