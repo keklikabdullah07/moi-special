@@ -23,7 +23,7 @@ import { gsap } from 'gsap';
             <div class="hero-item inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#EDE4D8] border border-[#D6C9B6] text-[#526E48] transition-all hover:scale-105">
               <span class="w-2 h-2 rounded-full bg-[#526E48] animate-ping"></span>
               <span class="label-caps text-[11px] font-semibold tracking-widest text-[#3B5532]">
-                Şanlıurfa • Modern Artisan Pastane & Fırın
+                Sırrın Karşıyaka, Şanlıurfa • Modern Artisan Pastane & Fırın
               </span>
             </div>
 
@@ -47,8 +47,16 @@ import { gsap } from 'gsap';
                 </svg>
               </a>
               
-              <a href="#contact" class="px-8 py-4 rounded-full bg-transparent hover:bg-[#EDE4D8]/80 text-[#3B5532] border border-[#526E48] font-semibold text-xs tracking-wider uppercase transition-all duration-300 hover:shadow-md active:scale-95">
-                Şubemizi Ziyaret Et
+              <a 
+                href="https://share.google/P5BMtr0gzI00D3TQj" 
+                target="_blank"
+                rel="noopener"
+                class="px-8 py-4 rounded-full bg-transparent hover:bg-[#EDE4D8]/80 text-[#3B5532] border border-[#526E48] font-semibold text-xs tracking-wider uppercase transition-all duration-300 hover:shadow-md active:scale-95 inline-flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-[#526E48]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                </svg>
+                <span>Şubemizi Ziyaret Et (Harita)</span>
               </a>
             </div>
 
@@ -100,11 +108,15 @@ import { gsap } from 'gsap';
             </div>
 
             <!-- Floating Decorative Stamp Element (Continuous Slow Spin) -->
-            <div class="absolute -bottom-6 -left-6 hidden sm:flex w-24 h-24 rounded-full bg-[#526E48] text-white items-center justify-center p-2 text-center shadow-xl animate-spin-slow cursor-pointer hover:bg-[#3B5532] transition-colors">
+            <a 
+              href="https://share.google/P5BMtr0gzI00D3TQj" 
+              target="_blank" 
+              rel="noopener"
+              class="absolute -bottom-6 -left-6 hidden sm:flex w-24 h-24 rounded-full bg-[#526E48] text-white items-center justify-center p-2 text-center shadow-xl animate-spin-slow cursor-pointer hover:bg-[#3B5532] transition-colors">
               <span class="label-caps text-[9px] leading-tight text-center font-bold tracking-normal">
                 Şanlıurfa • Lüks Artisan Lezzet •
               </span>
-            </div>
+            </a>
 
           </div>
 
