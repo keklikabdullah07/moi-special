@@ -1,6 +1,6 @@
 import { Component, inject, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ProductService } from '../../services/product.service';
+import { ProductService, Product } from '../../services/product.service';
 import { CartService } from '../../services/cart.service';
 import { ReservationService } from '../../services/reservation.service';
 import { StoryService } from '../../services/story.service';
@@ -13,45 +13,32 @@ import { ToastService } from '../../services/toast.service';
   standalone: true,
   imports: [CommonModule],
   template: `
-    <!-- Dedicated Mobile Native App Shell (Visible only on < md screens) -->
-    <div id="mobile-hero" class="md:hidden flex flex-col bg-[#FFF8F2] min-h-screen pb-12 select-none overflow-x-hidden">
+    <div class="relative bg-[#FFF8F2] min-h-screen pb-24">
       
-      <!-- Native Mobile Header Bar -->
-      <header class="sticky top-0 z-30 bg-[#FFF8F2]/95 backdrop-blur-xl border-b border-[#D6C9B6]/60 px-4 py-3 flex items-center justify-between shadow-xs">
+      <!-- App Header Bar -->
+      <header class="sticky top-0 z-40 bg-[#FFF8F2]/95 backdrop-blur-md border-b border-[#D6C9B6]/40 px-4 py-3 flex items-center justify-between shadow-xs">
         
-        <!-- Location Picker Pill (Opens Google Maps link) -->
-        <a 
-          href="https://share.google/P5BMtr0gzI00D3TQj" 
-          target="_blank" 
-          rel="noopener"
-          class="flex items-center gap-2.5 active:scale-95 transition-transform group">
-          <div class="w-9 h-9 rounded-full bg-[#526E48]/10 border border-[#526E48]/20 flex items-center justify-center text-[#526E48] group-hover:bg-[#526E48] group-hover:text-white transition-colors">
-            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-            </svg>
+        <!-- Brand & Location -->
+        <div class="flex items-center gap-2.5">
+          <div class="w-9 h-9 rounded-full bg-[#526E48] text-white font-serif font-bold text-lg flex items-center justify-center shadow-xs">
+            M
           </div>
-          <div class="flex flex-col">
-            <span class="label-caps text-[9px] text-[#B87333] tracking-wider">Gap Vadisi Bulv. • Haritada Gör</span>
-            <span class="font-serif text-xs font-bold text-[#1F1B14] flex items-center gap-1">
-              Karşıyaka Mah., Kanalboyu
-              <svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3 text-[#526E48]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-              </svg>
-            </span>
+          <div>
+            <h2 class="font-serif font-bold text-base text-[#1F1B14] leading-none">Móí Special</h2>
+            <span class="label-caps text-[8px] text-[#B87333] tracking-wider block mt-0.5">Sırrın Karşıyaka • Taş Fırın</span>
           </div>
-        </a>
+        </div>
 
-        <!-- Right Quick Actions (Cart & User Pill) -->
+        <!-- Cart Quick Badge -->
         <div class="flex items-center gap-2">
           <button 
             (click)="cartService.toggleDrawer()"
-            class="relative w-10 h-10 rounded-full bg-[#EDE4D8] border border-[#D6C9B6] flex items-center justify-center text-[#1F1B14] active:scale-90 transition-transform cursor-pointer">
-            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-[#526E48]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+            class="relative p-2 rounded-full bg-[#EDE4D8] text-[#1F1B14] hover:bg-[#D6C9B6] transition-colors cursor-pointer">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
             </svg>
             @if (cartService.itemCount() > 0) {
-              <span class="absolute -top-1 -right-1 bg-[#B87333] text-white text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center shadow-md animate-bounce">
+              <span class="absolute -top-1 -right-1 bg-[#B87333] text-white text-[9px] font-bold w-5 h-5 rounded-full flex items-center justify-center shadow-md animate-bounce">
                 {{ cartService.itemCount() }}
               </span>
             }
@@ -141,7 +128,7 @@ import { ToastService } from '../../services/toast.service';
         </div>
 
         <div class="flex items-center gap-2 overflow-x-auto no-scrollbar pb-2">
-          @for (cat of productService.categories(); track cat.id) {
+          @for (cat of categories; track cat.id) {
             <button 
               (click)="selectedCategory.set(cat.id)"
               [class.bg-[#526E48]]="selectedCategory() === cat.id"
@@ -250,6 +237,14 @@ export class MobileAppShellComponent {
 
   public readonly selectedCategory = signal<string>('all');
 
+  public readonly categories = [
+    { id: 'all', name: 'Tüm Lezzetler' },
+    { id: 'fistikli', name: 'Fıstıklı Özel' },
+    { id: 'pastane', name: 'Artisan Pastane' },
+    { id: 'firin', name: 'Taş Fırın & Ekmek' },
+    { id: 'icecek', name: 'Gurme İçecekler' }
+  ];
+
   public readonly filteredProducts = computed(() => {
     const cat = this.selectedCategory();
     const all = this.productService.products();
@@ -303,7 +298,7 @@ export class MobileAppShellComponent {
   }
 
   public addFeaturedToCart(): void {
-    const croissant = this.productService.products().find(p => p.id === 'fistikli-croissant');
+    const croissant = this.productService.products().find(p => p.id === 'p1');
     if (croissant) {
       this.cartService.addItem(croissant);
     }
