@@ -17,7 +17,7 @@ import { gsap } from 'gsap';
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
           
           <!-- Text Content Column -->
-          <div #heroText class="lg:col-span-7 space-y-8 text-left z-10 opacity-0">
+          <div #heroText class="lg:col-span-7 space-y-8 text-left z-10">
             
             <!-- Eyebrow Badge -->
             <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#EDE4D8] border border-[#D6C9B6] text-[#526E48]">
@@ -71,7 +71,7 @@ import { gsap } from 'gsap';
           </div>
 
           <!-- Arched Hero Image Column -->
-          <div #heroImage class="lg:col-span-5 relative flex justify-center opacity-0">
+          <div #heroImage class="lg:col-span-5 relative flex justify-center">
             
             <!-- Architectural Soft Arch Container -->
             <div class="relative w-full max-w-md aspect-[3/4] p-3 rounded-t-[10rem] rounded-b-3xl bg-[#EDE4D8] border border-[#D6C9B6] shadow-2xl overflow-hidden group">
@@ -119,19 +119,16 @@ export class HeroComponent implements AfterViewInit {
 
   public ngAfterViewInit(): void {
     if (typeof window !== 'undefined') {
-      gsap.to(this.heroText.nativeElement, {
-        opacity: 1,
-        y: 0,
-        duration: 1,
-        ease: 'power3.out'
-      });
-      gsap.to(this.heroImage.nativeElement, {
-        opacity: 1,
-        scale: 1,
-        duration: 1.2,
-        delay: 0.2,
-        ease: 'power3.out'
-      });
+      gsap.fromTo(
+        this.heroText.nativeElement,
+        { opacity: 0, y: 30 },
+        { opacity: 1, y: 0, duration: 1, ease: 'power3.out' }
+      );
+      gsap.fromTo(
+        this.heroImage.nativeElement,
+        { opacity: 0, scale: 0.95 },
+        { opacity: 1, scale: 1, duration: 1.2, delay: 0.2, ease: 'power3.out' }
+      );
     }
   }
 
