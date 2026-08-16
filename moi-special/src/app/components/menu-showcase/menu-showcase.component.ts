@@ -47,57 +47,61 @@ import { SiteAssetService } from '../../services/site-asset.service';
           }
         </div>
 
-        <!-- Luxury Category Filter Tabs (No Emojis, Pure Minimalist Elegance) -->
-        <div class="flex flex-wrap items-center justify-center gap-2 sm:gap-3 p-1.5 rounded-full bg-[#EDE4D8]/60 border border-[#D6C9B6] max-w-3xl mx-auto shadow-xs">
-          <button 
-            (click)="setCategory('all')"
-            [class.bg-[#526E48]]="productService.selectedCategory() === 'all'"
-            [class.text-white]="productService.selectedCategory() === 'all'"
-            [class.shadow-md]="productService.selectedCategory() === 'all'"
-            [class.text-[#1F1B14]]="productService.selectedCategory() !== 'all'"
-            class="px-6 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider transition-all duration-300 cursor-pointer">
-            Tüm Lezzetler
-          </button>
+        <!-- ULTRA-LUXURY SLEEK CATEGORY FILTER TRACK (NO WRAPPING DISTORTION) -->
+        <div class="w-full max-w-5xl mx-auto overflow-x-auto no-scrollbar py-2">
+          <div class="inline-flex items-center gap-1.5 sm:gap-2 p-1.5 rounded-full bg-[#EDE4D8]/80 border border-[#D6C9B6] shadow-sm min-w-max mx-auto flex-nowrap">
+            
+            <button 
+              (click)="setCategory('all')"
+              [class.bg-[#526E48]]="productService.selectedCategory() === 'all'"
+              [class.text-white]="productService.selectedCategory() === 'all'"
+              [class.shadow-md]="productService.selectedCategory() === 'all'"
+              [class.text-[#1F1B14]]="productService.selectedCategory() !== 'all'"
+              class="px-5 sm:px-6 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider transition-all duration-300 cursor-pointer whitespace-nowrap hover:text-white hover:bg-[#526E48]/80">
+              Tüm Lezzetler
+            </button>
 
-          <button 
-            (click)="setCategory('fistikli')"
-            [class.bg-[#526E48]]="productService.selectedCategory() === 'fistikli'"
-            [class.text-white]="productService.selectedCategory() === 'fistikli'"
-            [class.shadow-md]="productService.selectedCategory() === 'fistikli'"
-            [class.text-[#1F1B14]]="productService.selectedCategory() !== 'fistikli'"
-            class="px-6 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider transition-all duration-300 cursor-pointer">
-            Fıstıklı Özel
-          </button>
+            <button 
+              (click)="setCategory('fistikli')"
+              [class.bg-[#526E48]]="productService.selectedCategory() === 'fistikli'"
+              [class.text-white]="productService.selectedCategory() === 'fistikli'"
+              [class.shadow-md]="productService.selectedCategory() === 'fistikli'"
+              [class.text-[#1F1B14]]="productService.selectedCategory() !== 'fistikli'"
+              class="px-5 sm:px-6 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider transition-all duration-300 cursor-pointer whitespace-nowrap hover:text-white hover:bg-[#526E48]/80">
+              Fıstıklı Özel
+            </button>
 
-          <button 
-            (click)="setCategory('pastane')"
-            [class.bg-[#526E48]]="productService.selectedCategory() === 'pastane'"
-            [class.text-white]="productService.selectedCategory() === 'pastane'"
-            [class.shadow-md]="productService.selectedCategory() === 'pastane'"
-            [class.text-[#1F1B14]]="productService.selectedCategory() !== 'pastane'"
-            class="px-6 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider transition-all duration-300 cursor-pointer">
-            Artisan Pastane
-          </button>
+            <button 
+              (click)="setCategory('pastane')"
+              [class.bg-[#526E48]]="productService.selectedCategory() === 'pastane'"
+              [class.text-white]="productService.selectedCategory() === 'pastane'"
+              [class.shadow-md]="productService.selectedCategory() === 'pastane'"
+              [class.text-[#1F1B14]]="productService.selectedCategory() !== 'pastane'"
+              class="px-5 sm:px-6 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider transition-all duration-300 cursor-pointer whitespace-nowrap hover:text-white hover:bg-[#526E48]/80">
+              Artisan Pastane
+            </button>
 
-          <button 
-            (click)="setCategory('firin')"
-            [class.bg-[#526E48]]="productService.selectedCategory() === 'firin'"
-            [class.text-white]="productService.selectedCategory() === 'firin'"
-            [class.shadow-md]="productService.selectedCategory() === 'firin'"
-            [class.text-[#1F1B14]]="productService.selectedCategory() !== 'firin'"
-            class="px-6 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider transition-all duration-300 cursor-pointer">
-            Taş Fırın & Ekmek
-          </button>
+            <button 
+              (click)="setCategory('firin')"
+              [class.bg-[#526E48]]="productService.selectedCategory() === 'firin'"
+              [class.text-white]="productService.selectedCategory() === 'firin'"
+              [class.shadow-md]="productService.selectedCategory() === 'firin'"
+              [class.text-[#1F1B14]]="productService.selectedCategory() !== 'firin'"
+              class="px-5 sm:px-6 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider transition-all duration-300 cursor-pointer whitespace-nowrap hover:text-white hover:bg-[#526E48]/80">
+              Taş Fırın & Ekmek
+            </button>
 
-          <button 
-            (click)="setCategory('icecek')"
-            [class.bg-[#526E48]]="productService.selectedCategory() === 'icecek'"
-            [class.text-white]="productService.selectedCategory() === 'icecek'"
-            [class.shadow-md]="productService.selectedCategory() === 'icecek'"
-            [class.text-[#1F1B14]]="productService.selectedCategory() !== 'icecek'"
-            class="px-6 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider transition-all duration-300 cursor-pointer">
-            Gurme İçecekler
-          </button>
+            <button 
+              (click)="setCategory('icecek')"
+              [class.bg-[#526E48]]="productService.selectedCategory() === 'icecek'"
+              [class.text-white]="productService.selectedCategory() === 'icecek'"
+              [class.shadow-md]="productService.selectedCategory() === 'icecek'"
+              [class.text-[#1F1B14]]="productService.selectedCategory() !== 'icecek'"
+              class="px-5 sm:px-6 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider transition-all duration-300 cursor-pointer whitespace-nowrap hover:text-white hover:bg-[#526E48]/80">
+              Gurme İçecekler
+            </button>
+
+          </div>
         </div>
 
         <!-- Product Cards Grid (Clean Luxury Architecture) -->
