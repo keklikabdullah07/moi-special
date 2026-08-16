@@ -4,6 +4,7 @@ import { HeroComponent } from './components/hero/hero.component';
 import { MenuShowcaseComponent } from './components/menu-showcase/menu-showcase.component';
 import { CartDrawerComponent } from './components/cart-drawer/cart-drawer.component';
 import { MobileBottomNavComponent } from './components/mobile-bottom-nav/mobile-bottom-nav.component';
+import { MobileAppShellComponent } from './components/mobile-app-shell/mobile-app-shell.component';
 import { FooterComponent } from './components/footer/footer.component';
 
 @Component({
@@ -15,6 +16,7 @@ import { FooterComponent } from './components/footer/footer.component';
     MenuShowcaseComponent,
     CartDrawerComponent,
     MobileBottomNavComponent,
+    MobileAppShellComponent,
     FooterComponent
   ],
   templateUrl: './app.html',

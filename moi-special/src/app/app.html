@@ -1,22 +1,26 @@
-<div class="min-h-screen bg-[#FFF8F2] flex flex-col font-sans selection:bg-[#526E48] selection:text-white pb-16 md:pb-0">
-  <!-- Sticky Header with Wordmark Logo, Nav & Mobile Hamburger -->
-  <app-header></app-header>
+<div class="min-h-screen bg-[#FFF8F2] flex flex-col font-sans selection:bg-[#526E48] selection:text-white">
+  
+  <!-- DESKTOP EDITORIAL LAYOUT (Hidden on mobile < md) -->
+  <div class="hidden md:flex flex-col flex-1">
+    <app-header></app-header>
 
-  <!-- Main Content Areas -->
-  <main class="flex-1">
-    <!-- Arched Hero Showcase -->
-    <app-hero></app-hero>
+    <main class="flex-1">
+      <app-hero></app-hero>
+      <app-menu-showcase></app-menu-showcase>
+    </main>
 
-    <!-- Reactive Menu Showcase with Category Filters & Cards -->
-    <app-menu-showcase></app-menu-showcase>
-  </main>
+    <app-footer></app-footer>
+  </div>
 
-  <!-- Side Drawer Shopping Bag -->
+  <!-- MOBILE NATIVE APP SHELL (Visible on mobile < md) -->
+  <div class="block md:hidden flex-1">
+    <app-mobile-app-shell></app-mobile-app-shell>
+    <app-footer></app-footer>
+  </div>
+
+  <!-- SHARED RECTIVE CART DRAWER -->
   <app-cart-drawer></app-cart-drawer>
 
-  <!-- Mobile PWA Fixed Bottom Quick Bar -->
+  <!-- MOBILE FIXED BOTTOM TAB BAR -->
   <app-mobile-bottom-nav></app-mobile-bottom-nav>
-
-  <!-- Footer -->
-  <app-footer></app-footer>
 </div>
