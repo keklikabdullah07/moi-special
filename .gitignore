@@ -1,0 +1,17 @@
+# Build & Output directories
+bin/
+obj/
+dist/
+node_modules/
+
+# IDE & Editor files
+.vscode/
+.vs/
+.idea/
+*.user
+*.userossc
+*.suo
+
+# System files
+.DS_Store
+Thumbs.db

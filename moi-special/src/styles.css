@@ -1,0 +1,57 @@
+/* You can add global styles to this file, and also import other style files */
+
+@import 'tailwindcss';
+
+@theme {
+  --font-serif: 'Playfair Display', Georgia, serif;
+  --font-sans: 'Hanken Grotesk', system-ui, sans-serif;
+
+  --color-limestone: #FFF8F2;
+  --color-limestone-dim: #EDE4D8;
+  --color-pistachio: #526E48;
+  --color-pistachio-dark: #3B5532;
+  --color-pistachio-light: #CFEFC0;
+  --color-copper: #B87333;
+  --color-copper-dark: #784000;
+  --color-copper-light: #FFDCC2;
+  --color-charcoal: #1F1B14;
+  --color-charcoal-muted: #434840;
+  --color-beige-border: #D6C9B6;
+}
+
+@layer utilities {
+  .label-caps {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .arch-top-hero {
+    border-top-left-radius: 12rem;
+    border-top-right-radius: 12rem;
+  }
+
+  .arch-card-img {
+    border-top-left-radius: 2.5rem;
+    border-top-right-radius: 2.5rem;
+    border-bottom-left-radius: 0.5rem;
+    border-bottom-right-radius: 0.5rem;
+  }
+}
+
+/* Custom scrollbar and glassmorphism helpers */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #FFF8F2;
+}
+::-webkit-scrollbar-thumb {
+  background: #D6C9B6;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #526E48;
+}
