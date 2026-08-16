@@ -7,7 +7,7 @@ import { CartService } from '../../services/cart.service';
   standalone: true,
   imports: [CommonModule],
   template: `
-    <header class="sticky top-0 z-40 w-full backdrop-blur-md bg-[#FFF8F2]/90 border-b border-[#D6C9B6]/60 transition-all duration-300">
+    <header class="sticky top-0 z-40 w-full backdrop-blur-md bg-[#FFF8F2]/95 border-b border-[#D6C9B6]/60 transition-colors duration-300">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
         
         <!-- Brand Wordmark Logo -->
@@ -21,17 +21,21 @@ import { CartService } from '../../services/cart.service';
 
         <!-- Desktop Navigation Links -->
         <nav class="hidden md:flex items-center space-x-8">
-          <a href="#hero" class="label-caps text-xs text-[#1F1B14] hover:text-[#526E48] transition-colors py-1 relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[2px] after:bg-[#526E48] hover:after:w-full after:transition-all">
-            Ana Sayfa
+          <a href="#hero" class="label-caps text-xs text-[#1F1B14] hover:text-[#526E48] py-1 relative group transition-colors">
+            <span>Ana Sayfa</span>
+            <span class="absolute bottom-0 left-0 w-0 h-[2px] bg-[#526E48] transition-all duration-300 group-hover:w-full"></span>
           </a>
-          <a href="#menu" class="label-caps text-xs text-[#1F1B14] hover:text-[#526E48] transition-colors py-1 relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[2px] after:bg-[#526E48] hover:after:w-full after:transition-all">
-            Menü Koleksiyonu
+          <a href="#menu" class="label-caps text-xs text-[#1F1B14] hover:text-[#526E48] py-1 relative group transition-colors">
+            <span>Menü Koleksiyonu</span>
+            <span class="absolute bottom-0 left-0 w-0 h-[2px] bg-[#526E48] transition-all duration-300 group-hover:w-full"></span>
           </a>
-          <a href="#about" class="label-caps text-xs text-[#1F1B14] hover:text-[#526E48] transition-colors py-1 relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[2px] after:bg-[#526E48] hover:after:w-full after:transition-all">
-            Hikayemiz
+          <a href="#about" class="label-caps text-xs text-[#1F1B14] hover:text-[#526E48] py-1 relative group transition-colors">
+            <span>Hikayemiz</span>
+            <span class="absolute bottom-0 left-0 w-0 h-[2px] bg-[#526E48] transition-all duration-300 group-hover:w-full"></span>
           </a>
-          <a href="#contact" class="label-caps text-xs text-[#1F1B14] hover:text-[#526E48] transition-colors py-1 relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[2px] after:bg-[#526E48] hover:after:w-full after:transition-all">
-            İletişim
+          <a href="#contact" class="label-caps text-xs text-[#1F1B14] hover:text-[#526E48] py-1 relative group transition-colors">
+            <span>İletişim</span>
+            <span class="absolute bottom-0 left-0 w-0 h-[2px] bg-[#526E48] transition-all duration-300 group-hover:w-full"></span>
           </a>
         </nav>
 
@@ -76,7 +80,7 @@ import { CartService } from '../../services/cart.service';
 
       <!-- Mobile Dropdown Navigation Menu -->
       @if (isMobileMenuOpen()) {
-        <div class="md:hidden bg-[#FFF8F2] border-b border-[#D6C9B6] px-6 py-6 space-y-4 shadow-xl animate-fadeIn">
+        <div class="md:hidden bg-[#FFF8F2] border-b border-[#D6C9B6] px-6 py-6 space-y-4 shadow-xl">
           <nav class="flex flex-col space-y-3">
             <a 
               (click)="isMobileMenuOpen.set(false)"
@@ -106,7 +110,7 @@ import { CartService } from '../../services/cart.service';
           
           <button 
             (click)="isMobileMenuOpen.set(false)"
-            class="w-full py-3.5 rounded-full bg-[#B87333] text-white font-medium text-xs tracking-wider uppercase text-center shadow-md">
+            class="w-full py-3.5 rounded-full bg-[#B87333] text-white font-medium text-xs tracking-wider uppercase text-center shadow-md cursor-pointer">
             Masa Rezerve Et
           </button>
         </div>
