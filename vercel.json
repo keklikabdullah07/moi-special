@@ -1,0 +1,12 @@
+{
+  "version": 2,
+  "buildCommand": "cd moi-special && npm install && npm run build",
+  "outputDirectory": "moi-special/dist/moi-special/browser",
+  "framework": "angular",
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
+}
