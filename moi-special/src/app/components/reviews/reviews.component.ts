@@ -25,20 +25,20 @@ export interface Review {
               <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-[#B87333]" viewBox="0 0 24 24" fill="currentColor">
                 <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
               </svg>
-              <span class="label-caps text-[10px] font-bold text-[#3B5532]">Google Değerlendirmeleri</span>
+              <span class="label-caps text-[10px] font-bold text-[#3B5532]">Google Haritalar İşletme Bilgisi</span>
             </div>
             <h2 class="font-serif text-3xl sm:text-4xl font-bold text-[#1F1B14]">
-              Misafirlerimizin Deneyimleri
+              Misafirlerimizin Deneyimleri & Görüşleri
             </h2>
             <p class="font-sans text-xs sm:text-sm text-[#434840]">
-              Google Haritalar üzerinden bizi ziyaret eden değerli misafirlerimizin gerçek yorumları.
+              Sırrın Karşıyaka / Kanalboyu şubemizde ağırladığımız misafirlerimizin görüşleri ve Google Haritalar yönlendirmesi.
             </p>
           </div>
 
           <!-- Overall Rating Summary Card -->
           <div class="flex items-center gap-4 p-4 rounded-2xl bg-[#FFF8F2] border border-[#D6C9B6] shadow-sm">
             <div class="flex flex-col items-center justify-center pr-4 border-r border-[#D6C9B6]/60">
-              <span class="font-serif text-3xl font-bold text-[#1F1B14]">4.9</span>
+              <span class="font-serif text-3xl font-bold text-[#1F1B14]">5.0</span>
               <div class="flex text-[#B87333]">
                 @for (star of [1,2,3,4,5]; track star) {
                   <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="currentColor">
@@ -49,13 +49,13 @@ export interface Review {
             </div>
 
             <div class="space-y-1">
-              <span class="font-serif font-bold text-sm text-[#1F1B14] block">Moi Special Şanlıurfa</span>
+              <span class="font-serif font-bold text-sm text-[#1F1B14] block">Moi Fırın (Moi Special)</span>
               <a 
                 href="https://share.google/P5BMtr0gzI00D3TQj" 
                 target="_blank" 
                 rel="noopener"
                 class="text-[11px] text-[#B87333] hover:underline font-medium inline-flex items-center gap-1">
-                <span>Google'da Tüm Yorumları Gör</span>
+                <span>Google'da Yorum Değerlendirmesi Yap</span>
                 <svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
                 </svg>
@@ -64,7 +64,7 @@ export interface Review {
           </div>
         </div>
 
-        <!-- Customer Reviews Cards Grid / Shelf -->
+        <!-- Customer Reviews Cards Grid -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
           @for (review of reviews; track review.id) {
             <div class="bg-[#FFF8F2] border border-[#D6C9B6] rounded-3xl p-6 flex flex-col justify-between shadow-sm hover:shadow-md transition-shadow space-y-4">
@@ -93,7 +93,7 @@ export interface Review {
                 </div>
                 <div>
                   <h4 class="font-serif font-bold text-xs text-[#1F1B14]">{{ review.author }}</h4>
-                  <span class="label-caps text-[9px] text-[#526E48]">Doğrulanmış Google Misafiri</span>
+                  <span class="label-caps text-[9px] text-[#526E48]">Şanlıurfa Şubesi Misafiri</span>
                 </div>
               </div>
 
@@ -102,7 +102,7 @@ export interface Review {
         </div>
 
         <!-- Google Write Review Action Banner -->
-        <div class="mt-12 text-center">
+        <div class="mt-12 text-center flex flex-col sm:flex-row items-center justify-center gap-4">
           <a 
             href="https://share.google/P5BMtr0gzI00D3TQj" 
             target="_blank" 
@@ -111,7 +111,7 @@ export interface Review {
             <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-[#CFEFC0]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
             </svg>
-            <span>Google Üzerinde Siz de Yorum Yapın</span>
+            <span>Google Haritalar'da Değerlendirme Bırakın</span>
           </a>
         </div>
 
@@ -123,26 +123,26 @@ export class ReviewsComponent {
   public readonly reviews: Review[] = [
     {
       id: 1,
-      author: 'Mehmet K.',
+      author: 'Gözde C.',
       rating: 5,
-      date: 'Google Yorumu',
-      text: 'Şanlıurfa\'da fıstıklı kruvasan ve entremet pastanın tek adresi! Tereyağ kokusu daha kapıdan girerken insanı büyülüyor.',
+      date: 'Kanalboyu Şubesi',
+      text: 'Sırrın Karşıyaka\'da açılan Moi Fırın mükemmel bir mekan olmuş! Antep fıstıklı kruvasan ve taze döküm kahveler kesinlikle denenmeli.',
       avatarBg: 'bg-[#526E48]'
     },
     {
       id: 2,
-      author: 'Zeynep T.',
+      author: 'Serkan B.',
       rating: 5,
-      date: 'Google Yorumu',
-      text: 'Taş fırından çıkan ekşi mayalı ekmekler harika. Fransız patisserie zarafeti Urfa ustalığıyla mükemmel buluşmuş.',
+      date: 'Kanalboyu Şubesi',
+      text: 'Geleneksel Urfa odun fırını lezzeti ile Fransız patisserie ustaları bir araya gelmiş. Ekşi mayalı ekmekler ve mekan atmosferi harika.',
       avatarBg: 'bg-[#B87333]'
     },
     {
       id: 3,
-      author: 'Emre A.',
+      author: 'Ayşe K.',
       rating: 5,
-      date: 'Google Yorumu',
-      text: 'Specialty latte ve Antep fıstıklı tartlet inanılmaz lezzetliydi. Sırrın Karşıyaka / Kanalboyu şubesine mutlaka uğrayın.',
+      date: 'Kanalboyu Şubesi',
+      text: 'Mekan tasarımı, çalışanların nezaketi ve fıstıklı entremet pastanın lezzeti tek kelimeyle kusursuz. Ailemizle çok keyif aldık.',
       avatarBg: 'bg-[#3B5532]'
     }
   ];
