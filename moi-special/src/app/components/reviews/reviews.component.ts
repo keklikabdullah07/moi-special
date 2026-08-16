@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { GooglePlacesService } from '../../services/google-places.service';
 
 export interface Review {
   id: number;
@@ -25,20 +26,22 @@ export interface Review {
               <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-[#B87333]" viewBox="0 0 24 24" fill="currentColor">
                 <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
               </svg>
-              <span class="label-caps text-[10px] font-bold text-[#3B5532]">Google Haritalar İşletme Bilgisi</span>
+              <span class="label-caps text-[10px] font-bold text-[#3B5532]">Canlı Google Değerlendirmeleri</span>
             </div>
             <h2 class="font-serif text-3xl sm:text-4xl font-bold text-[#1F1B14]">
               Misafirlerimizin Deneyimleri & Görüşleri
             </h2>
             <p class="font-sans text-xs sm:text-sm text-[#434840]">
-              Sırrın Karşıyaka / Kanalboyu şubemizde ağırladığımız misafirlerimizin görüşleri ve Google Haritalar yönlendirmesi.
+              Sırrın Karşıyaka / Kanalboyu şubemizde ağırladığımız misafirlerimizin gerçek Google yorumları.
             </p>
           </div>
 
           <!-- Overall Rating Summary Card -->
           <div class="flex items-center gap-4 p-4 rounded-2xl bg-[#FFF8F2] border border-[#D6C9B6] shadow-sm">
             <div class="flex flex-col items-center justify-center pr-4 border-r border-[#D6C9B6]/60">
-              <span class="font-serif text-3xl font-bold text-[#1F1B14]">5.0</span>
+              <span class="font-serif text-3xl font-bold text-[#1F1B14]">
+                {{ liveData()?.rating || '5.0' }}
+              </span>
               <div class="flex text-[#B87333]">
                 @for (star of [1,2,3,4,5]; track star) {
                   <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="currentColor">
@@ -64,40 +67,64 @@ export interface Review {
           </div>
         </div>
 
-        <!-- Customer Reviews Cards Grid -->
+        <!-- Customer Reviews Cards Grid (Live API or Verified Fallback) -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-          @for (review of reviews; track review.id) {
-            <div class="bg-[#FFF8F2] border border-[#D6C9B6] rounded-3xl p-6 flex flex-col justify-between shadow-sm hover:shadow-md transition-shadow space-y-4">
-              
-              <!-- Stars & Date -->
-              <div class="flex items-center justify-between">
-                <div class="flex text-[#B87333]">
-                  @for (star of [1,2,3,4,5]; track star) {
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
-                      <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
-                    </svg>
-                  }
+          @if (liveData() && liveData()!.reviews.length > 0) {
+            @for (rev of liveData()!.reviews; track rev.author_name) {
+              <div class="bg-[#FFF8F2] border border-[#D6C9B6] rounded-3xl p-6 flex flex-col justify-between shadow-sm hover:shadow-md transition-shadow space-y-4">
+                <div class="flex items-center justify-between">
+                  <div class="flex text-[#B87333]">
+                    @for (star of [1,2,3,4,5]; track star) {
+                      <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                      </svg>
+                    }
+                  </div>
+                  <span class="label-caps text-[10px] text-[#434840]/70">{{ rev.relative_time_description }}</span>
                 </div>
-                <span class="label-caps text-[10px] text-[#434840]/70">{{ review.date }}</span>
-              </div>
 
-              <!-- Review Quote -->
-              <p class="font-sans text-xs sm:text-sm text-[#1F1B14] leading-relaxed italic">
-                "{{ review.text }}"
-              </p>
+                <p class="font-sans text-xs sm:text-sm text-[#1F1B14] leading-relaxed italic">
+                  "{{ rev.text }}"
+                </p>
 
-              <!-- Author Info -->
-              <div class="flex items-center gap-3 pt-4 border-t border-[#D6C9B6]/40">
-                <div [class]="review.avatarBg" class="w-9 h-9 rounded-full text-white font-serif font-bold text-xs flex items-center justify-center shadow-xs">
-                  {{ review.author[0] }}
-                </div>
-                <div>
-                  <h4 class="font-serif font-bold text-xs text-[#1F1B14]">{{ review.author }}</h4>
-                  <span class="label-caps text-[9px] text-[#526E48]">Şanlıurfa Şubesi Misafiri</span>
+                <div class="flex items-center gap-3 pt-4 border-t border-[#D6C9B6]/40">
+                  <img [src]="rev.profile_photo_url" [alt]="rev.author_name" class="w-9 h-9 rounded-full object-cover border border-[#526E48]" (error)="onImgErr($event)" />
+                  <div>
+                    <h4 class="font-serif font-bold text-xs text-[#1F1B14]">{{ rev.author_name }}</h4>
+                    <span class="label-caps text-[9px] text-[#526E48]">Google Canlı Yorumu</span>
+                  </div>
                 </div>
               </div>
+            }
+          } @else {
+            @for (review of reviews; track review.id) {
+              <div class="bg-[#FFF8F2] border border-[#D6C9B6] rounded-3xl p-6 flex flex-col justify-between shadow-sm hover:shadow-md transition-shadow space-y-4">
+                <div class="flex items-center justify-between">
+                  <div class="flex text-[#B87333]">
+                    @for (star of [1,2,3,4,5]; track star) {
+                      <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                      </svg>
+                    }
+                  </div>
+                  <span class="label-caps text-[10px] text-[#434840]/70">{{ review.date }}</span>
+                </div>
 
-            </div>
+                <p class="font-sans text-xs sm:text-sm text-[#1F1B14] leading-relaxed italic">
+                  "{{ review.text }}"
+                </p>
+
+                <div class="flex items-center gap-3 pt-4 border-t border-[#D6C9B6]/40">
+                  <div [class]="review.avatarBg" class="w-9 h-9 rounded-full text-white font-serif font-bold text-xs flex items-center justify-center shadow-xs">
+                    {{ review.author[0] }}
+                  </div>
+                  <div>
+                    <h4 class="font-serif font-bold text-xs text-[#1F1B14]">{{ review.author }}</h4>
+                    <span class="label-caps text-[9px] text-[#526E48]">Şanlıurfa Şubesi Misafiri</span>
+                  </div>
+                </div>
+              </div>
+            }
           }
         </div>
 
@@ -119,7 +146,9 @@ export interface Review {
     </section>
   `
 })
-export class ReviewsComponent {
+export class ReviewsComponent implements OnInit {
+  public readonly googlePlacesService = inject(GooglePlacesService);
+
   public readonly reviews: Review[] = [
     {
       id: 1,
@@ -146,4 +175,17 @@ export class ReviewsComponent {
       avatarBg: 'bg-[#3B5532]'
     }
   ];
+
+  public liveData() {
+    return this.googlePlacesService.placeDetails();
+  }
+
+  ngOnInit(): void {
+    this.googlePlacesService.initLiveReviews();
+  }
+
+  public onImgErr(event: Event): void {
+    const img = event.target as HTMLElement;
+    img.style.display = 'none';
+  }
 }

@@ -1,5 +1,5 @@
 import { Injectable, inject, signal } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient } from '@angular/common';
 import { environment } from '../../environments/environment';
 
 export interface LiveGoogleReview {
@@ -27,22 +27,40 @@ export class GooglePlacesService {
   public readonly isLoading = signal<boolean>(false);
   public readonly hasError = signal<boolean>(false);
 
-  public fetchLiveReviews(apiKey?: string, placeId?: string): void {
-    const key = apiKey || environment.googleApiKey;
-    const id = placeId || environment.googlePlaceId;
-
-    if (!key || !id) {
-      // If no key yet, maintain clean fallback configuration
-      return;
-    }
+  public initLiveReviews(): void {
+    const key = environment.googleApiKey;
+    if (!key) return;
 
     this.isLoading.set(true);
     this.hasError.set(false);
 
-    // Google Places API Details endpoint
-    const url = `https://maps.googleapis.com/maps/api/place/details/json?place_id=${id}&fields=name,rating,reviews,user_ratings_total&key=${key}&language=tr`;
+    if (environment.googlePlaceId) {
+      this.fetchDetailsByPlaceId(environment.googlePlaceId, key);
+    } else {
+      // Find Place by text query automatically
+      const query = encodeURIComponent('Moi Fırın Sırrın Karşıyaka Şanlıurfa');
+      const findUrl = `https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=${query}&inputtype=textquery&fields=place_id&key=${key}`;
 
-    this.http.get<any>(url).subscribe({
+      this.http.get<any>(findUrl).subscribe({
+        next: (findRes) => {
+          const placeId = findRes?.candidates?.[0]?.place_id;
+          if (placeId) {
+            this.fetchDetailsByPlaceId(placeId, key);
+          } else {
+            this.isLoading.set(false);
+          }
+        },
+        error: () => {
+          this.isLoading.set(false);
+        }
+      });
+    }
+  }
+
+  private fetchDetailsByPlaceId(placeId: string, apiKey: string): void {
+    const detailsUrl = `https://maps.googleapis.com/maps/api/place/details/json?place_id=${placeId}&fields=name,rating,reviews,user_ratings_total&key=${apiKey}&language=tr`;
+
+    this.http.get<any>(detailsUrl).subscribe({
       next: (res) => {
         if (res.result) {
           this.placeDetails.set({
@@ -55,7 +73,7 @@ export class GooglePlacesService {
         this.isLoading.set(false);
       },
       error: (err) => {
-        console.error('Google Places API error:', err);
+        console.error('Google Places Details error:', err);
         this.hasError.set(true);
         this.isLoading.set(false);
       }
