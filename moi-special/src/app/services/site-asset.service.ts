@@ -20,7 +20,7 @@ export interface SiteAssetConfig {
   footerCopyright: string;
 }
 
-const ASSET_CACHE_KEY = 'moi_site_assets_v4';
+const ASSET_CACHE_KEY = 'moi_site_assets_v5';
 
 @Injectable({
   providedIn: 'root'
@@ -36,15 +36,15 @@ export class SiteAssetService {
     heroEyebrow: 'Sırrın Karşıyaka, Şanlıurfa • Modern Artisan Pastane & Fırın',
     heroHeadline: 'Mezopotamya Gün Işığında Artisan Fırın Sanatı',
     heroSubtitle: 'Tarihi Şanlıurfa taş fırın kültürünün geleneksel ustalığı, Fransız patisserie inceliği ve zümrüt Antep fıstığının en eşsiz haliyle buluşuyor. Günlük taze pişen lezzetlerimizi keşfedin.',
-    aboutTitle: 'Tarihi Taş Fırın Kültürü, Fransız Zarafetiyle Buluşuyor',
-    aboutBody: 'Móí Special, Şanlıurfa\'nın köklü taş fırın geleneğini modern Fransız patisserie ustalığı ile harmanlayarak doğdu. Sırrın Karşıyaka / Gap Vadisi Bulvarı şubemizde her sabah gün ışımadan başlayan pişirim yolculuğumuzda, katkısız saf tereyağı ve bölgenin en seçkin zümrüt Antep fıstıkları kullanılır.',
-    brandName: 'Móí Special',
+    aboutTitle: 'Tarihi Taş Fırın Kültürü, Modern Zarafetle Buluşuyor',
+    aboutBody: 'Moi Special, Şanlıurfa\'nın köklü taş fırın geleneğini modern patisserie ustalığı ile harmanlayarak doğdu. Sırrın Karşıyaka / Gap Vadisi Bulvarı şubemizde her sabah gün ışımadan başlayan pişirim yolculuğumuzda, katkısız saf tereyağı ve bölgenin en seçkin zümrüt Antep fıstıkları kullanılır.',
+    brandName: 'Moi Special',
     navHome: 'Ana Sayfa',
     navMenu: 'Menü Koleksiyonu',
     navStory: 'Hikayemiz',
     navContact: 'İletişim',
     workingHours: 'Haftanın 7 Günü: 07:00 - 00:00',
-    footerCopyright: '© 2026 Móí Special. Tüm Hakları Saklıdır.'
+    footerCopyright: '© 2026 Moi Special. Tüm Hakları Saklıdır.'
   };
 
   // WebCMS Builder Mode Signals

@@ -20,7 +20,7 @@ import { SiteAssetService } from '../../services/site-asset.service';
       <!-- App Mobile Top Header Bar -->
       <header class="sticky top-0 z-40 bg-[#FFF8F2]/95 backdrop-blur-md border-b border-[#D6C9B6]/50 px-4 py-2.5 flex items-center justify-between shadow-xs">
         
-        <!-- Brand & Location Logo Emblem -->
+        <!-- Brand & Location Logo Emblem (CLEAN MOI TYPOGRAPHY) -->
         <div (click)="scrollToTop()" class="flex items-center gap-2 cursor-pointer active:scale-95 transition-transform">
           <svg viewBox="0 0 160 50" class="h-10 w-auto shrink-0" fill="none" xmlns="http://www.w3.org/2000/svg">
             <defs>
@@ -30,7 +30,7 @@ import { SiteAssetService } from '../../services/site-asset.service';
                 <stop offset="100%" stop-color="#784000" />
               </linearGradient>
             </defs>
-            <text x="2" y="34" font-family="'Playfair Display', Georgia, serif" font-weight="900" font-size="34" fill="url(#moiMobileGold)" letter-spacing="1">MOÍ</text>
+            <text x="2" y="34" font-family="'Playfair Display', Georgia, serif" font-weight="900" font-size="34" fill="url(#moiMobileGold)" letter-spacing="1">MOI</text>
             <path d="M98 10 Q104 6 110 12 Q104 18 98 10 Z" fill="#526E48" />
             <path d="M101 16 Q107 12 113 18 Q107 24 101 16 Z" fill="#526E48" />
             <path d="M104 22 Q110 18 116 24 Q110 30 104 22 Z" fill="#B87333" />
@@ -42,7 +42,7 @@ import { SiteAssetService } from '../../services/site-asset.service';
         <!-- Right Quick Actions (ERP Launcher, Login Profile & Cart Badge) -->
         <div class="flex items-center gap-2">
           
-          <!-- Super Admin ERP Quick Access Button (Strictly Guarded for Super Admin Abdullah Keklik) -->
+          <!-- Super Admin ERP Quick Access Button -->
           @if (authService.isSuperAdmin()) {
             <a 
               routerLink="/admin"

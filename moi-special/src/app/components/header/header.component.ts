@@ -26,7 +26,7 @@ import { SiteAssetService } from '../../services/site-asset.service';
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex items-center justify-between h-24 sm:h-28">
           
-          <!-- GRAND LUXURY MOÍ BRAND LOGO EMBLEM -->
+          <!-- GRAND LUXURY MOI BRAND LOGO EMBLEM (STANDARD CLEAN TYPOGRAPHY) -->
           <div (click)="scrollToSection('hero')" class="flex items-center gap-3 cursor-pointer group py-1">
             <div class="flex items-center gap-2 group-hover:scale-105 transition-transform duration-300">
               <svg viewBox="0 0 240 70" class="h-16 sm:h-20 w-auto shrink-0" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -37,7 +37,7 @@ import { SiteAssetService } from '../../services/site-asset.service';
                     <stop offset="100%" stop-color="#784000" />
                   </linearGradient>
                 </defs>
-                <text x="2" y="46" font-family="'Playfair Display', Georgia, serif" font-weight="900" font-size="52" fill="url(#moiLuxeGold)" letter-spacing="2">MOÍ</text>
+                <text x="2" y="46" font-family="'Playfair Display', Georgia, serif" font-weight="900" font-size="52" fill="url(#moiLuxeGold)" letter-spacing="2">MOI</text>
                 <path d="M142 16 Q150 10 158 18 Q150 26 142 16 Z" fill="#526E48" />
                 <path d="M146 24 Q154 18 162 26 Q154 34 146 24 Z" fill="#526E48" />
                 <path d="M150 32 Q158 26 166 34 Q158 42 150 32 Z" fill="#B87333" />
@@ -130,7 +130,7 @@ import { SiteAssetService } from '../../services/site-asset.service';
           
           <!-- Floating Island Mini Logo Mark -->
           <div (click)="scrollToSection('hero')" class="flex items-center gap-1.5 cursor-pointer hover:scale-105 transition-transform">
-            <span class="font-serif font-black text-xl text-[#B87333] tracking-widest">MOÍ</span>
+            <span class="font-serif font-black text-xl text-[#B87333] tracking-widest">MOI</span>
             <span class="text-xs text-[#526E48]">🌾</span>
           </div>
 

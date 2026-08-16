@@ -22,15 +22,18 @@ import { ToastService } from '../../../services/toast.service';
         <div class="p-6 space-y-6">
           <div class="flex items-center justify-between">
             
-            <!-- SEAMLESS MOÍ BRAND LOGO IN SIDEBAR -->
+            <!-- SEAMLESS MOI BRAND LOGO IN SIDEBAR -->
             <div class="flex items-center gap-3">
-              <img 
-                src="assets/moi-header-logo.jpg" 
-                alt="MOÍ Special Designer Logo" 
-                class="h-10 w-auto object-contain rounded-xl bg-white p-1" />
+              <div class="px-3.5 py-1.5 rounded-2xl bg-[#B87333] border border-[#D6C9B6]/40 flex items-center justify-center shadow-lg">
+                <svg viewBox="0 0 100 40" class="h-6 w-auto" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <text x="5" y="30" font-family="'Playfair Display', Georgia, serif" font-weight="800" font-size="28" fill="#FFF8F2" letter-spacing="1">MOI</text>
+                  <path d="M72 8 Q76 5 80 10 Q76 15 72 8 Z" fill="#CFEFC0" />
+                  <path d="M73 26 C74 20 76 15 80 8" stroke="#CFEFC0" stroke-width="1.5" stroke-linecap="round" />
+                </svg>
+              </div>
               
               <div>
-                <h2 class="font-serif font-bold text-lg text-[#FFF8F2] tracking-wide">Móí Special</h2>
+                <h2 class="font-serif font-bold text-lg text-[#FFF8F2] tracking-wide">Moi Special</h2>
                 <span class="label-caps text-[9px] text-[#B87333] font-bold block">Şanlıurfa Kurumsal ERP</span>
               </div>
             </div>
@@ -128,7 +131,7 @@ import { ToastService } from '../../../services/toast.service';
               🍔
             </button>
             <span class="label-caps text-[10px] text-[#B87333] font-bold hidden sm:inline">
-              Móí Special Taş Fırın & Pastane • Kurumsal ERP V2.0
+              Moi Special Taş Fırın & Pastane • Kurumsal ERP V2.0
             </span>
           </div>
 
