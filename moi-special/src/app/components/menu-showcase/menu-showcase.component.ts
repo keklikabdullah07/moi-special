@@ -10,93 +10,100 @@ import { SiteAssetService } from '../../services/site-asset.service';
   standalone: true,
   imports: [CommonModule],
   template: `
-    <section id="menu" class="py-20 bg-[#FFF8F2] relative border-b border-[#D6C9B6]/40">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+    <section id="menu" class="py-24 bg-[#FFF8F2] relative border-b border-[#D6C9B6]/40">
+      
+      <!-- Background Ambient Glow Blobs -->
+      <div class="absolute top-1/4 -left-20 w-80 h-80 bg-[#CFEFC0]/30 rounded-full blur-3xl pointer-events-none"></div>
+      <div class="absolute bottom-10 -right-20 w-80 h-80 bg-[#B87333]/10 rounded-full blur-3xl pointer-events-none"></div>
+
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-14 relative z-10">
         
         <!-- Section Header -->
-        <div class="text-center space-y-4 max-w-2xl mx-auto">
-          <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#EDE4D8] border border-[#D6C9B6] text-[#526E48]">
-            <span class="w-2 h-2 rounded-full bg-[#526E48]"></span>
-            <span class="label-caps text-[10px] font-semibold text-[#3B5532]">Günlük Taş Fırın Üretimi</span>
+        <div class="text-center space-y-4 max-w-3xl mx-auto">
+          <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#EDE4D8] border border-[#D6C9B6] text-[#526E48] shadow-xs">
+            <span class="w-2 h-2 rounded-full bg-[#526E48] animate-ping"></span>
+            <span class="label-caps text-[10px] font-bold tracking-widest text-[#3B5532]">
+              👑 Şanlıurfa Taş Fırın Ustalığı • Günlük Taze Pişirim
+            </span>
           </div>
 
-          <h2 class="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-[#1F1B14]">
+          <h2 class="font-serif text-4xl sm:text-5xl lg:text-6xl font-extrabold text-[#1F1B14] tracking-tight">
             Artisan Lezzet Koleksiyonu
           </h2>
 
-          <p class="font-sans text-sm sm:text-base text-[#434840]">
-            Şanlıurfa Taş Fırınımızdan her sabah sıcacık çıkan, %100 saf tereyağı ve zümrüt Antep fıstığı ile üretilen imza ürünlerimiz.
+          <p class="font-sans text-sm sm:text-base text-[#434840] max-w-2xl mx-auto leading-relaxed">
+            Şanlıurfa Taş Fırınımızdan her sabah sıcacık çıkan, %100 katkısız saf tereyağı ve Gaziantep zümrüt fıstığı ile hazırlanan imza pastane eserlerimiz.
           </p>
 
           <!-- SUPER ADMIN WEBCMS ADD NEW PRODUCT BUTTON -->
           @if (assetService.isEditMode()) {
-            <div class="pt-2">
+            <div class="pt-3">
               <button 
                 (click)="openAddProductModal()"
-                class="px-6 py-2.5 rounded-full bg-[#B87333] hover:bg-[#784000] text-white text-xs font-bold uppercase tracking-wider shadow-lg flex items-center gap-2 mx-auto active:scale-95 transition-all cursor-pointer">
+                class="px-6 py-3 rounded-full bg-[#B87333] hover:bg-[#784000] text-white text-xs font-bold uppercase tracking-wider shadow-lg flex items-center gap-2 mx-auto active:scale-95 transition-all cursor-pointer">
                 <span>+ Menüye Yeni Ürün Ekle</span>
               </button>
             </div>
           }
         </div>
 
-        <!-- Category Filter Tabs -->
-        <div class="flex flex-wrap items-center justify-center gap-2 sm:gap-3">
+        <!-- Luxury Category Filter Tabs -->
+        <div class="flex flex-wrap items-center justify-center gap-2.5 sm:gap-3 p-1.5 rounded-full bg-[#EDE4D8]/60 border border-[#D6C9B6] max-w-3xl mx-auto shadow-xs">
           <button 
             (click)="setCategory('all')"
             [class.bg-[#526E48]]="productService.selectedCategory() === 'all'"
             [class.text-white]="productService.selectedCategory() === 'all'"
-            [class.bg-[#EDE4D8]]="productService.selectedCategory() !== 'all'"
+            [class.shadow-md]="productService.selectedCategory() === 'all'"
             [class.text-[#1F1B14]]="productService.selectedCategory() !== 'all'"
-            class="px-5 py-2 rounded-full text-xs font-semibold uppercase tracking-wider border border-[#D6C9B6] hover:border-[#526E48] transition-all cursor-pointer">
-            Tüm Lezzetler
+            class="px-5 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider transition-all duration-300 cursor-pointer">
+            ✨ Tüm Lezzetler
           </button>
 
           <button 
             (click)="setCategory('fistikli')"
             [class.bg-[#526E48]]="productService.selectedCategory() === 'fistikli'"
             [class.text-white]="productService.selectedCategory() === 'fistikli'"
-            [class.bg-[#EDE4D8]]="productService.selectedCategory() !== 'fistikli'"
+            [class.shadow-md]="productService.selectedCategory() === 'fistikli'"
             [class.text-[#1F1B14]]="productService.selectedCategory() !== 'fistikli'"
-            class="px-5 py-2 rounded-full text-xs font-semibold uppercase tracking-wider border border-[#D6C9B6] hover:border-[#526E48] transition-all cursor-pointer">
-            Fıstıklı Özel
+            class="px-5 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider transition-all duration-300 cursor-pointer">
+            💚 Fıstıklı Özel
           </button>
 
           <button 
             (click)="setCategory('pastane')"
             [class.bg-[#526E48]]="productService.selectedCategory() === 'pastane'"
             [class.text-white]="productService.selectedCategory() === 'pastane'"
-            [class.bg-[#EDE4D8]]="productService.selectedCategory() !== 'pastane'"
+            [class.shadow-md]="productService.selectedCategory() === 'pastane'"
             [class.text-[#1F1B14]]="productService.selectedCategory() !== 'pastane'"
-            class="px-5 py-2 rounded-full text-xs font-semibold uppercase tracking-wider border border-[#D6C9B6] hover:border-[#526E48] transition-all cursor-pointer">
-            Artisan Pastane
+            class="px-5 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider transition-all duration-300 cursor-pointer">
+            🍰 Artisan Pastane
           </button>
 
           <button 
             (click)="setCategory('firin')"
             [class.bg-[#526E48]]="productService.selectedCategory() === 'firin'"
             [class.text-white]="productService.selectedCategory() === 'firin'"
-            [class.bg-[#EDE4D8]]="productService.selectedCategory() !== 'firin'"
+            [class.shadow-md]="productService.selectedCategory() === 'firin'"
             [class.text-[#1F1B14]]="productService.selectedCategory() !== 'firin'"
-            class="px-5 py-2 rounded-full text-xs font-semibold uppercase tracking-wider border border-[#D6C9B6] hover:border-[#526E48] transition-all cursor-pointer">
-            Taş Fırın & Ekmek
+            class="px-5 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider transition-all duration-300 cursor-pointer">
+            🥖 Taş Fırın & Ekmek
           </button>
 
           <button 
             (click)="setCategory('icecek')"
             [class.bg-[#526E48]]="productService.selectedCategory() === 'icecek'"
             [class.text-white]="productService.selectedCategory() === 'icecek'"
-            [class.bg-[#EDE4D8]]="productService.selectedCategory() !== 'icecek'"
+            [class.shadow-md]="productService.selectedCategory() === 'icecek'"
             [class.text-[#1F1B14]]="productService.selectedCategory() !== 'icecek'"
-            class="px-5 py-2 rounded-full text-xs font-semibold uppercase tracking-wider border border-[#D6C9B6] hover:border-[#526E48] transition-all cursor-pointer">
-            Gurme İçecekler
+            class="px-5 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider transition-all duration-300 cursor-pointer">
+            ☕ Gurme İçecekler
           </button>
         </div>
 
-        <!-- Product Cards Grid -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+        <!-- Product Cards Grid (Chic Luxury Card Design) -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 sm:gap-10">
           @for (prod of productService.filteredProducts(); track prod.id) {
-            <div class="group bg-[#FFF8F2] border border-[#D6C9B6] rounded-3xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col relative">
+            <div class="group bg-white border border-[#D6C9B6] rounded-3xl overflow-hidden shadow-sm hover:shadow-2xl hover:-translate-y-1 transition-all duration-500 flex flex-col relative">
               
               <!-- SUPER ADMIN INLINE WEBCMS EDIT & DELETE BUTTONS ON CARD -->
               @if (assetService.isEditMode()) {
@@ -114,35 +121,40 @@ import { SiteAssetService } from '../../services/site-asset.service';
                 </div>
               }
 
-              <!-- Image Header Container -->
+              <!-- Image Container with Smooth Scale & Tags Overlay -->
               <div class="relative aspect-[4/3] overflow-hidden bg-[#EDE4D8]">
                 <img 
                   [src]="prod.imageUrl" 
                   [alt]="prod.name" 
-                  class="w-full h-full object-cover transform transition-transform duration-700 group-hover:scale-105"
+                  class="w-full h-full object-cover transform transition-transform duration-700 group-hover:scale-110"
                   (error)="onImgError($event)" />
 
-                <!-- Category & Specialty Tags -->
-                <div class="absolute top-4 right-4 flex flex-col gap-1 items-end">
+                <!-- Ambient Gradient Overlay -->
+                <div class="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-60 group-hover:opacity-40 transition-opacity"></div>
+
+                <!-- Tag Badges -->
+                <div class="absolute top-4 right-4 flex flex-col gap-1 items-end z-10">
                   @for (tag of prod.tags; track tag) {
-                    <span class="px-3 py-1 rounded-full bg-[#FFF8F2]/90 backdrop-blur-md text-[#526E48] font-bold text-[9px] uppercase tracking-wider shadow-xs">
+                    <span class="px-3.5 py-1 rounded-full bg-[#FFF8F2]/95 backdrop-blur-md text-[#526E48] font-bold text-[9px] uppercase tracking-wider shadow-md border border-[#D6C9B6]/60">
                       {{ tag }}
                     </span>
                   }
                 </div>
+
+                <!-- Price Badge Overlay on Image -->
+                <div class="absolute bottom-4 left-4 z-10">
+                  <span class="px-4 py-1.5 rounded-full bg-[#1F1B14]/90 backdrop-blur-md text-[#CFEFC0] font-serif font-bold text-base shadow-lg border border-[#B87333]/40">
+                    {{ prod.price }} ₺
+                  </span>
+                </div>
               </div>
 
               <!-- Product Info Body -->
-              <div class="p-6 flex-1 flex flex-col justify-between space-y-4">
+              <div class="p-6 flex-1 flex flex-col justify-between space-y-5 bg-white">
                 <div class="space-y-2">
-                  <div class="flex items-start justify-between gap-2">
-                    <h3 class="font-serif font-bold text-xl text-[#1F1B14] group-hover:text-[#526E48] transition-colors">
-                      {{ prod.name }}
-                    </h3>
-                    <span class="font-serif font-bold text-lg text-[#526E48] whitespace-nowrap">
-                      {{ prod.price }} ₺
-                    </span>
-                  </div>
+                  <h3 class="font-serif font-bold text-2xl text-[#1F1B14] group-hover:text-[#B87333] transition-colors leading-tight">
+                    {{ prod.name }}
+                  </h3>
 
                   <p class="font-sans text-xs text-[#434840] leading-relaxed line-clamp-2">
                     {{ prod.description }}
@@ -152,7 +164,7 @@ import { SiteAssetService } from '../../services/site-asset.service';
                 <!-- Add to Cart Action Button -->
                 <button 
                   (click)="addToCart(prod)"
-                  class="w-full py-3 rounded-full bg-[#EDE4D8] hover:bg-[#526E48] text-[#1F1B14] hover:text-white font-bold text-xs uppercase tracking-wider transition-all duration-300 flex items-center justify-center gap-2 group-hover:shadow-md cursor-pointer">
+                  class="w-full py-3.5 rounded-full bg-[#EDE4D8] hover:bg-[#526E48] text-[#1F1B14] hover:text-white font-bold text-xs uppercase tracking-wider transition-all duration-300 flex items-center justify-center gap-2 shadow-xs group-hover:shadow-md cursor-pointer active:scale-98">
                   <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
                   </svg>
@@ -180,7 +192,7 @@ export class MenuShowcaseComponent {
 
   public addToCart(product: Product): void {
     this.cartService.addItem(product);
-    this.toastService.show(`"${product.name}" sepete eklendi! 🛒`);
+    this.toastService.showCart(`"${product.name}" sepete eklendi! 🥐`);
   }
 
   public editProduct(product: Product): void {

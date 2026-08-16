@@ -10,11 +10,11 @@ import { SiteAssetService } from '../../services/site-asset.service';
   imports: [CommonModule],
   template: `
     <header 
-      [class.bg-[#FFF8F2]/90]="isScrolled"
+      [class.bg-[#FFF8F2]/95]="isScrolled"
       [class.backdrop-blur-md]="isScrolled"
       [class.shadow-md]="isScrolled"
       [class.bg-[#FFF8F2]]="!isScrolled"
-      class="sticky top-0 z-40 transition-all duration-300 border-b border-[#D6C9B6]/40 relative group/header">
+      class="sticky top-0 z-40 transition-all duration-300 border-b border-[#D6C9B6]/50 relative group/header">
       
       <!-- WEBCMS LIVE EDIT OVERLAY BADGE FOR HEADER -->
       @if (assetService.isEditMode()) {
@@ -28,27 +28,50 @@ import { SiteAssetService } from '../../services/site-asset.service';
       }
 
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex items-center justify-between h-20 sm:h-24">
+        <div class="flex items-center justify-between h-24 sm:h-28">
           
-          <!-- SEAMLESS FLAT HEADER LOGO (NO BORDERS, NO CARDS, PERFECT BACKGROUND BLEND) -->
-          <div (click)="scrollToSection('hero')" class="flex items-center cursor-pointer group py-1">
-            <img 
-              src="assets/moi-header-logo.jpg" 
-              alt="MOÍ Special Designer Logo" 
-              class="h-12 sm:h-16 w-auto object-contain group-hover:scale-105 transition-all duration-300 mix-blend-multiply" />
+          <!-- GRAND LUXURY MOÍ BRAND LOGO EMBLEM (PROMINENT, LARGE & PIXEL-PERFECT) -->
+          <div (click)="scrollToSection('hero')" class="flex items-center gap-3 cursor-pointer group py-1">
+            
+            <div class="flex items-center gap-2 group-hover:scale-105 transition-transform duration-300">
+              <!-- Ultra-Crisp High Resolution Vector Logo -->
+              <svg viewBox="0 0 240 70" class="h-16 sm:h-20 w-auto shrink-0" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <!-- Rich Copper Gold Gradient Definition -->
+                <defs>
+                  <linearGradient id="moiLuxeGold" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#C68244" />
+                    <stop offset="50%" stop-color="#B87333" />
+                    <stop offset="100%" stop-color="#784000" />
+                  </linearGradient>
+                </defs>
+
+                <!-- MOÍ Main Grand Serif Typography -->
+                <text x="2" y="46" font-family="'Playfair Display', Georgia, serif" font-weight="900" font-size="52" fill="url(#moiLuxeGold)" letter-spacing="2">MOÍ</text>
+
+                <!-- Elegant Wheat Ear Line Art Stemming from Letter Í -->
+                <path d="M142 16 Q150 10 158 18 Q150 26 142 16 Z" fill="#526E48" />
+                <path d="M146 24 Q154 18 162 26 Q154 34 146 24 Z" fill="#526E48" />
+                <path d="M150 32 Q158 26 166 34 Q158 42 150 32 Z" fill="#B87333" />
+                <path d="M144 48 C146 36 150 24 160 12" stroke="#526E48" stroke-width="2.5" stroke-linecap="round" />
+
+                <!-- Subtitle Tagline -->
+                <text x="4" y="64" font-family="'Inter', sans-serif" font-weight="700" font-size="9" fill="#B87333" letter-spacing="3">ŞANLIURFA • ARTISAN PATISSERIE</text>
+              </svg>
+            </div>
+
           </div>
 
           <!-- Desktop Navigation Bar Links -->
-          <nav class="hidden md:flex items-center gap-8">
+          <nav class="hidden md:flex items-center gap-9">
             <button 
               (click)="scrollToSection('hero')" 
-              class="font-sans text-xs font-semibold uppercase tracking-widest text-[#1F1B14] hover:text-[#526E48] transition-colors cursor-pointer">
+              class="font-sans text-xs font-bold uppercase tracking-widest text-[#1F1B14] hover:text-[#526E48] transition-colors cursor-pointer">
               {{ assetService.navHome() }}
             </button>
             
             <button 
               (click)="scrollToSection('menu')" 
-              class="font-sans text-xs font-semibold uppercase tracking-widest text-[#1F1B14] hover:text-[#526E48] transition-colors cursor-pointer">
+              class="font-sans text-xs font-bold uppercase tracking-widest text-[#1F1B14] hover:text-[#526E48] transition-colors cursor-pointer">
               {{ assetService.navMenu() }}
             </button>
 
@@ -71,8 +94,8 @@ import { SiteAssetService } from '../../services/site-asset.service';
             <!-- User Login / Profile Avatar Button -->
             <button 
               (click)="handleUserButtonClick()"
-              class="px-4 py-2 rounded-full border border-[#D6C9B6] hover:border-[#526E48] bg-[#EDE4D8]/50 hover:bg-[#EDE4D8] text-[#1F1B14] text-xs font-bold uppercase tracking-wider flex items-center gap-2 transition-all cursor-pointer">
-              <span class="w-2 h-2 rounded-full" [class.bg-emerald-600]="authService.isLoggedIn()" [class.bg-amber-600]="!authService.isLoggedIn()"></span>
+              class="px-4 py-2.5 rounded-full border border-[#D6C9B6] hover:border-[#526E48] bg-[#EDE4D8]/50 hover:bg-[#EDE4D8] text-[#1F1B14] text-xs font-bold uppercase tracking-wider flex items-center gap-2 transition-all cursor-pointer">
+              <span class="w-2.5 h-2.5 rounded-full" [class.bg-emerald-600]="authService.isLoggedIn()" [class.bg-amber-600]="!authService.isLoggedIn()"></span>
               <span>
                 @if (authService.currentUser()) {
                   {{ authService.currentUser()?.name }}
@@ -85,7 +108,7 @@ import { SiteAssetService } from '../../services/site-asset.service';
             <!-- Cart Pill Trigger -->
             <button 
               (click)="cartService.toggleDrawer()" 
-              class="relative p-2.5 rounded-full bg-[#526E48] text-white hover:bg-[#3B5532] shadow-md hover:shadow-lg transition-all active:scale-95 cursor-pointer">
+              class="relative p-3 rounded-full bg-[#526E48] text-white hover:bg-[#3B5532] shadow-md hover:shadow-lg transition-all active:scale-95 cursor-pointer">
               <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
               </svg>
