@@ -11,10 +11,12 @@ import { SiteAssetService } from '../../services/site-asset.service';
   template: `
     <header 
       [class.bg-[#FFF8F2]/95]="isScrolled"
-      [class.backdrop-blur-md]="isScrolled"
-      [class.shadow-md]="isScrolled"
+      [class.backdrop-blur-xl]="isScrolled"
+      [class.shadow-lg]="isScrolled"
+      [class.border-[#B87333]/30]="isScrolled"
+      [class.py-1]="isScrolled"
       [class.bg-[#FFF8F2]]="!isScrolled"
-      class="sticky top-0 z-40 transition-all duration-300 border-b border-[#D6C9B6]/50 relative group/header">
+      class="sticky top-0 z-40 transition-all duration-500 border-b border-[#D6C9B6]/50 relative group/header select-none">
       
       <!-- WEBCMS LIVE EDIT OVERLAY BADGE FOR HEADER -->
       @if (assetService.isEditMode()) {
@@ -28,12 +30,15 @@ import { SiteAssetService } from '../../services/site-asset.service';
       }
 
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex items-center justify-between h-24 sm:h-28">
+        <div 
+          [class.h-20]="isScrolled"
+          [class.h-24]="!isScrolled"
+          class="flex items-center justify-between transition-all duration-500">
           
-          <!-- GRAND LUXURY MOÍ BRAND LOGO EMBLEM -->
+          <!-- GRAND LUXURY MOÍ BRAND LOGO EMBLEM (DYNAMICAL SCALED ON SCROLL) -->
           <div (click)="scrollToSection('hero')" class="flex items-center gap-3 cursor-pointer group py-1">
             <div class="flex items-center gap-2 group-hover:scale-105 transition-transform duration-300">
-              <svg viewBox="0 0 240 70" class="h-16 sm:h-20 w-auto shrink-0" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <svg viewBox="0 0 240 70" [class.h-14]="isScrolled" [class.h-18]="!isScrolled" class="w-auto shrink-0 transition-all duration-500" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <defs>
                   <linearGradient id="moiLuxeGold" x1="0%" y1="0%" x2="100%" y2="100%">
                     <stop offset="0%" stop-color="#C68244" />
@@ -51,7 +56,7 @@ import { SiteAssetService } from '../../services/site-asset.service';
             </div>
           </div>
 
-          <!-- HIGH-FASHION MINIMALIST HEADER NAVIGATION MENU BAR (NO EMOJIS, CLEAN LUXURY) -->
+          <!-- STICKY FLOATING HEADER NAVIGATION MENU BAR -->
           <nav class="hidden md:flex items-center gap-1.5 p-1.5 rounded-full bg-[#EDE4D8]/60 border border-[#D6C9B6] shadow-xs">
             <button 
               (click)="scrollToSection('hero')" 
@@ -59,7 +64,7 @@ import { SiteAssetService } from '../../services/site-asset.service';
               [class.text-white]="activeNav() === 'hero'"
               [class.shadow-sm]="activeNav() === 'hero'"
               [class.text-[#1F1B14]]="activeNav() !== 'hero'"
-              class="px-6 py-2.5 rounded-full font-sans text-xs font-bold uppercase tracking-widest hover:bg-[#526E48] hover:text-white transition-all duration-300 cursor-pointer">
+              class="px-6 py-2 rounded-full font-sans text-xs font-bold uppercase tracking-widest hover:bg-[#526E48] hover:text-white transition-all duration-300 cursor-pointer">
               {{ assetService.navHome() }}
             </button>
             
@@ -69,7 +74,7 @@ import { SiteAssetService } from '../../services/site-asset.service';
               [class.text-white]="activeNav() === 'menu'"
               [class.shadow-sm]="activeNav() === 'menu'"
               [class.text-[#1F1B14]]="activeNav() !== 'menu'"
-              class="px-6 py-2.5 rounded-full font-sans text-xs font-bold uppercase tracking-widest hover:bg-[#526E48] hover:text-white transition-all duration-300 cursor-pointer">
+              class="px-6 py-2 rounded-full font-sans text-xs font-bold uppercase tracking-widest hover:bg-[#526E48] hover:text-white transition-all duration-300 cursor-pointer">
               {{ assetService.navMenu() }}
             </button>
 
@@ -79,7 +84,7 @@ import { SiteAssetService } from '../../services/site-asset.service';
               [class.text-white]="activeNav() === 'about'"
               [class.shadow-sm]="activeNav() === 'about'"
               [class.text-[#1F1B14]]="activeNav() !== 'about'"
-              class="px-6 py-2.5 rounded-full font-sans text-xs font-bold uppercase tracking-widest hover:bg-[#526E48] hover:text-white transition-all duration-300 cursor-pointer">
+              class="px-6 py-2 rounded-full font-sans text-xs font-bold uppercase tracking-widest hover:bg-[#526E48] hover:text-white transition-all duration-300 cursor-pointer">
               {{ assetService.navStory() }}
             </button>
 
@@ -89,7 +94,7 @@ import { SiteAssetService } from '../../services/site-asset.service';
               [class.text-white]="activeNav() === 'contact'"
               [class.shadow-sm]="activeNav() === 'contact'"
               [class.text-[#1F1B14]]="activeNav() !== 'contact'"
-              class="px-6 py-2.5 rounded-full font-sans text-xs font-bold uppercase tracking-widest hover:bg-[#526E48] hover:text-white transition-all duration-300 cursor-pointer">
+              class="px-6 py-2 rounded-full font-sans text-xs font-bold uppercase tracking-widest hover:bg-[#526E48] hover:text-white transition-all duration-300 cursor-pointer">
               {{ assetService.navContact() }}
             </button>
           </nav>
@@ -145,7 +150,7 @@ export class HeaderComponent {
     
     // Auto active nav update on scroll
     if (typeof window !== 'undefined') {
-      const scrollPos = window.scrollY + 100;
+      const scrollPos = window.scrollY + 120;
       const menuSection = document.getElementById('menu');
       const aboutSection = document.getElementById('about');
       const contactSection = document.getElementById('contact');

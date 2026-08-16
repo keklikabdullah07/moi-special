@@ -15,6 +15,7 @@ import { SuperAdminBarComponent } from '../../components/super-admin-bar/super-a
 import { LiveSectionEditorModalComponent } from '../../components/live-section-editor-modal/live-section-editor-modal.component';
 import { ToastComponent } from '../../components/toast/toast.component';
 import { FooterComponent } from '../../components/footer/footer.component';
+import { ScrollToTopComponent } from '../../components/scroll-to-top/scroll-to-top.component';
 
 @Component({
   selector: 'app-customer-shell',
@@ -35,7 +36,8 @@ import { FooterComponent } from '../../components/footer/footer.component';
     SuperAdminBarComponent,
     LiveSectionEditorModalComponent,
     ToastComponent,
-    FooterComponent
+    FooterComponent,
+    ScrollToTopComponent
   ],
   template: `
     <div class="min-h-screen bg-[#FFF8F2] flex flex-col font-sans selection:bg-[#526E48] selection:text-white">
@@ -64,13 +66,16 @@ import { FooterComponent } from '../../components/footer/footer.component';
       </div>
 
       <!-- SHARED INTERACTIVE MODALS & DRAWER -->
-      <app-cart-drawer></app-cart-drawer>
+      <app-cart-drawer></app-[#FFF8F2] drawer>
       <app-reservation-modal></app-reservation-modal>
       <app-story-modal></app-story-modal>
       <app-auth-modal></app-auth-modal>
       <app-user-profile-modal></app-user-profile-modal>
       <app-live-section-editor-modal></app-live-section-editor-modal>
       <app-toast></app-toast>
+
+      <!-- FLOATING BACK TO TOP BUTTON -->
+      <app-scroll-to-top></app-scroll-to-top>
 
       <!-- MOBILE FIXED BOTTOM TAB BAR -->
       <app-mobile-bottom-nav></app-mobile-bottom-nav>
