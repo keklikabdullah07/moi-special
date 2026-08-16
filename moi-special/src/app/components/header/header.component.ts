@@ -2,6 +2,7 @@ import { Component, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CartService } from '../../services/cart.service';
 import { ReservationService } from '../../services/reservation.service';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-header',
@@ -12,36 +13,63 @@ import { ReservationService } from '../../services/reservation.service';
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
         
         <!-- Brand Wordmark Logo -->
-        <a href="#" class="flex items-center gap-3 group">
+        <button (click)="scrollToSection('hero')" class="flex items-center gap-3 group text-left cursor-pointer">
           <img src="assets/wordmark.png" alt="Moi Special Logo" class="h-10 w-auto object-contain transition-transform duration-300 group-hover:scale-105" (error)="onImgError($event)">
           <div class="flex flex-col">
             <span class="font-serif text-xl sm:text-2xl font-bold tracking-tight text-[#3B5532]">MOI SPECIAL</span>
             <span class="label-caps text-[9px] text-[#B87333] tracking-[0.2em]">Şanlıurfa • Artisan Patisserie</span>
           </div>
-        </a>
+        </button>
 
         <!-- Desktop Navigation Links -->
         <nav class="hidden md:flex items-center space-x-8">
-          <a href="#hero" class="label-caps text-xs text-[#1F1B14] hover:text-[#526E48] py-1 relative group transition-colors">
+          <button (click)="scrollToSection('hero')" class="label-caps text-xs text-[#1F1B14] hover:text-[#526E48] py-1 relative group transition-colors cursor-pointer">
             <span>Ana Sayfa</span>
             <span class="absolute bottom-0 left-0 w-0 h-[2px] bg-[#526E48] transition-all duration-300 group-hover:w-full"></span>
-          </a>
-          <a href="#menu" class="label-caps text-xs text-[#1F1B14] hover:text-[#526E48] py-1 relative group transition-colors">
+          </button>
+          <button (click)="scrollToSection('menu')" class="label-caps text-xs text-[#1F1B14] hover:text-[#526E48] py-1 relative group transition-colors cursor-pointer">
             <span>Menü Koleksiyonu</span>
             <span class="absolute bottom-0 left-0 w-0 h-[2px] bg-[#526E48] transition-all duration-300 group-hover:w-full"></span>
-          </a>
-          <a href="#about" class="label-caps text-xs text-[#1F1B14] hover:text-[#526E48] py-1 relative group transition-colors">
+          </button>
+          <button (click)="scrollToSection('about')" class="label-caps text-xs text-[#1F1B14] hover:text-[#526E48] py-1 relative group transition-colors cursor-pointer">
             <span>Hikayemiz</span>
             <span class="absolute bottom-0 left-0 w-0 h-[2px] bg-[#526E48] transition-all duration-300 group-hover:w-full"></span>
-          </a>
-          <a href="#contact" class="label-caps text-xs text-[#1F1B14] hover:text-[#526E48] py-1 relative group transition-colors">
+          </button>
+          <button (click)="scrollToSection('contact')" class="label-caps text-xs text-[#1F1B14] hover:text-[#526E48] py-1 relative group transition-colors cursor-pointer">
             <span>İletişim</span>
             <span class="absolute bottom-0 left-0 w-0 h-[2px] bg-[#526E48] transition-all duration-300 group-hover:w-full"></span>
-          </a>
+          </button>
         </nav>
 
-        <!-- Actions: Cart, Reservation CTA & Mobile Hamburger -->
+        <!-- Actions: User Profile, Cart, Reservation CTA & Mobile Hamburger -->
         <div class="flex items-center gap-3">
+          
+          <!-- User Profile / Auth Login Button -->
+          @if (authService.isLoggedIn()) {
+            <button 
+              (click)="authService.isProfileModalOpen.set(true)"
+              class="flex items-center gap-2 px-3 py-1.5 rounded-full border border-[#D6C9B6] bg-[#EDE4D8]/80 hover:bg-[#EDE4D8] text-[#1F1B14] transition-all active:scale-95 cursor-pointer">
+              <div 
+                [class.bg-[#526E48]]="!authService.isAdmin()"
+                [class.bg-[#B87333]]="authService.isAdmin()"
+                class="w-7 h-7 rounded-full text-white font-serif font-bold text-xs flex items-center justify-center">
+                {{ authService.currentUser()?.name?.[0] }}
+              </div>
+              <span class="label-caps text-xs font-bold hidden sm:inline">
+                {{ authService.isAdmin() ? '👑 Yönetici' : authService.currentUser()?.name }}
+              </span>
+            </button>
+          } @else {
+            <button 
+              (click)="authService.isAuthModalOpen.set(true)"
+              class="flex items-center gap-1.5 px-3.5 py-2 rounded-full border border-[#D6C9B6] bg-[#EDE4D8]/60 hover:bg-[#EDE4D8] text-[#1F1B14] transition-all active:scale-95 cursor-pointer">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-[#526E48]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+              </svg>
+              <span class="label-caps text-xs font-bold">Giriş Yap</span>
+            </button>
+          }
+
           <!-- Shopping Bag Button -->
           <button 
             (click)="cartService.toggleDrawer()" 
@@ -83,32 +111,28 @@ import { ReservationService } from '../../services/reservation.service';
 
       <!-- Mobile Dropdown Navigation Menu -->
       @if (isMobileMenuOpen()) {
-        <div class="md:hidden bg-[#FFF8F2] border-b border-[#D6C9B6] px-6 py-6 space-y-4 shadow-xl">
+        <div class="md:hidden bg-[#FFF8F2] border-b border-[#D6C9B6] px-6 py-6 space-y-4 shadow-xl animate-fadeIn">
           <nav class="flex flex-col space-y-3">
-            <a 
-              (click)="isMobileMenuOpen.set(false)"
-              href="#hero" 
-              class="label-caps text-sm text-[#1F1B14] hover:text-[#526E48] py-2 border-b border-[#D6C9B6]/40">
+            <button 
+              (click)="scrollToSection('hero')" 
+              class="label-caps text-sm text-[#1F1B14] hover:text-[#526E48] py-2 border-b border-[#D6C9B6]/40 text-left font-bold cursor-pointer">
               Ana Sayfa
-            </a>
-            <a 
-              (click)="isMobileMenuOpen.set(false)"
-              href="#menu" 
-              class="label-caps text-sm text-[#1F1B14] hover:text-[#526E48] py-2 border-b border-[#D6C9B6]/40">
+            </button>
+            <button 
+              (click)="scrollToSection('menu')" 
+              class="label-caps text-sm text-[#1F1B14] hover:text-[#526E48] py-2 border-b border-[#D6C9B6]/40 text-left font-bold cursor-pointer">
               Menü Koleksiyonu
-            </a>
-            <a 
-              (click)="isMobileMenuOpen.set(false)"
-              href="#about" 
-              class="label-caps text-sm text-[#1F1B14] hover:text-[#526E48] py-2 border-b border-[#D6C9B6]/40">
+            </button>
+            <button 
+              (click)="scrollToSection('about')" 
+              class="label-caps text-sm text-[#1F1B14] hover:text-[#526E48] py-2 border-b border-[#D6C9B6]/40 text-left font-bold cursor-pointer">
               Hikayemiz
-            </a>
-            <a 
-              (click)="isMobileMenuOpen.set(false)"
-              href="#contact" 
-              class="label-caps text-sm text-[#1F1B14] hover:text-[#526E48] py-2">
+            </button>
+            <button 
+              (click)="scrollToSection('contact')" 
+              class="label-caps text-sm text-[#1F1B14] hover:text-[#526E48] py-2 text-left font-bold cursor-pointer">
               İletişim
-            </a>
+            </button>
           </nav>
           
           <button 
@@ -124,7 +148,26 @@ import { ReservationService } from '../../services/reservation.service';
 export class HeaderComponent {
   public readonly cartService = inject(CartService);
   public readonly reservationService = inject(ReservationService);
+  public readonly authService = inject(AuthService);
+
   public readonly isMobileMenuOpen = signal<boolean>(false);
+
+  public scrollToSection(id: string): void {
+    this.isMobileMenuOpen.set(false);
+    if (typeof window === 'undefined') return;
+
+    if (id === 'hero' || id === 'mobile-hero') {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      return;
+    }
+
+    const elem = document.getElementById(id);
+    if (elem) {
+      const yOffset = -80; // Header offset
+      const y = elem.getBoundingClientRect().top + window.pageYOffset + yOffset;
+      window.scrollTo({ top: y, behavior: 'smooth' });
+    }
+  }
 
   public onImgError(event: Event): void {
     const target = event.target as HTMLElement;

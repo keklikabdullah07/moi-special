@@ -81,4 +81,8 @@ export class ProductService {
       isAvailable: true
     }
   ]);
+
+  public addProduct(product: Product): void {
+    this.products.update(list => [product, ...list]);
+  }
 }

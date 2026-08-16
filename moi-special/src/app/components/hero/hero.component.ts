@@ -40,12 +40,14 @@ import { gsap } from 'gsap';
 
             <!-- Action Buttons -->
             <div class="hero-item flex flex-wrap items-center gap-4 pt-2">
-              <a href="#menu" class="btn-shimmer px-8 py-4 rounded-full text-white font-medium text-xs tracking-wider uppercase shadow-lg hover:shadow-2xl transform hover:-translate-y-1 active:scale-95 transition-all duration-300 inline-flex items-center gap-3 group">
+              <button 
+                (click)="scrollToSection('menu')"
+                class="btn-shimmer px-8 py-4 rounded-full text-white font-medium text-xs tracking-wider uppercase shadow-lg hover:shadow-2xl transform hover:-translate-y-1 active:scale-95 transition-all duration-300 inline-flex items-center gap-3 group cursor-pointer">
                 <span>Menüyü Keşfet</span>
                 <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
                 </svg>
-              </a>
+              </button>
               
               <a 
                 href="https://share.google/P5BMtr0gzI00D3TQj" 
@@ -62,15 +64,15 @@ import { gsap } from 'gsap';
 
             <!-- Trust / Metric Highlights -->
             <div class="hero-item grid grid-cols-3 gap-6 pt-8 border-t border-[#D6C9B6]/60 max-w-xl">
-              <div class="group cursor-pointer">
+              <div (click)="scrollToSection('menu')" class="group cursor-pointer">
                 <span class="block font-serif text-2xl lg:text-3xl font-bold text-[#526E48] transition-transform group-hover:scale-110">100%</span>
                 <span class="label-caps text-[10px] text-[#434840]">Boz Antep Fıstığı</span>
               </div>
-              <div class="group cursor-pointer">
+              <div (click)="scrollToSection('about')" class="group cursor-pointer">
                 <span class="block font-serif text-2xl lg:text-3xl font-bold text-[#B87333] transition-transform group-hover:scale-110">72 Saat</span>
                 <span class="label-caps text-[10px] text-[#434840]">Soğuk Maya Fermentasyonu</span>
               </div>
-              <div class="group cursor-pointer">
+              <div (click)="scrollToSection('menu')" class="group cursor-pointer">
                 <span class="block font-serif text-2xl lg:text-3xl font-bold text-[#526E48] transition-transform group-hover:scale-110">Günlük</span>
                 <span class="label-caps text-[10px] text-[#434840]">Taze Fırın Üretimi</span>
               </div>
@@ -145,6 +147,16 @@ export class HeroComponent {
         );
       }
     });
+  }
+
+  public scrollToSection(id: string): void {
+    if (typeof window === 'undefined') return;
+    const elem = document.getElementById(id);
+    if (elem) {
+      const yOffset = -80;
+      const y = elem.getBoundingClientRect().top + window.pageYOffset + yOffset;
+      window.scrollTo({ top: y, behavior: 'smooth' });
+    }
   }
 
   public onHeroImgError(event: Event): void {

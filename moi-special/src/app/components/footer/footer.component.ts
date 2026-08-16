@@ -14,8 +14,8 @@ import { CommonModule } from '@angular/common';
           <!-- Brand Column -->
           <div class="space-y-4 md:col-span-1">
             <div class="flex flex-col">
-              <span class="font-serif text-2xl font-bold tracking-tight text-[#CFEFC0]">MOI SPECIAL</span>
-              <span class="label-caps text-[9px] text-[#B87333] tracking-[0.2em]">Şanlıurfa • Artisan Patisserie & Bakery</span>
+              <span class="font-serif text-2xl font-bold tracking-tight text-[#CFEFC0]">Moi special</span>
+              <span class="label-caps text-[9px] text-[#B87333] tracking-[0.2em]">Şanlıurfa • Fırın & Patisserie</span>
             </div>
             <p class="font-sans text-xs text-[#D6C9B6]/80 leading-relaxed">
               Tarihin ve lezzetin buluştuğu nokta. Geleneksel odun taş fırın ustalığı ve Fransız patisserie zarafeti.
@@ -37,9 +37,9 @@ import { CommonModule } from '@angular/common';
           <div class="space-y-3">
             <h4 class="label-caps text-xs text-[#CFEFC0]">Çalışma Saatleri</h4>
             <div class="space-y-1 text-xs text-[#D6C9B6]/80">
-              <p><strong class="text-white font-medium">Hafta İçi:</strong> 07:30 - 23:30</p>
-              <p><strong class="text-white font-medium">Hafta Sonu:</strong> 08:00 - 00:00</p>
-              <p class="text-[10px] text-[#B87333] pt-1">Her sabah taze taş fırın üretimi</p>
+              <p><strong class="text-white font-medium">Hafta İçi & Sonu:</strong> Açık</p>
+              <p><strong class="text-white font-medium">Kapanış Saati:</strong> 00:00</p>
+              <p class="text-[10px] text-[#B87333] pt-1">Her sabah taze fırın ve patisserie üretimi</p>
             </div>
           </div>
 
@@ -47,9 +47,9 @@ import { CommonModule } from '@angular/common';
           <div class="space-y-3">
             <h4 class="label-caps text-xs text-[#CFEFC0]">İletişim & Konum</h4>
             <p class="text-xs text-[#D6C9B6]/80 leading-relaxed">
-              <strong>Sırrın Karşıyaka Mah., Kanalboyu</strong><br />
-              Haliliye / Şanlıurfa<br />
-              info&#64;moispecial.com
+              <strong>Karşıyaka Mah. Gap Vadisi Bulvarı</strong><br />
+              Kanalboyu, 63000 Haliliye / Şanlıurfa<br />
+              Telefon: <a href="tel:05550860594" class="text-white hover:underline font-bold">0555 086 05 94</a>
             </p>
 
             <a 
@@ -69,7 +69,7 @@ import { CommonModule } from '@angular/common';
 
         <!-- Copyright Bottom -->
         <div class="pt-8 flex flex-col sm:flex-row items-center justify-between text-[11px] text-[#D6C9B6]/50">
-          <p>© 2026 Moi Special (Moi Fırın). Tüm hakları saklıdır.</p>
+          <p>© 2026 Moi special (Moi Fırın). Tüm hakları saklıdır.</p>
           <div class="flex space-x-6 mt-4 sm:mt-0">
             <a href="#" class="hover:text-white transition-colors">Gizlilik Politikası</a>
             <a href="#" class="hover:text-white transition-colors">Kullanım Şartları</a>

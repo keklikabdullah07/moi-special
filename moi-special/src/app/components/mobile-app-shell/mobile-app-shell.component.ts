@@ -4,6 +4,9 @@ import { ProductService } from '../../services/product.service';
 import { CartService } from '../../services/cart.service';
 import { ReservationService } from '../../services/reservation.service';
 import { StoryService } from '../../services/story.service';
+import { GooglePlacesService } from '../../services/google-places.service';
+import { AuthService } from '../../services/auth.service';
+import { ToastService } from '../../services/toast.service';
 
 @Component({
   selector: 'app-mobile-app-shell',
@@ -11,7 +14,7 @@ import { StoryService } from '../../services/story.service';
   imports: [CommonModule],
   template: `
     <!-- Dedicated Mobile Native App Shell (Visible only on < md screens) -->
-    <div class="md:hidden flex flex-col bg-[#FFF8F2] min-h-screen pb-32 select-none overflow-x-hidden">
+    <div id="mobile-hero" class="md:hidden flex flex-col bg-[#FFF8F2] min-h-screen pb-12 select-none overflow-x-hidden">
       
       <!-- Native Mobile Header Bar -->
       <header class="sticky top-0 z-30 bg-[#FFF8F2]/95 backdrop-blur-xl border-b border-[#D6C9B6]/60 px-4 py-3 flex items-center justify-between shadow-xs">
@@ -29,9 +32,9 @@ import { StoryService } from '../../services/story.service';
             </svg>
           </div>
           <div class="flex flex-col">
-            <span class="label-caps text-[9px] text-[#B87333] tracking-wider">Kanalboyu • Haritada Gör</span>
+            <span class="label-caps text-[9px] text-[#B87333] tracking-wider">Gap Vadisi Bulv. • Haritada Gör</span>
             <span class="font-serif text-xs font-bold text-[#1F1B14] flex items-center gap-1">
-              Sırrın Karşıyaka, Haliliye
+              Karşıyaka Mah., Kanalboyu
               <svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3 text-[#526E48]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
               </svg>
@@ -39,7 +42,7 @@ import { StoryService } from '../../services/story.service';
           </div>
         </a>
 
-        <!-- Right Quick Actions (Cart & Notification) -->
+        <!-- Right Quick Actions (Cart & User Pill) -->
         <div class="flex items-center gap-2">
           <button 
             (click)="cartService.toggleDrawer()"
@@ -57,12 +60,12 @@ import { StoryService } from '../../services/story.service';
 
       </header>
 
-      <!-- App Story Highlights (Instagram / Native App Style - Interactive Story Player & Owner Post) -->
+      <!-- App Story Highlights (Instagram / Native App Style) -->
       <div class="py-4 px-4 overflow-x-auto no-scrollbar flex items-center gap-4 border-b border-[#D6C9B6]/40 bg-[#EDE4D8]/30">
         
-        <!-- Owner Add Story Button (+) -->
+        <!-- Owner Add Story Button (+) RESTRICTED TO ADMIN ONLY -->
         <button 
-          (click)="storyService.isAdminAddOpen.set(true)"
+          (click)="handleAddStoryClick()"
           class="flex flex-col items-center gap-1.5 shrink-0 group active:scale-95 transition-transform cursor-pointer">
           <div class="w-16 h-16 rounded-full border-2 border-dashed border-[#526E48] bg-[#526E48]/10 flex items-center justify-center text-[#526E48] relative">
             <svg xmlns="http://www.w3.org/2000/svg" class="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -72,7 +75,9 @@ import { StoryService } from '../../services/story.service';
               +
             </span>
           </div>
-          <span class="label-caps text-[9px] text-[#526E48] font-bold">Hikaye Ekle</span>
+          <span class="label-caps text-[9px] text-[#526E48] font-bold">
+            {{ authService.isAdmin() ? '+ Hikaye Ekle' : 'Yönetici Paylaşımı' }}
+          </span>
         </button>
 
         <!-- Instagram Story Rings -->
@@ -127,10 +132,12 @@ import { StoryService } from '../../services/story.service';
       </div>
 
       <!-- Native Category Filter Segmented Control -->
-      <div class="px-4 pt-6 pb-2">
+      <div id="menu" class="px-4 pt-6 pb-2 scroll-mt-16">
         <div class="flex items-center justify-between mb-3">
           <h3 class="font-serif text-lg font-bold text-[#1F1B14]">Menü Koleksiyonu</h3>
-          <button (click)="selectedCategory.set('all')" class="label-caps text-[10px] text-[#B87333] cursor-pointer">Tümünü Gör</button>
+          <button (click)="showAllProducts()" class="label-caps text-[10px] text-[#B87333] font-bold underline cursor-pointer active:scale-95 transition-transform">
+            Tümünü Gör (Sıfırla)
+          </button>
         </div>
 
         <div class="flex items-center gap-2 overflow-x-auto no-scrollbar pb-2">
@@ -193,14 +200,15 @@ import { StoryService } from '../../services/story.service';
           <div class="flex items-center justify-between">
             <span class="label-caps text-[9px] text-[#526E48] font-bold">Google Müşteri Yorumları</span>
             <span class="font-serif font-bold text-sm text-[#B87333] flex items-center gap-1">
-              ★ 4.9 / 5.0
+              ★ {{ liveRating() }} / 5.0 ({{ liveTotalReviews() }} Yorum)
             </span>
           </div>
+          
           <p class="font-sans text-xs italic text-[#1F1B14]">
-            "Şanlıurfa'da fıstıklı kruvasan ve entremet pastanın tek adresi! Tereyağ kokusu daha kapıdan girerken büyülüyor."
+            "{{ firstReviewText() }}"
           </p>
           <div class="flex items-center justify-between pt-2 border-t border-[#D6C9B6]/40 text-[10px] text-[#434840]">
-            <span>— Mehmet K. (Google Misafiri)</span>
+            <span>— {{ firstReviewAuthor() }}</span>
             <a 
               href="https://share.google/P5BMtr0gzI00D3TQj" 
               target="_blank" 
@@ -218,7 +226,7 @@ import { StoryService } from '../../services/story.service';
           <div class="space-y-1">
             <span class="label-caps text-[9px] text-[#B87333]">Masa & Davet</span>
             <h4 class="font-serif font-bold text-base text-[#1F1B14]">Masa Rezerve Edin</h4>
-            <p class="text-[11px] text-[#434840]">Sırrın Karşıyaka şubemizde yerinizi ayırtın.</p>
+            <p class="text-[11px] text-[#434840]">Kanalboyu Gap Vadisi Bulvarı şubemizde yerinizi ayırtın.</p>
           </div>
           <button 
             (click)="reservationService.openModal()"
@@ -236,6 +244,9 @@ export class MobileAppShellComponent {
   public readonly cartService = inject(CartService);
   public readonly reservationService = inject(ReservationService);
   public readonly storyService = inject(StoryService);
+  public readonly googlePlacesService = inject(GooglePlacesService);
+  public readonly authService = inject(AuthService);
+  public readonly toastService = inject(ToastService);
 
   public readonly selectedCategory = signal<string>('all');
 
@@ -245,6 +256,51 @@ export class MobileAppShellComponent {
     if (cat === 'all') return all;
     return all.filter(p => p.category === cat);
   });
+
+  public handleAddStoryClick(): void {
+    if (this.authService.isAdmin()) {
+      this.storyService.isAdminAddOpen.set(true);
+    } else {
+      this.toastService.show('🔒 Hikaye paylaşımı yalnızca Yönetici (Sayın Abdullah Keklik) tarafından yapılabilir.');
+      this.authService.isAuthModalOpen.set(true);
+    }
+  }
+
+  public showAllProducts(): void {
+    this.selectedCategory.set('all');
+    if (typeof window !== 'undefined') {
+      const elem = document.getElementById('menu');
+      if (elem) {
+        elem.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+  }
+
+  public liveRating(): string {
+    const live = this.googlePlacesService.placeDetails();
+    return live ? live.rating.toFixed(1) : '4.5';
+  }
+
+  public liveTotalReviews(): number {
+    const live = this.googlePlacesService.placeDetails();
+    return live ? live.user_ratings_total : 31;
+  }
+
+  public firstReviewText(): string {
+    const live = this.googlePlacesService.placeDetails();
+    if (live && live.reviews && live.reviews[0]) {
+      return live.reviews[0].text;
+    }
+    return 'Geleneksel Şanlıurfa taş fırın lezzetleri ve harika taze pastalar. Mekan atmosferi çok huzurlu.';
+  }
+
+  public firstReviewAuthor(): string {
+    const live = this.googlePlacesService.placeDetails();
+    if (live && live.reviews && live.reviews[0]) {
+      return live.reviews[0].author_name + ' (Google Misafiri)';
+    }
+    return 'Google Misafiri';
+  }
 
   public addFeaturedToCart(): void {
     const croissant = this.productService.products().find(p => p.id === 'fistikli-croissant');
