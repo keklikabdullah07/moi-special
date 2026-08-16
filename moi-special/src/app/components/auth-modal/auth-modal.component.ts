@@ -139,7 +139,7 @@ import { ToastService } from '../../services/toast.service';
                     type="email" 
                     [(ngModel)]="loginEmail" 
                     name="loginEmail" 
-                    placeholder="keklikabdullah07@gmail.com"
+                    placeholder="ornek@domain.com"
                     required
                     class="w-full px-4 py-3 rounded-2xl bg-[#EDE4D8]/50 border border-[#D6C9B6] text-xs text-[#1F1B14] focus:outline-none focus:border-[#526E48]" />
                 </div>
@@ -214,22 +214,6 @@ import { ToastService } from '../../services/toast.service';
                 </button>
               </form>
             }
-
-            <!-- Admin Direct Shortcut Card for Abdullah Keklik -->
-            <div class="pt-4 border-t border-[#D6C9B6]/50">
-              <button 
-                (click)="loginAdminDirect()"
-                class="w-full py-3 px-4 rounded-2xl bg-[#B87333]/15 hover:bg-[#B87333]/25 border border-[#B87333]/30 text-xs font-bold text-[#B87333] flex items-center justify-between active:scale-95 transition-all cursor-pointer">
-                <div class="flex items-center gap-2 text-left">
-                  <span class="text-base">👑</span>
-                  <div>
-                    <span class="block">Sayın Abdullah Keklik (Süper Yönetici)</span>
-                    <span class="text-[9px] font-normal text-[#434840]">keklikabdullah07&#64;gmail.com • 05531675669</span>
-                  </div>
-                </div>
-                <span class="text-xs">Giriş Yap →</span>
-              </button>
-            </div>
           }
 
         </div>
@@ -247,8 +231,8 @@ export class AuthModalComponent {
   public readonly smsPhone = signal<string>('');
   public readonly errorMessage = signal<string>('');
 
-  public loginEmail = 'keklikabdullah07@gmail.com';
-  public loginPass = '123456';
+  public loginEmail = '';
+  public loginPass = '';
 
   public regName = '';
   public regEmail = '';
@@ -300,10 +284,5 @@ export class AuthModalComponent {
     } else {
       this.errorMessage.set(res.message);
     }
-  }
-
-  public loginAdminDirect(): void {
-    this.authService.loginAsSuperAdminDirect();
-    this.toastService.show('Sayın Abdullah Keklik, Süper Yönetici Hesabınıza Giriş Yapıldı! 👑');
   }
 }
