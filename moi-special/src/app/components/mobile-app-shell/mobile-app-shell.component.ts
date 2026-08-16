@@ -187,8 +187,33 @@ import { StoryService } from '../../services/story.service';
         </div>
       </div>
 
-      <!-- App Action Card: Quick Reservation / Google Maps Location -->
+      <!-- Mobile Google Customer Reviews Card -->
       <div class="px-4 py-4">
+        <div class="rounded-3xl bg-[#EDE4D8]/60 border border-[#D6C9B6] p-5 space-y-3 shadow-xs">
+          <div class="flex items-center justify-between">
+            <span class="label-caps text-[9px] text-[#526E48] font-bold">Google Müşteri Yorumları</span>
+            <span class="font-serif font-bold text-sm text-[#B87333] flex items-center gap-1">
+              ★ 4.9 / 5.0
+            </span>
+          </div>
+          <p class="font-sans text-xs italic text-[#1F1B14]">
+            "Şanlıurfa'da fıstıklı kruvasan ve entremet pastanın tek adresi! Tereyağ kokusu daha kapıdan girerken büyülüyor."
+          </p>
+          <div class="flex items-center justify-between pt-2 border-t border-[#D6C9B6]/40 text-[10px] text-[#434840]">
+            <span>— Mehmet K. (Google Misafiri)</span>
+            <a 
+              href="https://share.google/P5BMtr0gzI00D3TQj" 
+              target="_blank" 
+              rel="noopener" 
+              class="text-[#526E48] font-bold underline">
+              Tüm Yorumları Gör →
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- App Action Card: Quick Reservation / Google Maps Location -->
+      <div class="px-4 py-2">
         <div class="rounded-3xl bg-[#EDE4D8] border border-[#D6C9B6] p-5 flex items-center justify-between shadow-sm">
           <div class="space-y-1">
             <span class="label-caps text-[9px] text-[#B87333]">Masa & Davet</span>
