@@ -11,9 +11,16 @@ export interface SiteAssetConfig {
   heroSubtitle: string;
   aboutTitle: string;
   aboutBody: string;
+  brandName: string;
+  navHome: string;
+  navMenu: string;
+  navStory: string;
+  navContact: string;
+  workingHours: string;
+  footerCopyright: string;
 }
 
-const ASSET_CACHE_KEY = 'moi_site_assets_v3';
+const ASSET_CACHE_KEY = 'moi_site_assets_v4';
 
 @Injectable({
   providedIn: 'root'
@@ -30,12 +37,19 @@ export class SiteAssetService {
     heroHeadline: 'Mezopotamya Gün Işığında Artisan Fırın Sanatı',
     heroSubtitle: 'Tarihi Şanlıurfa taş fırın kültürünün geleneksel ustalığı, Fransız patisserie inceliği ve zümrüt Antep fıstığının en eşsiz haliyle buluşuyor. Günlük taze pişen lezzetlerimizi keşfedin.',
     aboutTitle: 'Tarihi Taş Fırın Kültürü, Fransız Zarafetiyle Buluşuyor',
-    aboutBody: 'Móí Special, Şanlıurfa\'nın köklü taş fırın geleneğini modern Fransız patisserie ustalığı ile harmanlayarak doğdu. Sırrın Karşıyaka / Gap Vadisi Bulvarı şubemizde her sabah gün ışımadan başlayan pişirim yolculuğumuzda, katkısız saf tereyağı ve bölgenin en seçkin zümrüt Antep fıstıkları kullanılır.'
+    aboutBody: 'Móí Special, Şanlıurfa\'nın köklü taş fırın geleneğini modern Fransız patisserie ustalığı ile harmanlayarak doğdu. Sırrın Karşıyaka / Gap Vadisi Bulvarı şubemizde her sabah gün ışımadan başlayan pişirim yolculuğumuzda, katkısız saf tereyağı ve bölgenin en seçkin zümrüt Antep fıstıkları kullanılır.',
+    brandName: 'Móí Special',
+    navHome: 'Ana Sayfa',
+    navMenu: 'Menü Koleksiyonu',
+    navStory: 'Hikayemiz',
+    navContact: 'İletişim',
+    workingHours: 'Haftanın 7 Günü: 07:00 - 00:00',
+    footerCopyright: '© 2026 Móí Special. Tüm Hakları Saklıdır.'
   };
 
-  // Live Builder Mode Signals
+  // WebCMS Builder Mode Signals
   public readonly isEditMode = signal<boolean>(false);
-  public readonly activeSectionEditing = signal<'hero' | 'menu' | 'about' | 'contact' | null>(null);
+  public readonly activeSectionEditing = signal<'hero' | 'menu' | 'about' | 'contact' | 'header' | 'footer' | null>(null);
 
   // Dynamic Site Copy & Assets Signals
   public readonly heroBakeryImage = signal<string>(this.MASTER_DEFAULT_TEMPLATE.heroBakeryImage);
@@ -50,6 +64,15 @@ export class SiteAssetService {
 
   public readonly aboutTitle = signal<string>(this.MASTER_DEFAULT_TEMPLATE.aboutTitle);
   public readonly aboutBody = signal<string>(this.MASTER_DEFAULT_TEMPLATE.aboutBody);
+
+  public readonly brandName = signal<string>(this.MASTER_DEFAULT_TEMPLATE.brandName);
+  public readonly navHome = signal<string>(this.MASTER_DEFAULT_TEMPLATE.navHome);
+  public readonly navMenu = signal<string>(this.MASTER_DEFAULT_TEMPLATE.navMenu);
+  public readonly navStory = signal<string>(this.MASTER_DEFAULT_TEMPLATE.navStory);
+  public readonly navContact = signal<string>(this.MASTER_DEFAULT_TEMPLATE.navContact);
+
+  public readonly workingHours = signal<string>(this.MASTER_DEFAULT_TEMPLATE.workingHours);
+  public readonly footerCopyright = signal<string>(this.MASTER_DEFAULT_TEMPLATE.footerCopyright);
 
   constructor() {
     this.loadCachedAssets();
@@ -71,6 +94,13 @@ export class SiteAssetService {
         if (p.heroSubtitle) this.heroSubtitle.set(p.heroSubtitle);
         if (p.aboutTitle) this.aboutTitle.set(p.aboutTitle);
         if (p.aboutBody) this.aboutBody.set(p.aboutBody);
+        if (p.brandName) this.brandName.set(p.brandName);
+        if (p.navHome) this.navHome.set(p.navHome);
+        if (p.navMenu) this.navMenu.set(p.navMenu);
+        if (p.navStory) this.navStory.set(p.navStory);
+        if (p.navContact) this.navContact.set(p.navContact);
+        if (p.workingHours) this.workingHours.set(p.workingHours);
+        if (p.footerCopyright) this.footerCopyright.set(p.footerCopyright);
       }
     } catch (e) {}
   }
@@ -86,6 +116,30 @@ export class SiteAssetService {
     this.heroSubtitle.set(this.MASTER_DEFAULT_TEMPLATE.heroSubtitle);
     this.aboutTitle.set(this.MASTER_DEFAULT_TEMPLATE.aboutTitle);
     this.aboutBody.set(this.MASTER_DEFAULT_TEMPLATE.aboutBody);
+    this.brandName.set(this.MASTER_DEFAULT_TEMPLATE.brandName);
+    this.navHome.set(this.MASTER_DEFAULT_TEMPLATE.navHome);
+    this.navMenu.set(this.MASTER_DEFAULT_TEMPLATE.navMenu);
+    this.navStory.set(this.MASTER_DEFAULT_TEMPLATE.navStory);
+    this.navContact.set(this.MASTER_DEFAULT_TEMPLATE.navContact);
+    this.workingHours.set(this.MASTER_DEFAULT_TEMPLATE.workingHours);
+    this.footerCopyright.set(this.MASTER_DEFAULT_TEMPLATE.footerCopyright);
+    this.saveAssets();
+  }
+
+  public updateHeaderSection(brand: string, home: string, menu: string, story: string, contact: string): void {
+    if (brand) this.brandName.set(brand);
+    if (home) this.navHome.set(home);
+    if (menu) this.navMenu.set(menu);
+    if (story) this.navStory.set(story);
+    if (contact) this.navContact.set(contact);
+    this.saveAssets();
+  }
+
+  public updateFooterSection(hours: string, address: string, phone: string, copyright: string): void {
+    if (hours) this.workingHours.set(hours);
+    if (address) this.storeAddress.set(address);
+    if (phone) this.storePhone.set(phone);
+    if (copyright) this.footerCopyright.set(copyright);
     this.saveAssets();
   }
 
@@ -132,7 +186,7 @@ export class SiteAssetService {
     this.isEditMode.update(v => !v);
   }
 
-  public openSectionEditor(section: 'hero' | 'menu' | 'about' | 'contact'): void {
+  public openSectionEditor(section: 'hero' | 'menu' | 'about' | 'contact' | 'header' | 'footer'): void {
     this.activeSectionEditing.set(section);
   }
 
@@ -153,7 +207,14 @@ export class SiteAssetService {
         heroHeadline: this.heroHeadline(),
         heroSubtitle: this.heroSubtitle(),
         aboutTitle: this.aboutTitle(),
-        aboutBody: this.aboutBody()
+        aboutBody: this.aboutBody(),
+        brandName: this.brandName(),
+        navHome: this.navHome(),
+        navMenu: this.navMenu(),
+        navStory: this.navStory(),
+        navContact: this.navContact(),
+        workingHours: this.workingHours(),
+        footerCopyright: this.footerCopyright()
       }));
     } catch (e) {}
   }

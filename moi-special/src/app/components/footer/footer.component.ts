@@ -1,84 +1,130 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { SiteAssetService } from '../../services/site-asset.service';
 
 @Component({
   selector: 'app-footer',
   standalone: true,
   imports: [CommonModule],
   template: `
-    <footer id="contact" class="bg-[#1F1B14] text-[#EDE4D8] pt-16 pb-12 border-t border-[#D6C9B6]/20">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <footer id="contact" class="bg-[#1F1B14] text-white pt-16 pb-12 border-t border-[#B87333]/30 relative group/footer">
+      
+      <!-- WEBCMS LIVE EDIT OVERLAY BADGE FOR FOOTER -->
+      @if (assetService.isEditMode()) {
+        <div class="absolute top-4 right-4 z-30 animate-bounce">
+          <button 
+            (click)="assetService.openSectionEditor('footer')"
+            class="px-5 py-2.5 rounded-full bg-[#526E48] hover:bg-[#3B5532] text-white text-xs font-bold uppercase tracking-wider shadow-2xl border-2 border-white flex items-center gap-2 active:scale-95 transition-all cursor-pointer">
+            <span>✏️ Footer, Saatler & Adresi Canlı Düzenle</span>
+          </button>
+        </div>
+      }
+
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
         
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-10 pb-12 border-b border-[#EDE4D8]/10">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           
-          <!-- Brand Column -->
-          <div class="space-y-4 md:col-span-1">
-            <div class="flex flex-col">
-              <span class="font-serif text-2xl font-bold tracking-tight text-[#CFEFC0]">Moi special</span>
-              <span class="label-caps text-[9px] text-[#B87333] tracking-[0.2em]">Şanlıurfa • Fırın & Patisserie</span>
+          <!-- Column 1: Brand Info -->
+          <div class="space-y-4">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-full bg-[#526E48] text-white font-serif font-bold text-xl flex items-center justify-center">
+                M
+              </div>
+              <span class="font-serif text-2xl font-bold tracking-tight text-white">
+                {{ assetService.brandName() }}
+              </span>
             </div>
-            <p class="font-sans text-xs text-[#D6C9B6]/80 leading-relaxed">
-              Tarihin ve lezzetin buluştuğu nokta. Geleneksel odun taş fırın ustalığı ve Fransız patisserie zarafeti.
+
+            <p class="font-sans text-xs text-white/70 leading-relaxed">
+              Şanlıurfa Sırrın Karşıyaka / Gap Vadisi Bulvarı şubemizde geleneksel taş fırın ustalığı ve Fransız patisserie inceliği.
             </p>
+
+            <div class="pt-2">
+              <span class="label-caps text-[9px] text-[#CFEFC0] block font-bold">Gerçek Google Puanı</span>
+              <div class="flex items-center gap-2 mt-1">
+                <span class="text-amber-400 text-sm">★★★★★</span>
+                <span class="font-serif font-bold text-sm text-white">4.5 / 5</span>
+                <span class="text-[10px] text-white/60">(31 Yorum)</span>
+              </div>
+            </div>
           </div>
 
-          <!-- Quick Links -->
+          <!-- Column 2: Quick Links -->
           <div class="space-y-3">
-            <h4 class="label-caps text-xs text-[#CFEFC0]">Keşfedin</h4>
-            <ul class="space-y-2 text-xs text-[#D6C9B6]/80 font-sans">
-              <li><a href="#hero" class="hover:text-white transition-colors">Ana Sayfa</a></li>
-              <li><a href="#menu" class="hover:text-white transition-colors">Menü Koleksiyonu</a></li>
-              <li><a href="#about" class="hover:text-white transition-colors">Hikayemiz & Felsefemiz</a></li>
-              <li><a href="https://share.google/P5BMtr0gzI00D3TQj" target="_blank" rel="noopener" class="hover:text-white transition-colors">Google Haritalar Konumu</a></li>
+            <span class="label-caps text-[10px] text-[#B87333] font-bold">Hızlı Navigasyon</span>
+            <ul class="space-y-2 text-xs font-medium text-white/80">
+              <li>
+                <button (click)="scrollToSection('hero')" class="hover:text-[#CFEFC0] transition-colors cursor-pointer">
+                  {{ assetService.navHome() }}
+                </button>
+              </li>
+              <li>
+                <button (click)="scrollToSection('menu')" class="hover:text-[#CFEFC0] transition-colors cursor-pointer">
+                  {{ assetService.navMenu() }}
+                </button>
+              </li>
+              <li>
+                <button (click)="scrollToSection('about')" class="hover:text-[#CFEFC0] transition-colors cursor-pointer">
+                  {{ assetService.navStory() }}
+                </button>
+              </li>
+              <li>
+                <button (click)="scrollToSection('contact')" class="hover:text-[#CFEFC0] transition-colors cursor-pointer">
+                  {{ assetService.navContact() }}
+                </button>
+              </li>
             </ul>
           </div>
 
-          <!-- Working Hours -->
+          <!-- Column 3: Store Hours & Phone -->
           <div class="space-y-3">
-            <h4 class="label-caps text-xs text-[#CFEFC0]">Çalışma Saatleri</h4>
-            <div class="space-y-1 text-xs text-[#D6C9B6]/80">
-              <p><strong class="text-white font-medium">Hafta İçi & Sonu:</strong> Açık</p>
-              <p><strong class="text-white font-medium">Kapanış Saati:</strong> 00:00</p>
-              <p class="text-[10px] text-[#B87333] pt-1">Her sabah taze fırın ve patisserie üretimi</p>
+            <span class="label-caps text-[10px] text-[#B87333] font-bold">Çalışma Saatleri & İletişim</span>
+            <div class="space-y-2 text-xs text-white/80">
+              <p class="font-bold text-[#CFEFC0]">{{ assetService.workingHours() }}</p>
+              <p>
+                <strong>Telefon:</strong> 
+                <a href="tel:05550860594" class="hover:text-white underline ml-1">{{ assetService.storePhone() }}</a>
+              </p>
+              <p><strong>Açık Adres:</strong> {{ assetService.storeAddress() }}</p>
             </div>
           </div>
 
-          <!-- Location & Contact -->
+          <!-- Column 4: Google Maps Location CTA -->
           <div class="space-y-3">
-            <h4 class="label-caps text-xs text-[#CFEFC0]">İletişim & Konum</h4>
-            <p class="text-xs text-[#D6C9B6]/80 leading-relaxed">
-              <strong>Karşıyaka Mah. Gap Vadisi Bulvarı</strong><br />
-              Kanalboyu, 63000 Haliliye / Şanlıurfa<br />
-              Telefon: <a href="tel:05550860594" class="text-white hover:underline font-bold">0555 086 05 94</a>
-            </p>
-
+            <span class="label-caps text-[10px] text-[#B87333] font-bold">Konum & Yol Tarifi</span>
+            <p class="text-xs text-white/70">Gap Vadisi Bulvarı, Kanalboyu Haliliye şubemize yol tarifi alın.</p>
+            
             <a 
               href="https://share.google/P5BMtr0gzI00D3TQj" 
               target="_blank" 
               rel="noopener"
-              class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#526E48] hover:bg-[#3B5532] text-white text-[11px] font-semibold uppercase tracking-wider transition-all shadow-sm mt-2">
-              <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-[#CFEFC0]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-              </svg>
-              <span>Haritada Yol Tarifi Al</span>
+              class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#526E48] hover:bg-[#3B5532] text-white text-xs font-bold uppercase tracking-wider transition-all shadow-md active:scale-95">
+              <span>📍 Google Haritalar'da Aç</span>
             </a>
           </div>
 
         </div>
 
-        <!-- Copyright Bottom -->
-        <div class="pt-8 flex flex-col sm:flex-row items-center justify-between text-[11px] text-[#D6C9B6]/50">
-          <p>© 2026 Moi special (Moi Fırın). Tüm hakları saklıdır.</p>
-          <div class="flex space-x-6 mt-4 sm:mt-0">
-            <a href="#" class="hover:text-white transition-colors">Gizlilik Politikası</a>
-            <a href="#" class="hover:text-white transition-colors">Kullanım Şartları</a>
-            <a href="https://share.google/P5BMtr0gzI00D3TQj" target="_blank" class="hover:text-white transition-colors">Google Haritalar</a>
-          </div>
+        <!-- Bottom Copyright & Disclaimer -->
+        <div class="pt-8 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4 text-[11px] text-white/50">
+          <span>{{ assetService.footerCopyright() }}</span>
+          <span>Designed for Móí Special Taş Fırın & Pastane</span>
         </div>
 
       </div>
     </footer>
   `
 })
-export class FooterComponent {}
+export class FooterComponent {
+  public readonly assetService = inject(SiteAssetService);
+
+  public scrollToSection(id: string): void {
+    if (typeof window === 'undefined') return;
+    const elem = document.getElementById(id);
+    if (elem) {
+      const yOffset = -80;
+      const y = elem.getBoundingClientRect().top + window.pageYOffset + yOffset;
+      window.scrollTo({ top: y, behavior: 'smooth' });
+    }
+  }
+}

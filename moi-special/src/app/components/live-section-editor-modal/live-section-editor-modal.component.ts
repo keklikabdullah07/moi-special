@@ -1,7 +1,8 @@
-import { Component, inject, signal, effect } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { SiteAssetService } from '../../services/site-asset.service';
+import { ProductService, Product } from '../../services/product.service';
 import { ToastService } from '../../services/toast.service';
 
 @Component({
@@ -27,15 +28,19 @@ import { ToastService } from '../../services/toast.service';
           <div class="flex items-center justify-between border-b border-[#D6C9B6]/60 pb-4">
             <div class="space-y-0.5">
               <span class="label-caps text-[9px] text-[#B87333] font-bold">
-                👑 Abdullah Keklik • Modüler Canlı Editör
+                👑 Abdullah Keklik • WebCMS Modül Editörü
               </span>
               <h3 class="font-serif text-2xl font-bold text-[#1F1B14]">
-                @if (assetService.activeSectionEditing() === 'hero') {
+                @if (assetService.activeSectionEditing() === 'header') {
+                  Header & Menü Linklerini Düzenle
+                } @else if (assetService.activeSectionEditing() === 'menu') {
+                  @if (productService.editingProduct()) { Ürünü Canlı Düzenle } @else { Menüye Yeni Ürün Ekle }
+                } @else if (assetService.activeSectionEditing() === 'hero') {
                   Hero Banner Alanını Düzenle
                 } @else if (assetService.activeSectionEditing() === 'about') {
                   Taş Fırın Hikayemizi Düzenle
-                } @else if (assetService.activeSectionEditing() === 'contact') {
-                  Adres & İletişim Düzenle
+                } @else if (assetService.activeSectionEditing() === 'footer') {
+                  Footer, Saatler & Adres Düzenle
                 }
               </h3>
             </div>
@@ -49,7 +54,84 @@ import { ToastService } from '../../services/toast.service';
             </button>
           </div>
 
-          <!-- SECTION 1: HERO EDIT FORM -->
+          <!-- SECTION 1: HEADER EDIT FORM -->
+          @if (assetService.activeSectionEditing() === 'header') {
+            <form (ngSubmit)="saveHeaderSection()" class="space-y-4">
+              <div class="space-y-1">
+                <label class="label-caps text-[10px] text-[#434840]">Marka/Logo Yazısı</label>
+                <input type="text" [(ngModel)]="brandName" name="brandName" class="w-full px-4 py-2.5 rounded-2xl bg-[#EDE4D8]/50 border border-[#D6C9B6] text-xs font-bold text-[#1F1B14]" />
+              </div>
+
+              <div class="grid grid-cols-2 gap-2">
+                <div class="space-y-1">
+                  <label class="label-caps text-[10px] text-[#434840]">Nav 1 Link Adı</label>
+                  <input type="text" [(ngModel)]="navHome" name="navHome" class="w-full px-3 py-2 rounded-xl bg-[#EDE4D8]/50 border border-[#D6C9B6] text-xs" />
+                </div>
+                <div class="space-y-1">
+                  <label class="label-caps text-[10px] text-[#434840]">Nav 2 Link Adı</label>
+                  <input type="text" [(ngModel)]="navMenu" name="navMenu" class="w-full px-3 py-2 rounded-xl bg-[#EDE4D8]/50 border border-[#D6C9B6] text-xs" />
+                </div>
+                <div class="space-y-1">
+                  <label class="label-caps text-[10px] text-[#434840]">Nav 3 Link Adı</label>
+                  <input type="text" [(ngModel)]="navStory" name="navStory" class="w-full px-3 py-2 rounded-xl bg-[#EDE4D8]/50 border border-[#D6C9B6] text-xs" />
+                </div>
+                <div class="space-y-1">
+                  <label class="label-caps text-[10px] text-[#434840]">Nav 4 Link Adı</label>
+                  <input type="text" [(ngModel)]="navContact" name="navContact" class="w-full px-3 py-2 rounded-xl bg-[#EDE4D8]/50 border border-[#D6C9B6] text-xs" />
+                </div>
+              </div>
+
+              <button 
+                type="submit"
+                class="w-full py-3.5 rounded-full bg-[#B87333] hover:bg-[#784000] text-white text-xs font-bold uppercase tracking-wider shadow-lg cursor-pointer">
+                Header Değişikliklerini Canlı Kaydet ⚡
+              </button>
+            </form>
+          }
+
+          <!-- SECTION 2: MENU PRODUCT EDIT / ADD FORM -->
+          @if (assetService.activeSectionEditing() === 'menu') {
+            <form (ngSubmit)="saveProductForm()" class="space-y-4">
+              <div class="space-y-1">
+                <label class="label-caps text-[10px] text-[#434840]">Ürün Adı</label>
+                <input type="text" [(ngModel)]="prodName" name="prodName" required class="w-full px-4 py-2.5 rounded-2xl bg-[#EDE4D8]/50 border border-[#D6C9B6] text-xs text-[#1F1B14]" />
+              </div>
+
+              <div class="grid grid-cols-2 gap-2">
+                <div class="space-y-1">
+                  <label class="label-caps text-[10px] text-[#434840]">Fiyat (₺)</label>
+                  <input type="number" [(ngModel)]="prodPrice" name="prodPrice" required class="w-full px-3 py-2 rounded-xl bg-[#EDE4D8]/50 border border-[#D6C9B6] text-xs" />
+                </div>
+                <div class="space-y-1">
+                  <label class="label-caps text-[10px] text-[#434840]">Kategori</label>
+                  <select [(ngModel)]="prodCategory" name="prodCategory" class="w-full px-3 py-2 rounded-xl bg-[#EDE4D8]/50 border border-[#D6C9B6] text-xs">
+                    <option value="fistikli">Fıstıklı Özel</option>
+                    <option value="pastane">Artisan Pastane</option>
+                    <option value="firin">Taş Fırın & Ekmek</option>
+                    <option value="icecek">Gurme İçecekler</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="space-y-1">
+                <label class="label-caps text-[10px] text-[#434840]">Ürün Görsel Yolu (URL)</label>
+                <input type="text" [(ngModel)]="prodImage" name="prodImage" class="w-full px-4 py-2.5 rounded-2xl bg-[#EDE4D8]/50 border border-[#D6C9B6] text-xs text-[#1F1B14]" />
+              </div>
+
+              <div class="space-y-1">
+                <label class="label-caps text-[10px] text-[#434840]">Açıklama</label>
+                <textarea [(ngModel)]="prodDesc" name="prodDesc" rows="3" class="w-full px-4 py-2.5 rounded-2xl bg-[#EDE4D8]/50 border border-[#D6C9B6] text-xs text-[#1F1B14]"></textarea>
+              </div>
+
+              <button 
+                type="submit"
+                class="w-full py-3.5 rounded-full bg-[#526E48] hover:bg-[#3B5532] text-white text-xs font-bold uppercase tracking-wider shadow-lg cursor-pointer">
+                Ürün Değişikliğini Menüde Güncelle ⚡
+              </button>
+            </form>
+          }
+
+          <!-- SECTION 3: HERO EDIT FORM -->
           @if (assetService.activeSectionEditing() === 'hero') {
             <form (ngSubmit)="saveHeroSection()" class="space-y-4">
               <div class="space-y-1">
@@ -80,7 +162,7 @@ import { ToastService } from '../../services/toast.service';
             </form>
           }
 
-          <!-- SECTION 2: ABOUT EDIT FORM -->
+          <!-- SECTION 4: ABOUT EDIT FORM -->
           @if (assetService.activeSectionEditing() === 'about') {
             <form (ngSubmit)="saveAboutSection()" class="space-y-4">
               <div class="space-y-1">
@@ -106,9 +188,14 @@ import { ToastService } from '../../services/toast.service';
             </form>
           }
 
-          <!-- SECTION 3: CONTACT EDIT FORM -->
-          @if (assetService.activeSectionEditing() === 'contact') {
-            <form (ngSubmit)="saveContactSection()" class="space-y-4">
+          <!-- SECTION 5: FOOTER EDIT FORM -->
+          @if (assetService.activeSectionEditing() === 'footer' || assetService.activeSectionEditing() === 'contact') {
+            <form (ngSubmit)="saveFooterSection()" class="space-y-4">
+              <div class="space-y-1">
+                <label class="label-caps text-[10px] text-[#434840]">Çalışma Saatleri Metni</label>
+                <input type="text" [(ngModel)]="workingHours" name="workingHours" class="w-full px-4 py-2.5 rounded-2xl bg-[#EDE4D8]/50 border border-[#D6C9B6] text-xs font-bold text-[#1F1B14]" />
+              </div>
+
               <div class="space-y-1">
                 <label class="label-caps text-[10px] text-[#434840]">Mağaza Açık Adresi</label>
                 <input type="text" [(ngModel)]="storeAddress" name="storeAddress" class="w-full px-4 py-2.5 rounded-2xl bg-[#EDE4D8]/50 border border-[#D6C9B6] text-xs text-[#1F1B14]" />
@@ -119,10 +206,15 @@ import { ToastService } from '../../services/toast.service';
                 <input type="text" [(ngModel)]="storePhone" name="storePhone" class="w-full px-4 py-2.5 rounded-2xl bg-[#EDE4D8]/50 border border-[#D6C9B6] text-xs text-[#1F1B14]" />
               </div>
 
+              <div class="space-y-1">
+                <label class="label-caps text-[10px] text-[#434840]">Telif Hakkı (Copyright) Metni</label>
+                <input type="text" [(ngModel)]="footerCopyright" name="footerCopyright" class="w-full px-4 py-2.5 rounded-2xl bg-[#EDE4D8]/50 border border-[#D6C9B6] text-xs text-[#1F1B14]" />
+              </div>
+
               <button 
                 type="submit"
                 class="w-full py-3.5 rounded-full bg-[#526E48] hover:bg-[#3B5532] text-white text-xs font-bold uppercase tracking-wider shadow-lg cursor-pointer">
-                Değişiklikleri Sitede Canlı Uygula ⚡
+                Footer Değişikliklerini Canlı Kaydet ⚡
               </button>
             </form>
           }
@@ -135,7 +227,14 @@ import { ToastService } from '../../services/toast.service';
 })
 export class LiveSectionEditorModalComponent {
   public readonly assetService = inject(SiteAssetService);
+  public readonly productService = inject(ProductService);
   public readonly toastService = inject(ToastService);
+
+  public brandName = this.assetService.brandName();
+  public navHome = this.assetService.navHome();
+  public navMenu = this.assetService.navMenu();
+  public navStory = this.assetService.navStory();
+  public navContact = this.assetService.navContact();
 
   public heroEyebrow = this.assetService.heroEyebrow();
   public heroHeadline = this.assetService.heroHeadline();
@@ -148,6 +247,64 @@ export class LiveSectionEditorModalComponent {
 
   public storeAddress = this.assetService.storeAddress();
   public storePhone = this.assetService.storePhone();
+  public workingHours = this.assetService.workingHours();
+  public footerCopyright = this.assetService.footerCopyright();
+
+  // Menu Product Edit Fields
+  public prodName = '';
+  public prodPrice = 185;
+  public prodCategory: 'fistikli' | 'pastane' | 'firin' | 'icecek' = 'fistikli';
+  public prodImage = 'assets/croissant.jpg';
+  public prodDesc = '';
+
+  constructor() {
+    // Populate product fields if editing an existing product
+    const editing = this.productService.editingProduct();
+    if (editing) {
+      this.prodName = editing.name;
+      this.prodPrice = editing.price;
+      this.prodCategory = editing.category;
+      this.prodImage = editing.imageUrl;
+      this.prodDesc = editing.description;
+    }
+  }
+
+  public saveHeaderSection(): void {
+    this.assetService.updateHeaderSection(this.brandName, this.navHome, this.navMenu, this.navStory, this.navContact);
+    this.toastService.show('Header & Menü Linkleri Canlı Güncellendi! 🎨');
+    this.assetService.closeSectionEditor();
+  }
+
+  public saveProductForm(): void {
+    if (!this.prodName) return;
+
+    const editing = this.productService.editingProduct();
+    if (editing) {
+      this.productService.updateProduct(editing.id, {
+        name: this.prodName,
+        price: this.prodPrice,
+        category: this.prodCategory,
+        imageUrl: this.prodImage,
+        description: this.prodDesc
+      });
+      this.toastService.show(`"${this.prodName}" ürünü güncellendi! 🥖`);
+    } else {
+      this.productService.addProduct({
+        id: 'prod_' + Date.now(),
+        name: this.prodName,
+        description: this.prodDesc || 'Taze fırın usta lezzeti.',
+        price: this.prodPrice,
+        category: this.prodCategory,
+        imageUrl: this.prodImage || 'assets/croissant.jpg',
+        tags: ['Yeni'],
+        isSpecialty: true
+      });
+      this.toastService.show(`"${this.prodName}" menüye eklendi! 🥖`);
+    }
+
+    this.productService.editingProduct.set(null);
+    this.assetService.closeSectionEditor();
+  }
 
   public saveHeroSection(): void {
     this.assetService.updateHeroSection(this.heroEyebrow, this.heroHeadline, this.heroSubtitle, this.heroImg);
@@ -161,9 +318,9 @@ export class LiveSectionEditorModalComponent {
     this.assetService.closeSectionEditor();
   }
 
-  public saveContactSection(): void {
-    this.assetService.updateContactSection(this.storeAddress, this.storePhone);
-    this.toastService.show('Adres & İletişim Bilgileri Canlı Olarak Güncellendi! 📍');
+  public saveFooterSection(): void {
+    this.assetService.updateFooterSection(this.workingHours, this.storeAddress, this.storePhone, this.footerCopyright);
+    this.toastService.show('Footer, Saatler & Adres Canlı Güncellendi! 📍');
     this.assetService.closeSectionEditor();
   }
 }
