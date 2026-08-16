@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { AuthService } from '../../services/auth.service';
 import { SiteAssetService } from '../../services/site-asset.service';
 import { AdminAnalyticsService } from '../../services/admin-analytics.service';
+import { ErpModalService } from '../../services/erp-modal.service';
 import { ToastService } from '../../services/toast.service';
 
 @Component({
@@ -47,8 +48,15 @@ import { ToastService } from '../../services/toast.service';
             </button>
           </div>
 
-          <!-- Right Quick Metrics & Safety Reset Action -->
-          <div class="flex items-center gap-3">
+          <!-- Right Quick Metrics, ERP Panel & Safety Actions -->
+          <div class="flex items-center gap-2 sm:gap-3">
+            <!-- ERP DASHBOARD LAUNCHER BUTTON -->
+            <button 
+              (click)="erpModalService.open()"
+              class="px-3.5 py-1.5 rounded-full bg-[#526E48] hover:bg-[#3B5532] text-white font-bold uppercase tracking-wider text-[10px] shadow-md active:scale-95 transition-all cursor-pointer flex items-center gap-1">
+              <span>💼 Kurumsal ERP Paneli</span>
+            </button>
+
             <!-- Safety Master Template Restore Button -->
             <button 
               (click)="restoreMasterTemplate()"
@@ -73,6 +81,7 @@ export class SuperAdminBarComponent {
   public readonly authService = inject(AuthService);
   public readonly assetService = inject(SiteAssetService);
   public readonly analyticsService = inject(AdminAnalyticsService);
+  public readonly erpModalService = inject(ErpModalService);
   public readonly toastService = inject(ToastService);
 
   public setEditMode(editMode: boolean): void {
