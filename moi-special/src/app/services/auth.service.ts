@@ -15,8 +15,8 @@ export interface User {
   token?: string;
 }
 
-const AUTH_STORAGE_KEY = 'moi_auth_user_v4';
-const USERS_DB_KEY = 'moi_registered_users_db_v4';
+const AUTH_STORAGE_KEY = 'moi_auth_user_v5';
+const USERS_DB_KEY = 'moi_registered_users_db_v5';
 
 const SUPER_ADMIN_EMAIL = 'keklikabdullah07@gmail.com';
 
@@ -42,7 +42,7 @@ export class AuthService {
   public readonly canManageProducts = computed(() => this.isAdmin());
 
   constructor() {
-    this.ensureAdminUserExists();
+    this.ensureSeedUsersExist();
   }
 
   private loadInitialUser(): User | null {
@@ -54,16 +54,15 @@ export class AuthService {
     return null;
   }
 
-  private ensureAdminUserExists(): void {
+  private ensureSeedUsersExist(): void {
     if (typeof window === 'undefined') return;
     const users = this.getRegisteredUsersDB();
-    const hasSuperAdmin = users.some(u => u.email.toLowerCase() === SUPER_ADMIN_EMAIL.toLowerCase());
 
-    if (!hasSuperAdmin) {
-      const superAdminUser: User = {
+    const seedUsers: User[] = [
+      {
         id: 'admin_super_1',
         name: 'Abdullah Keklik',
-        email: SUPER_ADMIN_EMAIL,
+        email: 'keklikabdullah07@gmail.com',
         phone: '05531675669',
         role: 'super_admin',
         isVerified: true,
@@ -71,11 +70,8 @@ export class AuthService {
         address: 'Móí Special Taş Fırın & Pastane - Sırrın Karşıyaka / Şanlıurfa',
         createdAt: new Date().toISOString(),
         token: 'jwt_super_admin_token_abdullah_keklik'
-      };
-      users.push(superAdminUser);
-
-      // Add a demo content admin user
-      const contentAdminUser: User = {
+      },
+      {
         id: 'admin_content_1',
         name: 'Mehmet Şahap (İçerik Yöneticisi)',
         email: 'icerik@moispecial.com',
@@ -83,12 +79,57 @@ export class AuthService {
         role: 'content_admin',
         isVerified: true,
         authProvider: 'email',
-        address: 'Móí Special Üretim Mutfak',
+        address: 'Móí Special Üretim Mutfak - Şanlıurfa',
         createdAt: new Date().toISOString(),
         token: 'jwt_content_admin_token'
-      };
-      users.push(contentAdminUser);
+      },
+      {
+        id: 'customer_vip_1',
+        name: 'Ahmet Bakır',
+        email: 'ahmet.bakir@gmail.com',
+        phone: '0542 333 44 55',
+        role: 'customer',
+        isVerified: true,
+        authProvider: 'email',
+        address: 'Karaköprü Mah. 124. Sk. No:8, Şanlıurfa',
+        createdAt: new Date().toISOString(),
+        token: 'jwt_customer_ahmet_token'
+      },
+      {
+        id: 'customer_vip_2',
+        name: 'Zeynep Şanlı',
+        email: 'zeynep.sanli@gmail.com',
+        phone: '0533 777 88 99',
+        role: 'customer',
+        isVerified: true,
+        authProvider: 'email',
+        address: 'Bahçelievler Mah. Atatürk Cds. No:14, Şanlıurfa',
+        createdAt: new Date().toISOString(),
+        token: 'jwt_customer_zeynep_token'
+      },
+      {
+        id: 'customer_corp_1',
+        name: 'Mustafa Demir (Urfa OSB Gıda A.Ş.)',
+        email: 'kurumsal@sanliurfaorganize.com',
+        phone: '0544 555 66 77',
+        role: 'customer',
+        isVerified: true,
+        authProvider: 'email',
+        address: 'Şanlıurfa 1. Organize Sanayi Bölgesi 4. Cadde No:12',
+        createdAt: new Date().toISOString(),
+        token: 'jwt_customer_corp_token'
+      }
+    ];
 
+    let updated = false;
+    for (const seed of seedUsers) {
+      if (!users.some(u => u.email.toLowerCase() === seed.email.toLowerCase())) {
+        users.push(seed);
+        updated = true;
+      }
+    }
+
+    if (updated) {
       this.saveRegisteredUsersDB(users);
     }
   }
