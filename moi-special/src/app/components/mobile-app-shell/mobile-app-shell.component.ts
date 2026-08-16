@@ -2,7 +2,6 @@ import { Component, inject, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ProductService } from '../../services/product.service';
 import { CartService } from '../../services/cart.service';
-import { Product } from '../../models/product.model';
 
 @Component({
   selector: 'app-mobile-app-shell',
@@ -15,24 +14,28 @@ import { Product } from '../../models/product.model';
       <!-- Native Mobile Header Bar -->
       <header class="sticky top-0 z-30 bg-[#FFF8F2]/95 backdrop-blur-xl border-b border-[#D6C9B6]/60 px-4 py-3 flex items-center justify-between shadow-xs">
         
-        <!-- Location Picker Pill -->
-        <div class="flex items-center gap-2.5">
-          <div class="w-9 h-9 rounded-full bg-[#526E48]/10 border border-[#526E48]/20 flex items-center justify-center text-[#526E48]">
+        <!-- Location Picker Pill (Opens Google Maps link) -->
+        <a 
+          href="https://share.google/P5BMtr0gzI00D3TQj" 
+          target="_blank" 
+          rel="noopener"
+          class="flex items-center gap-2.5 active:scale-95 transition-transform group">
+          <div class="w-9 h-9 rounded-full bg-[#526E48]/10 border border-[#526E48]/20 flex items-center justify-center text-[#526E48] group-hover:bg-[#526E48] group-hover:text-white transition-colors">
             <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
             </svg>
           </div>
           <div class="flex flex-col">
-            <span class="label-caps text-[9px] text-[#B87333] tracking-wider">Teslimat / Şube</span>
+            <span class="label-caps text-[9px] text-[#B87333] tracking-wider">Haritada Gör • Yol Tarifi</span>
             <span class="font-serif text-xs font-bold text-[#1F1B14] flex items-center gap-1">
               Karaköprü, Şanlıurfa
               <svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3 text-[#526E48]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
               </svg>
             </span>
           </div>
-        </div>
+        </a>
 
         <!-- Right Quick Actions (Cart & Notification) -->
         <div class="flex items-center gap-2">
@@ -86,7 +89,7 @@ import { Product } from '../../models/product.model';
 
             <button 
               (click)="addFeaturedToCart()"
-              class="mt-2 px-4 py-2 rounded-full bg-[#B87333] hover:bg-[#784000] text-white text-[11px] font-bold uppercase tracking-wider shadow-md active:scale-95 transition-transform flex items-center gap-1.5">
+              class="mt-2 px-4 py-2 rounded-full bg-[#B87333] hover:bg-[#784000] text-white text-[11px] font-bold uppercase tracking-wider shadow-md active:scale-95 transition-transform flex items-center gap-1.5 cursor-pointer">
               <span>Sipariş Ver • 185 ₺</span>
             </button>
           </div>
@@ -113,7 +116,7 @@ import { Product } from '../../models/product.model';
               [class.text-white]="selectedCategory() === cat.id"
               [class.bg-[#EDE4D8]]="selectedCategory() !== cat.id"
               [class.text-[#1F1B14]]="selectedCategory() !== cat.id"
-              class="px-4 py-2 rounded-full text-[11px] font-semibold tracking-wider whitespace-nowrap border border-[#D6C9B6]/60 transition-all active:scale-95">
+              class="px-4 py-2 rounded-full text-[11px] font-semibold tracking-wider whitespace-nowrap border border-[#D6C9B6]/60 transition-all active:scale-95 cursor-pointer">
               {{ cat.name }}
             </button>
           }
@@ -159,17 +162,21 @@ import { Product } from '../../models/product.model';
         </div>
       </div>
 
-      <!-- App Action Card: Quick Reservation -->
+      <!-- App Action Card: Quick Reservation / Google Maps Location -->
       <div class="px-4 py-4">
         <div class="rounded-3xl bg-[#EDE4D8] border border-[#D6C9B6] p-5 flex items-center justify-between shadow-sm">
           <div class="space-y-1">
-            <span class="label-caps text-[9px] text-[#B87333]">Masa & Davet</span>
-            <h4 class="font-serif font-bold text-base text-[#1F1B14]">Masa Rezerve Edin</h4>
-            <p class="text-[11px] text-[#434840]">Şanlıurfa şubemizde yerinizi ayırtın.</p>
+            <span class="label-caps text-[9px] text-[#B87333]">Konum & Yol Tarifi</span>
+            <h4 class="font-serif font-bold text-base text-[#1F1B14]">Şubemize Ulaşın</h4>
+            <p class="text-[11px] text-[#434840]">Google Haritalar üzerinde yol tarifi alın.</p>
           </div>
-          <button class="px-4 py-2.5 rounded-full bg-[#B87333] text-white text-xs font-bold uppercase tracking-wider shadow-md active:scale-95 transition-transform whitespace-nowrap">
-            Rezerve Et
-          </button>
+          <a 
+            href="https://share.google/P5BMtr0gzI00D3TQj" 
+            target="_blank" 
+            rel="noopener"
+            class="px-4 py-2.5 rounded-full bg-[#526E48] text-white text-xs font-bold uppercase tracking-wider shadow-md active:scale-95 transition-transform whitespace-nowrap inline-flex items-center gap-1.5">
+            <span>Haritada Aç</span>
+          </a>
         </div>
       </div>
 
@@ -198,7 +205,6 @@ export class MobileAppShellComponent {
   ];
 
   public selectStory(story: any): void {
-    // Scroll to menu or filter
     this.selectedCategory.set('all');
   }
 

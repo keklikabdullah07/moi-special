@@ -29,7 +29,7 @@ import { CommonModule } from '@angular/common';
               <li><a href="#hero" class="hover:text-white transition-colors">Ana Sayfa</a></li>
               <li><a href="#menu" class="hover:text-white transition-colors">Menü Koleksiyonu</a></li>
               <li><a href="#about" class="hover:text-white transition-colors">Hikayemiz & Felsefemiz</a></li>
-              <li><a href="#branches" class="hover:text-white transition-colors">Şanlıurfa Şubelerimiz</a></li>
+              <li><a href="https://share.google/P5BMtr0gzI00D3TQj" target="_blank" rel="noopener" class="hover:text-white transition-colors">Google Haritalar Konumu</a></li>
             </ul>
           </div>
 
@@ -51,6 +51,18 @@ import { CommonModule } from '@angular/common';
               Rezervasyon: +90 (414) 000 00 00<br />
               info&#64;moispecial.com
             </p>
+
+            <a 
+              href="https://share.google/P5BMtr0gzI00D3TQj" 
+              target="_blank" 
+              rel="noopener"
+              class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#526E48] hover:bg-[#3B5532] text-white text-[11px] font-semibold uppercase tracking-wider transition-all shadow-sm mt-2">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-[#CFEFC0]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+              </svg>
+              <span>Haritada Yol Tarifi Al</span>
+            </a>
           </div>
 
         </div>
