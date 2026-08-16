@@ -1,6 +1,7 @@
-import { Component, ElementRef, ViewChild, afterNextRender } from '@angular/core';
+import { Component, ElementRef, ViewChild, afterNextRender, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { gsap } from 'gsap';
+import { SiteAssetService } from '../../services/site-asset.service';
 
 @Component({
   selector: 'app-hero',
@@ -80,16 +81,14 @@ import { gsap } from 'gsap';
 
           </div>
 
-          <!-- Arched Hero Image Column -->
+          <!-- Arched Hero Image Column (Dynamic Signal from SiteAssetService) -->
           <div #heroImage class="lg:col-span-5 relative flex justify-center">
             
-            <!-- Architectural Soft Arch Container (Gentle Levitation Float) -->
             <div class="animate-float relative w-full max-w-md aspect-[3/4] p-3 rounded-t-[10rem] rounded-b-3xl bg-[#EDE4D8] border border-[#D6C9B6] shadow-2xl overflow-hidden group">
               
-              <!-- Inner Arch Image -->
               <div class="w-full h-full rounded-t-[9.5rem] rounded-b-2xl overflow-hidden relative">
                 <img 
-                  src="assets/croissant.jpg" 
+                  [src]="assetService.croissantImage()" 
                   alt="Moi Special Artisan Pastane Görseli" 
                   class="w-full h-full object-cover transform transition-transform duration-700 group-hover:scale-110"
                   (error)="onHeroImgError($event)" />
@@ -109,7 +108,7 @@ import { gsap } from 'gsap';
               </div>
             </div>
 
-            <!-- Floating Decorative Stamp Element (Continuous Slow Spin) -->
+            <!-- Floating Decorative Stamp Element -->
             <a 
               href="https://share.google/P5BMtr0gzI00D3TQj" 
               target="_blank" 
@@ -130,6 +129,8 @@ import { gsap } from 'gsap';
 export class HeroComponent {
   @ViewChild('heroText') heroText!: ElementRef;
   @ViewChild('heroImage') heroImage!: ElementRef;
+
+  public readonly assetService = inject(SiteAssetService);
 
   constructor() {
     afterNextRender(() => {

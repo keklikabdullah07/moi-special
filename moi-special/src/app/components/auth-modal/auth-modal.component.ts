@@ -223,7 +223,7 @@ import { ToastService } from '../../services/toast.service';
                 <div class="flex items-center gap-2 text-left">
                   <span class="text-base">👑</span>
                   <div>
-                    <span class="block">Sayın Abdullah Keklik (Yönetici Paneli)</span>
+                    <span class="block">Sayın Abdullah Keklik (Süper Yönetici)</span>
                     <span class="text-[9px] font-normal text-[#434840]">keklikabdullah07&#64;gmail.com • 05531675669</span>
                   </div>
                 </div>
@@ -303,7 +303,7 @@ export class AuthModalComponent {
   }
 
   public loginAdminDirect(): void {
-    this.authService.loginAsAdminDirect();
-    this.toastService.show('Sayın Abdullah Keklik, Yönetici Hesabınıza Giriş Yapıldı! 👑');
+    this.authService.loginAsSuperAdminDirect();
+    this.toastService.show('Sayın Abdullah Keklik, Süper Yönetici Hesabınıza Giriş Yapıldı! 👑');
   }
 }

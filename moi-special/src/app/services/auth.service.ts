@@ -1,11 +1,13 @@
 import { Injectable, signal, computed } from '@angular/core';
 
+export type UserRole = 'super_admin' | 'content_admin' | 'customer';
+
 export interface User {
   id: string;
   name: string;
   email: string;
   phone: string;
-  role: 'admin' | 'customer';
+  role: UserRole;
   isVerified: boolean;
   authProvider: 'google' | 'sms' | 'email';
   address?: string;
@@ -13,10 +15,10 @@ export interface User {
   token?: string;
 }
 
-const AUTH_STORAGE_KEY = 'moi_auth_user_v3';
-const USERS_DB_KEY = 'moi_registered_users_db_v3';
+const AUTH_STORAGE_KEY = 'moi_auth_user_v4';
+const USERS_DB_KEY = 'moi_registered_users_db_v4';
 
-const ADMIN_EMAIL = 'keklikabdullah07@gmail.com';
+const SUPER_ADMIN_EMAIL = 'keklikabdullah07@gmail.com';
 
 @Injectable({
   providedIn: 'root'
@@ -29,7 +31,15 @@ export class AuthService {
   public readonly pendingSmsUser = signal<User | null>(null);
 
   public readonly isLoggedIn = computed(() => !!this.currentUser());
-  public readonly isAdmin = computed(() => this.currentUser()?.role === 'admin');
+  
+  // Specific Role Signals & Capabilities
+  public readonly isSuperAdmin = computed(() => this.currentUser()?.role === 'super_admin');
+  public readonly isContentAdmin = computed(() => this.currentUser()?.role === 'content_admin');
+  public readonly isAdmin = computed(() => this.isSuperAdmin() || this.isContentAdmin());
+
+  public readonly canManageDesign = computed(() => this.isSuperAdmin());
+  public readonly canViewAnalytics = computed(() => this.isSuperAdmin());
+  public readonly canManageProducts = computed(() => this.isAdmin());
 
   constructor() {
     this.ensureAdminUserExists();
@@ -47,22 +57,38 @@ export class AuthService {
   private ensureAdminUserExists(): void {
     if (typeof window === 'undefined') return;
     const users = this.getRegisteredUsersDB();
-    const hasAdmin = users.some(u => u.email.toLowerCase() === ADMIN_EMAIL.toLowerCase());
+    const hasSuperAdmin = users.some(u => u.email.toLowerCase() === SUPER_ADMIN_EMAIL.toLowerCase());
 
-    if (!hasAdmin) {
-      const adminUser: User = {
-        id: 'admin_1',
+    if (!hasSuperAdmin) {
+      const superAdminUser: User = {
+        id: 'admin_super_1',
         name: 'Abdullah Keklik',
-        email: ADMIN_EMAIL,
+        email: SUPER_ADMIN_EMAIL,
         phone: '05531675669',
-        role: 'admin',
+        role: 'super_admin',
         isVerified: true,
         authProvider: 'google',
         address: 'Móí Special Taş Fırın & Pastane - Sırrın Karşıyaka / Şanlıurfa',
         createdAt: new Date().toISOString(),
-        token: 'jwt_admin_token_abdullah_keklik'
+        token: 'jwt_super_admin_token_abdullah_keklik'
       };
-      users.push(adminUser);
+      users.push(superAdminUser);
+
+      // Add a demo content admin user
+      const contentAdminUser: User = {
+        id: 'admin_content_1',
+        name: 'Mehmet Şahap (İçerik Yöneticisi)',
+        email: 'icerik@moispecial.com',
+        phone: '0555 111 22 33',
+        role: 'content_admin',
+        isVerified: true,
+        authProvider: 'email',
+        address: 'Móí Special Üretim Mutfak',
+        createdAt: new Date().toISOString(),
+        token: 'jwt_content_admin_token'
+      };
+      users.push(contentAdminUser);
+
       this.saveRegisteredUsersDB(users);
     }
   }
@@ -70,7 +96,7 @@ export class AuthService {
   public loginWithGoogle(): { success: boolean; message: string; user: User } {
     const googleUser: User = {
       id: 'goog_' + Date.now(),
-      name: 'Google Doğrulanmış Kullanıcı',
+      name: 'Google Doğrulanmış Müşteri',
       email: 'user.google@gmail.com',
       phone: '0532 999 88 77',
       role: 'customer',
@@ -98,29 +124,28 @@ export class AuthService {
       return { success: false, message: 'Bu e-posta adresi ile zaten kayıtlı bir hesap var.', requiresSms: false };
     }
 
-    const isAdminAccount = normalizedEmail === ADMIN_EMAIL.toLowerCase();
+    const isSuperAdminAccount = normalizedEmail === SUPER_ADMIN_EMAIL.toLowerCase();
 
     const newUser: User = {
       id: 'usr_' + Date.now(),
       name,
       email: normalizedEmail,
       phone: phone || '0555 000 00 00',
-      role: isAdminAccount ? 'admin' : 'customer',
-      isVerified: isAdminAccount,
+      role: isSuperAdminAccount ? 'super_admin' : 'customer',
+      isVerified: isSuperAdminAccount,
       authProvider: 'sms',
       address: 'Haliliye / Şanlıurfa',
       createdAt: new Date().toISOString(),
       token: 'jwt_token_' + Date.now()
     };
 
-    if (isAdminAccount) {
+    if (isSuperAdminAccount) {
       users.push(newUser);
       this.saveRegisteredUsersDB(users);
       this.setCurrentUser(newUser);
-      return { success: true, message: 'Yönetici hesabı doğrulandı!', requiresSms: false, user: newUser };
+      return { success: true, message: 'Süper Yönetici hesabı doğrulandı!', requiresSms: false, user: newUser };
     }
 
-    // Set pending SMS user for verification step
     this.pendingSmsUser.set(newUser);
     return { success: true, message: 'SMS doğrulama kodu gönderildi.', requiresSms: true, user: newUser };
   }
@@ -165,44 +190,63 @@ export class AuthService {
       this.setCurrentUser(found);
       return { 
         success: true, 
-        message: found.role === 'admin' ? 'Hoş geldiniz Sayın Abdullah Keklik (Yönetici)' : `Hoş geldiniz ${found.name}` 
+        message: found.role === 'super_admin' 
+          ? 'Hoş geldiniz Sayın Abdullah Keklik (Süper Yönetici Paneli)' 
+          : (found.role === 'content_admin' ? 'Hoş geldiniz (İçerik Yöneticisi)' : `Hoş geldiniz ${found.name}`) 
       };
     }
 
-    if (normalizedEmail === ADMIN_EMAIL.toLowerCase()) {
-      const adminUser: User = {
-        id: 'admin_1',
+    if (normalizedEmail === SUPER_ADMIN_EMAIL.toLowerCase()) {
+      const superAdminUser: User = {
+        id: 'admin_super_1',
         name: 'Abdullah Keklik',
-        email: ADMIN_EMAIL,
+        email: SUPER_ADMIN_EMAIL,
         phone: '05531675669',
-        role: 'admin',
+        role: 'super_admin',
         isVerified: true,
         authProvider: 'google',
         address: 'Móí Special Taş Fırın & Pastane - Sırrın Karşıyaka / Şanlıurfa',
         createdAt: new Date().toISOString(),
-        token: 'jwt_admin_token_abdullah_keklik'
+        token: 'jwt_super_admin_token_abdullah_keklik'
       };
-      this.setCurrentUser(adminUser);
-      return { success: true, message: 'Hoş geldiniz Sayın Abdullah Keklik (Yönetici Paneli)' };
+      this.setCurrentUser(superAdminUser);
+      return { success: true, message: 'Hoş geldiniz Sayın Abdullah Keklik (Süper Yönetici Paneli)' };
     }
 
     return { success: false, message: 'E-posta veya şifre hatalı. Lütfen kontrol edin veya kayıt olun.' };
   }
 
-  public loginAsAdminDirect(): void {
-    const adminUser: User = {
-      id: 'admin_1',
+  public loginAsSuperAdminDirect(): void {
+    const superAdminUser: User = {
+      id: 'admin_super_1',
       name: 'Abdullah Keklik',
-      email: ADMIN_EMAIL,
+      email: SUPER_ADMIN_EMAIL,
       phone: '05531675669',
-      role: 'admin',
+      role: 'super_admin',
       isVerified: true,
       authProvider: 'google',
       address: 'Móí Special Taş Fırın & Pastane - Sırrın Karşıyaka / Şanlıurfa',
       createdAt: new Date().toISOString(),
-      token: 'jwt_admin_token_abdullah_keklik'
+      token: 'jwt_super_admin_token_abdullah_keklik'
     };
-    this.setCurrentUser(adminUser);
+    this.setCurrentUser(superAdminUser);
+    this.isAuthModalOpen.set(false);
+  }
+
+  public loginAsContentAdminDirect(): void {
+    const contentAdminUser: User = {
+      id: 'admin_content_1',
+      name: 'Mehmet Şahap (İçerik Yöneticisi)',
+      email: 'icerik@moispecial.com',
+      phone: '0555 111 22 33',
+      role: 'content_admin',
+      isVerified: true,
+      authProvider: 'email',
+      address: 'Móí Special Üretim Mutfak',
+      createdAt: new Date().toISOString(),
+      token: 'jwt_content_admin_token'
+    };
+    this.setCurrentUser(contentAdminUser);
     this.isAuthModalOpen.set(false);
   }
 
