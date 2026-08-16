@@ -7,15 +7,15 @@ import { CommonModule } from '@angular/common';
   imports: [CommonModule],
   template: `
     @if (isVisible()) {
-      <div class="fixed bottom-8 right-8 z-50 animate-bounce-in">
+      <div class="fixed bottom-20 right-4 md:bottom-8 md:right-8 z-50 animate-fadeInUp">
         <button
           (click)="scrollToTop()"
           title="Sayfanın En Üstüne Çık"
           aria-label="Yukarı Çık"
-          class="group relative p-3.5 sm:p-4 rounded-full bg-[#B87333] hover:bg-[#784000] text-white shadow-2xl border-2 border-[#FFF8F2] transition-all duration-300 hover:scale-110 active:scale-95 cursor-pointer flex items-center justify-center">
+          class="group relative p-3 sm:p-4 rounded-full bg-[#B87333] hover:bg-[#784000] text-white shadow-2xl border-2 border-[#FFF8F2] transition-all duration-300 hover:scale-110 active:scale-95 cursor-pointer flex items-center justify-center">
           
           <!-- Ambient Gold Glow Pulse -->
-          <span class="absolute inset-0 rounded-full bg-[#B87333]/40 animate-ping pointer-events-none"></span>
+          <span class="absolute inset-0 rounded-full bg-[#B87333]/30 animate-ping pointer-events-none"></span>
 
           <!-- Sharp SVG Up Chevron Arrow -->
           <svg 
@@ -28,7 +28,7 @@ import { CommonModule } from '@angular/common';
           </svg>
 
           <!-- Floating Tooltip Badge on Hover -->
-          <span class="absolute right-full mr-3 px-3 py-1.5 rounded-xl bg-[#1F1B14] text-[#FFF8F2] text-[10px] font-bold uppercase tracking-wider whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-300 shadow-xl border border-[#B87333]/40 pointer-events-none">
+          <span class="hidden sm:block absolute right-full mr-3 px-3 py-1.5 rounded-xl bg-[#1F1B14] text-[#FFF8F2] text-[10px] font-bold uppercase tracking-wider whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-300 shadow-xl border border-[#B87333]/40 pointer-events-none">
             Yukarı Çık
           </span>
         </button>
@@ -42,7 +42,7 @@ export class ScrollToTopComponent {
   @HostListener('window:scroll', [])
   onWindowScroll(): void {
     if (typeof window !== 'undefined') {
-      this.isVisible.set(window.scrollY > 250);
+      this.isVisible.set(window.scrollY > 300);
     }
   }
 
