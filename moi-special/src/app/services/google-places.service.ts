@@ -17,6 +17,9 @@ export interface LivePlaceDetails {
   reviews: LiveGoogleReview[];
 }
 
+const CACHE_KEY = 'moi_google_reviews_cache_v1';
+const CACHE_DURATION_MS = 24 * 60 * 60 * 1000; // 24 Hours Smart Caching (0 Credit Waste)
+
 @Injectable({
   providedIn: 'root'
 })
@@ -28,9 +31,16 @@ export class GooglePlacesService {
   public initLiveReviews(): void {
     if (typeof window === 'undefined') return;
 
+    // Step 1: Check 24-Hour Smart Cache first to save 100% of Google Credits
+    const cached = this.getValidCache();
+    if (cached) {
+      this.placeDetails.set(cached);
+      return;
+    }
+
     this.isLoading.set(true);
 
-    // Wait for Google Maps JS SDK to load if not available immediately
+    // Step 2: Wait for Google Maps JS SDK if cache missing
     const checkAndFetch = (attempts: number = 0) => {
       if (typeof google !== 'undefined' && google.maps && google.maps.places) {
         this.fetchWithGoogleSdk();
@@ -69,12 +79,16 @@ export class GooglePlacesService {
                 text: r.text
               }));
 
-              this.placeDetails.set({
+              const details: LivePlaceDetails = {
                 name: place.name,
                 rating: place.rating || 5.0,
                 user_ratings_total: place.user_ratings_total || (place.reviews ? place.reviews.length : 0),
                 reviews: liveReviews
-              });
+              };
+
+              // Save to 24-Hour Cache
+              this.setCache(details);
+              this.placeDetails.set(details);
             }
             this.isLoading.set(false);
           });
@@ -87,6 +101,32 @@ export class GooglePlacesService {
       console.error('Google Places SDK Error:', e);
       this.hasError.set(true);
       this.isLoading.set(false);
+    }
+  }
+
+  private getValidCache(): LivePlaceDetails | null {
+    try {
+      const raw = localStorage.getItem(CACHE_KEY);
+      if (!raw) return null;
+
+      const parsed = JSON.parse(raw);
+      if (Date.now() - parsed.timestamp < CACHE_DURATION_MS) {
+        return parsed.data;
+      }
+    } catch (e) {
+      // Ignore cache parse errors
+    }
+    return null;
+  }
+
+  private setCache(data: LivePlaceDetails): void {
+    try {
+      localStorage.setItem(CACHE_KEY, JSON.stringify({
+        timestamp: Date.now(),
+        data
+      }));
+    } catch (e) {
+      // Ignore localStorage write errors
     }
   }
 }
