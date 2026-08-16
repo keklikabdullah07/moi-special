@@ -67,12 +67,25 @@
   }
 }
 
+@keyframes storyProgress {
+  0% {
+    width: 0%;
+  }
+  100% {
+    width: 100%;
+  }
+}
+
 .animate-spin-slow {
   animation: spinSlow 20s linear infinite;
 }
 
 .animate-float {
   animation: floatGentle 5s ease-in-out infinite;
+}
+
+.animate-progress {
+  animation: storyProgress 5s linear forwards;
 }
 
 .btn-shimmer {
@@ -98,4 +111,13 @@
 }
 ::-webkit-scrollbar-thumb:hover {
   background: #526E48;
+}
+
+/* Hide scrollbars for story bar and horizontal product shelves */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }

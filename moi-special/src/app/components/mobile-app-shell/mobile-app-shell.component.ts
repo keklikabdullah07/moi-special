@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ProductService } from '../../services/product.service';
 import { CartService } from '../../services/cart.service';
 import { ReservationService } from '../../services/reservation.service';
+import { StoryService } from '../../services/story.service';
 
 @Component({
   selector: 'app-mobile-app-shell',
@@ -10,7 +11,7 @@ import { ReservationService } from '../../services/reservation.service';
   imports: [CommonModule],
   template: `
     <!-- Dedicated Mobile Native App Shell (Visible only on < md screens) -->
-    <div class="md:hidden flex flex-col bg-[#FFF8F2] min-h-screen pb-24 select-none">
+    <div class="md:hidden flex flex-col bg-[#FFF8F2] min-h-screen pb-32 select-none overflow-x-hidden">
       
       <!-- Native Mobile Header Bar -->
       <header class="sticky top-0 z-30 bg-[#FFF8F2]/95 backdrop-blur-xl border-b border-[#D6C9B6]/60 px-4 py-3 flex items-center justify-between shadow-xs">
@@ -56,19 +57,39 @@ import { ReservationService } from '../../services/reservation.service';
 
       </header>
 
-      <!-- App Story Highlights (Instagram / Native App Style - Interactive Story Filters) -->
+      <!-- App Story Highlights (Instagram / Native App Style - Interactive Story Player & Owner Post) -->
       <div class="py-4 px-4 overflow-x-auto no-scrollbar flex items-center gap-4 border-b border-[#D6C9B6]/40 bg-[#EDE4D8]/30">
-        @for (story of stories; track story.id) {
+        
+        <!-- Owner Add Story Button (+) -->
+        <button 
+          (click)="storyService.isAdminAddOpen.set(true)"
+          class="flex flex-col items-center gap-1.5 shrink-0 group active:scale-95 transition-transform cursor-pointer">
+          <div class="w-16 h-16 rounded-full border-2 border-dashed border-[#526E48] bg-[#526E48]/10 flex items-center justify-center text-[#526E48] relative">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+            </svg>
+            <span class="absolute -bottom-1 -right-1 bg-[#B87333] text-white rounded-full w-5 h-5 text-[10px] font-bold flex items-center justify-center shadow-sm">
+              +
+            </span>
+          </div>
+          <span class="label-caps text-[9px] text-[#526E48] font-bold">Hikaye Ekle</span>
+        </button>
+
+        <!-- Instagram Story Rings -->
+        @for (group of storyService.storyGroups(); track group.id) {
           <button 
-            (click)="selectStory(story)"
+            (click)="storyService.openGroup(group)"
             class="flex flex-col items-center gap-1.5 shrink-0 group active:scale-95 transition-transform cursor-pointer">
             <div 
-              [class.ring-2]="selectedCategory() === story.categoryId"
-              [class.ring-[#526E48]]="selectedCategory() === story.categoryId"
-              class="w-16 h-16 rounded-full p-[2px] bg-gradient-to-tr from-[#526E48] via-[#B87333] to-[#CFEFC0] shadow-sm">
-              <img [src]="story.image" [alt]="story.name" class="w-full h-full rounded-full object-cover border-2 border-[#FFF8F2]" />
+              [class.bg-gradient-to-tr]="group.hasUnread"
+              [class.from-[#526E48]]="group.hasUnread"
+              [class.via-[#B87333]]="group.hasUnread"
+              [class.to-[#CFEFC0]]="group.hasUnread"
+              [class.bg-[#D6C9B6]]="!group.hasUnread"
+              class="w-16 h-16 rounded-full p-[2px] shadow-sm">
+              <img [src]="group.avatar" [alt]="group.name" class="w-full h-full rounded-full object-cover border-2 border-[#FFF8F2]" />
             </div>
-            <span class="label-caps text-[9px] text-[#1F1B14] max-w-[68px] truncate text-center font-medium">{{ story.name }}</span>
+            <span class="label-caps text-[9px] text-[#1F1B14] max-w-[68px] truncate text-center font-medium">{{ group.name }}</span>
           </button>
         }
       </div>
@@ -189,6 +210,7 @@ export class MobileAppShellComponent {
   public readonly productService = inject(ProductService);
   public readonly cartService = inject(CartService);
   public readonly reservationService = inject(ReservationService);
+  public readonly storyService = inject(StoryService);
 
   public readonly selectedCategory = signal<string>('all');
 
@@ -198,18 +220,6 @@ export class MobileAppShellComponent {
     if (cat === 'all') return all;
     return all.filter(p => p.category === cat);
   });
-
-  public readonly stories = [
-    { id: 1, name: 'Günün Taze', categoryId: 'fistikli', image: 'assets/croissant.jpg' },
-    { id: 2, name: 'Entremet', categoryId: 'pastane', image: 'assets/entremet.jpg' },
-    { id: 3, name: 'Taş Fırın', categoryId: 'firin', image: 'assets/hero-bakery.jpg' },
-    { id: 4, name: 'Kahveler', categoryId: 'icecek', image: 'assets/croissant.jpg' },
-    { id: 5, name: 'Tümü', categoryId: 'all', image: 'assets/entremet.jpg' }
-  ];
-
-  public selectStory(story: any): void {
-    this.selectedCategory.set(story.categoryId);
-  }
 
   public addFeaturedToCart(): void {
     const croissant = this.productService.products().find(p => p.id === 'fistikli-croissant');

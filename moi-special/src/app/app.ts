@@ -6,6 +6,7 @@ import { CartDrawerComponent } from './components/cart-drawer/cart-drawer.compon
 import { MobileBottomNavComponent } from './components/mobile-bottom-nav/mobile-bottom-nav.component';
 import { MobileAppShellComponent } from './components/mobile-app-shell/mobile-app-shell.component';
 import { ReservationModalComponent } from './components/reservation-modal/reservation-modal.component';
+import { StoryModalComponent } from './components/story-modal/story-modal.component';
 import { ToastComponent } from './components/toast/toast.component';
 import { FooterComponent } from './components/footer/footer.component';
 
@@ -20,6 +21,7 @@ import { FooterComponent } from './components/footer/footer.component';
     MobileBottomNavComponent,
     MobileAppShellComponent,
     ReservationModalComponent,
+    StoryModalComponent,
     ToastComponent,
     FooterComponent
   ],
