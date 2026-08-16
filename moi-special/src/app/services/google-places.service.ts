@@ -17,8 +17,8 @@ export interface LivePlaceDetails {
   reviews: LiveGoogleReview[];
 }
 
-const CACHE_KEY = 'moi_google_reviews_cache_v2';
-const CACHE_DURATION_MS = 24 * 60 * 60 * 1000; // 24 Hours Smart Caching (0 Credit Waste)
+const CACHE_KEY = 'moi_google_reviews_cache_v3';
+const CACHE_DURATION_MS = 24 * 60 * 60 * 1000;
 
 @Injectable({
   providedIn: 'root'
@@ -33,9 +33,15 @@ export class GooglePlacesService {
   public initLiveReviews(): void {
     if (typeof window === 'undefined') return;
 
-    // Step 1: Check 24-Hour Smart Cache first to save 100% of Google Credits
+    // Clear any obsolete legacy caches
+    try {
+      localStorage.removeItem('moi_google_reviews_cache_v1');
+      localStorage.removeItem('moi_google_reviews_cache_v2');
+    } catch (e) {}
+
+    // Check current 24-Hour Cache
     const cached = this.getValidCache();
-    if (cached) {
+    if (cached && cached.reviews && cached.reviews.length > 0) {
       this.placeDetails.set(cached);
       return;
     }
@@ -46,7 +52,7 @@ export class GooglePlacesService {
     this.isLoading.set(true);
     this.hasError.set(false);
 
-    // Modern Places API (New) Text Search Endpoint: https://places.googleapis.com/v1/places:searchText
+    // Call Places API (New) Text Search
     const url = 'https://places.googleapis.com/v1/places:searchText';
     
     const headers = new HttpHeaders({
@@ -79,9 +85,10 @@ export class GooglePlacesService {
             reviews: liveReviews
           };
 
-          // Save to 24-Hour Cache
-          this.setCache(details);
-          this.placeDetails.set(details);
+          if (details.reviews.length > 0) {
+            this.setCache(details);
+            this.placeDetails.set(details);
+          }
         }
         this.isLoading.set(false);
       },
@@ -93,6 +100,14 @@ export class GooglePlacesService {
     });
   }
 
+  public clearCacheAndRefresh(): void {
+    try {
+      localStorage.removeItem(CACHE_KEY);
+    } catch (e) {}
+    this.placeDetails.set(null);
+    this.initLiveReviews();
+  }
+
   private getValidCache(): LivePlaceDetails | null {
     try {
       const raw = localStorage.getItem(CACHE_KEY);
@@ -102,9 +117,7 @@ export class GooglePlacesService {
       if (Date.now() - parsed.timestamp < CACHE_DURATION_MS) {
         return parsed.data;
       }
-    } catch (e) {
-      // Ignore cache parse errors
-    }
+    } catch (e) {}
     return null;
   }
 
@@ -114,8 +127,6 @@ export class GooglePlacesService {
         timestamp: Date.now(),
         data
       }));
-    } catch (e) {
-      // Ignore localStorage write errors
-    }
+    } catch (e) {}
   }
 }
