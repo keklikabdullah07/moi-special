@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, effect } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { SiteAssetService } from '../../services/site-asset.service';
@@ -295,25 +295,25 @@ export class LiveSectionEditorModalComponent {
   public readonly toastService = inject(ToastService);
   public readonly imageUploadService = inject(ImageUploadService);
 
-  public brandName = this.assetService.brandName();
-  public navHome = this.assetService.navHome();
-  public navMenu = this.assetService.navMenu();
-  public navStory = this.assetService.navStory();
-  public navContact = this.assetService.navContact();
+  public brandName = '';
+  public navHome = '';
+  public navMenu = '';
+  public navStory = '';
+  public navContact = '';
 
-  public heroEyebrow = this.assetService.heroEyebrow();
-  public heroHeadline = this.assetService.heroHeadline();
-  public heroSubtitle = this.assetService.heroSubtitle();
-  public heroImg = this.assetService.croissantImage();
+  public heroEyebrow = '';
+  public heroHeadline = '';
+  public heroSubtitle = '';
+  public heroImg = '';
 
-  public aboutTitle = this.assetService.aboutTitle();
-  public aboutBody = this.assetService.aboutBody();
-  public aboutImg = this.assetService.heroBakeryImage();
+  public aboutTitle = '';
+  public aboutBody = '';
+  public aboutImg = '';
 
-  public storeAddress = this.assetService.storeAddress();
-  public storePhone = this.assetService.storePhone();
-  public workingHours = this.assetService.workingHours();
-  public footerCopyright = this.assetService.footerCopyright();
+  public storeAddress = '';
+  public storePhone = '';
+  public workingHours = '';
+  public footerCopyright = '';
 
   // Menu Product Edit Fields
   public prodName = '';
@@ -323,14 +323,45 @@ export class LiveSectionEditorModalComponent {
   public prodDesc = '';
 
   constructor() {
-    const editing = this.productService.editingProduct();
-    if (editing) {
-      this.prodName = editing.name;
-      this.prodPrice = editing.price;
-      this.prodCategory = editing.category;
-      this.prodImage = editing.imageUrl;
-      this.prodDesc = editing.description;
-    }
+    effect(() => {
+      const activeSection = this.assetService.activeSectionEditing();
+      if (activeSection === 'menu') {
+        const editing = this.productService.editingProduct();
+        if (editing) {
+          this.prodName = editing.name;
+          this.prodPrice = editing.price;
+          this.prodCategory = editing.category;
+          this.prodImage = editing.imageUrl;
+          this.prodDesc = editing.description;
+        } else {
+          this.prodName = '';
+          this.prodPrice = 185;
+          this.prodCategory = 'fistikli';
+          this.prodImage = 'assets/croissant.jpg';
+          this.prodDesc = '';
+        }
+      } else if (activeSection === 'hero') {
+        this.heroEyebrow = this.assetService.heroEyebrow();
+        this.heroHeadline = this.assetService.heroHeadline();
+        this.heroSubtitle = this.assetService.heroSubtitle();
+        this.heroImg = this.assetService.croissantImage();
+      } else if (activeSection === 'about') {
+        this.aboutTitle = this.assetService.aboutTitle();
+        this.aboutBody = this.assetService.aboutBody();
+        this.aboutImg = this.assetService.heroBakeryImage();
+      } else if (activeSection === 'header') {
+        this.brandName = this.assetService.brandName();
+        this.navHome = this.assetService.navHome();
+        this.navMenu = this.assetService.navMenu();
+        this.navStory = this.assetService.navStory();
+        this.navContact = this.assetService.navContact();
+      } else if (activeSection === 'footer' || activeSection === 'contact') {
+        this.storeAddress = this.assetService.storeAddress();
+        this.storePhone = this.assetService.storePhone();
+        this.workingHours = this.assetService.workingHours();
+        this.footerCopyright = this.assetService.footerCopyright();
+      }
+    });
   }
 
   public async onFileSelected(event: Event, target: 'product' | 'hero' | 'about'): Promise<void> {
