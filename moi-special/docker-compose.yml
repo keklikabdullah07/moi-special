@@ -1,0 +1,53 @@
+version: '3.8'
+
+services:
+  # SERVICE 1: PostgreSQL 16 Enterprise Database
+  postgres:
+    image: postgres:16-alpine
+    container_name: moi_postgres_db
+    restart: always
+    environment:
+      POSTGRES_DB: moispecial_db
+      POSTGRES_USER: moi_admin
+      POSTGRES_PASSWORD: MoiSpecialPass2026!
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U moi_admin -d moispecial_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  # SERVICE 2: .NET 8 Web API Backend
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: moi_net8_api
+    restart: always
+    ports:
+      - "5000:80"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ConnectionStrings__PostgresConnection=Host=postgres;Port=5432;Database=moispecial_db;Username=moi_admin;Password=MoiSpecialPass2026!
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  # SERVICE 3: Angular 18 Nginx Frontend
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: moi_angular_frontend
+    restart: always
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+
+volumes:
+  postgres_data:
+    driver: local
