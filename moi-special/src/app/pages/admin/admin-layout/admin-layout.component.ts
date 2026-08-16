@@ -21,13 +21,17 @@ import { ToastService } from '../../../services/toast.service';
         <!-- Sidebar Header / Brand Logo -->
         <div class="p-6 space-y-6">
           <div class="flex items-center justify-between">
+            
+            <!-- SEAMLESS MOÍ BRAND LOGO IN SIDEBAR -->
             <div class="flex items-center gap-3">
-              <div class="w-10 h-10 rounded-2xl bg-[#B87333] text-white font-serif font-bold text-xl flex items-center justify-center shadow-lg border border-[#D6C9B6]/40">
-                M
-              </div>
+              <img 
+                src="assets/moi-header-logo.jpg" 
+                alt="MOÍ Special Designer Logo" 
+                class="h-10 w-auto object-contain rounded-xl bg-white p-1" />
+              
               <div>
                 <h2 class="font-serif font-bold text-lg text-[#FFF8F2] tracking-wide">Móí Special</h2>
-                <span class="label-caps text-[9px] text-[#B87333] font-bold block">Kurumsal ERP Paneli</span>
+                <span class="label-caps text-[9px] text-[#B87333] font-bold block">Şanlıurfa Kurumsal ERP</span>
               </div>
             </div>
 
@@ -135,7 +139,7 @@ import { ToastService } from '../../../services/toast.service';
                 AK
               </div>
               <div class="hidden sm:block text-left">
-                <span class="font-serif font-bold text-xs text-[#1F1B14] block">Abdullah Keklik</span>
+                <span class="font-serif font-bold text-[#1F1B14] block text-xs">Abdullah Keklik</span>
                 <span class="label-caps text-[9px] text-[#526E48] font-bold">Süper Yönetici</span>
               </div>
             </div>

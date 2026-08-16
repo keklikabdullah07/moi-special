@@ -28,21 +28,14 @@ import { SiteAssetService } from '../../services/site-asset.service';
       }
 
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex items-center justify-between h-20">
+        <div class="flex items-center justify-between h-20 sm:h-24">
           
-          <!-- Logo Brand Mark -->
-          <div (click)="scrollToSection('hero')" class="flex items-center gap-3 cursor-pointer group">
-            <div class="w-10 h-10 rounded-full bg-[#526E48] text-white font-serif font-bold text-xl flex items-center justify-center shadow-md group-hover:scale-105 transition-transform">
-              M
-            </div>
-            <div class="space-y-0.5">
-              <span class="font-serif text-xl sm:text-2xl font-bold tracking-tight text-[#1F1B14] block">
-                {{ assetService.brandName() }}
-              </span>
-              <span class="label-caps text-[9px] text-[#B87333] tracking-widest block font-bold">
-                Artisan Fırın & Pastane
-              </span>
-            </div>
+          <!-- SEAMLESS FLAT HEADER LOGO (NO BORDERS, NO CARDS, PERFECT BACKGROUND BLEND) -->
+          <div (click)="scrollToSection('hero')" class="flex items-center cursor-pointer group py-1">
+            <img 
+              src="assets/moi-header-logo.jpg" 
+              alt="MOÍ Special Designer Logo" 
+              class="h-12 sm:h-16 w-auto object-contain group-hover:scale-105 transition-all duration-300 mix-blend-multiply" />
           </div>
 
           <!-- Desktop Navigation Bar Links -->
