@@ -1,10 +1,13 @@
-import { Injectable, signal, computed } from '@angular/core';
+import { Injectable, signal, computed, inject } from '@angular/core';
 import { CartItem, Product } from '../models/product.model';
+import { ToastService } from './toast.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CartService {
+  private readonly toastService = inject(ToastService);
+
   private readonly cartItemsSignal = signal<CartItem[]>([]);
   public readonly isDrawerOpenSignal = signal<boolean>(false);
 
@@ -34,7 +37,7 @@ export class CartService {
       }
       return [...items, { product, quantity: 1 }];
     });
-    this.openDrawer();
+    this.toastService.show(`"${product.name}" sepete eklendi! 🥐`);
   }
 
   public removeItem(productId: string): void {

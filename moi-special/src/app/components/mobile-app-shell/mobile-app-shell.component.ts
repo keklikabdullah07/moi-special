@@ -2,6 +2,7 @@ import { Component, inject, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ProductService } from '../../services/product.service';
 import { CartService } from '../../services/cart.service';
+import { ReservationService } from '../../services/reservation.service';
 
 @Component({
   selector: 'app-mobile-app-shell',
@@ -41,7 +42,7 @@ import { CartService } from '../../services/cart.service';
         <div class="flex items-center gap-2">
           <button 
             (click)="cartService.toggleDrawer()"
-            class="relative w-10 h-10 rounded-full bg-[#EDE4D8] border border-[#D6C9B6] flex items-center justify-center text-[#1F1B14] active:scale-90 transition-transform">
+            class="relative w-10 h-10 rounded-full bg-[#EDE4D8] border border-[#D6C9B6] flex items-center justify-center text-[#1F1B14] active:scale-90 transition-transform cursor-pointer">
             <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-[#526E48]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
             </svg>
@@ -55,13 +56,16 @@ import { CartService } from '../../services/cart.service';
 
       </header>
 
-      <!-- App Story Highlights (Instagram / Native App Style) -->
+      <!-- App Story Highlights (Instagram / Native App Style - Interactive Story Filters) -->
       <div class="py-4 px-4 overflow-x-auto no-scrollbar flex items-center gap-4 border-b border-[#D6C9B6]/40 bg-[#EDE4D8]/30">
         @for (story of stories; track story.id) {
           <button 
             (click)="selectStory(story)"
             class="flex flex-col items-center gap-1.5 shrink-0 group active:scale-95 transition-transform cursor-pointer">
-            <div class="w-16 h-16 rounded-full p-[2px] bg-gradient-to-tr from-[#526E48] via-[#B87333] to-[#CFEFC0] shadow-sm">
+            <div 
+              [class.ring-2]="selectedCategory() === story.categoryId"
+              [class.ring-[#526E48]]="selectedCategory() === story.categoryId"
+              class="w-16 h-16 rounded-full p-[2px] bg-gradient-to-tr from-[#526E48] via-[#B87333] to-[#CFEFC0] shadow-sm">
               <img [src]="story.image" [alt]="story.name" class="w-full h-full rounded-full object-cover border-2 border-[#FFF8F2]" />
             </div>
             <span class="label-caps text-[9px] text-[#1F1B14] max-w-[68px] truncate text-center font-medium">{{ story.name }}</span>
@@ -105,7 +109,7 @@ import { CartService } from '../../services/cart.service';
       <div class="px-4 pt-6 pb-2">
         <div class="flex items-center justify-between mb-3">
           <h3 class="font-serif text-lg font-bold text-[#1F1B14]">Menü Koleksiyonu</h3>
-          <span class="label-caps text-[10px] text-[#B87333]">Tümünü Gör</span>
+          <button (click)="selectedCategory.set('all')" class="label-caps text-[10px] text-[#B87333] cursor-pointer">Tümünü Gör</button>
         </div>
 
         <div class="flex items-center gap-2 overflow-x-auto no-scrollbar pb-2">
@@ -166,17 +170,15 @@ import { CartService } from '../../services/cart.service';
       <div class="px-4 py-4">
         <div class="rounded-3xl bg-[#EDE4D8] border border-[#D6C9B6] p-5 flex items-center justify-between shadow-sm">
           <div class="space-y-1">
-            <span class="label-caps text-[9px] text-[#B87333]">Konum & Yol Tarifi</span>
-            <h4 class="font-serif font-bold text-base text-[#1F1B14]">Şubemize Ulaşın</h4>
-            <p class="text-[11px] text-[#434840]">Google Haritalar üzerinde yol tarifi alın.</p>
+            <span class="label-caps text-[9px] text-[#B87333]">Masa & Davet</span>
+            <h4 class="font-serif font-bold text-base text-[#1F1B14]">Masa Rezerve Edin</h4>
+            <p class="text-[11px] text-[#434840]">Şanlıurfa şubemizde yerinizi ayırtın.</p>
           </div>
-          <a 
-            href="https://share.google/P5BMtr0gzI00D3TQj" 
-            target="_blank" 
-            rel="noopener"
-            class="px-4 py-2.5 rounded-full bg-[#526E48] text-white text-xs font-bold uppercase tracking-wider shadow-md active:scale-95 transition-transform whitespace-nowrap inline-flex items-center gap-1.5">
-            <span>Haritada Aç</span>
-          </a>
+          <button 
+            (click)="reservationService.openModal()"
+            class="px-4 py-2.5 rounded-full bg-[#B87333] hover:bg-[#784000] text-white text-xs font-bold uppercase tracking-wider shadow-md active:scale-95 transition-transform whitespace-nowrap cursor-pointer">
+            Rezerve Et
+          </button>
         </div>
       </div>
 
@@ -186,6 +188,7 @@ import { CartService } from '../../services/cart.service';
 export class MobileAppShellComponent {
   public readonly productService = inject(ProductService);
   public readonly cartService = inject(CartService);
+  public readonly reservationService = inject(ReservationService);
 
   public readonly selectedCategory = signal<string>('all');
 
@@ -197,15 +200,15 @@ export class MobileAppShellComponent {
   });
 
   public readonly stories = [
-    { id: 1, name: 'Günün Taze', image: 'assets/croissant.jpg' },
-    { id: 2, name: 'Entremet', image: 'assets/entremet.jpg' },
-    { id: 3, name: 'Taş Fırın', image: 'assets/hero-bakery.jpg' },
-    { id: 4, name: 'Kahveler', image: 'assets/croissant.jpg' },
-    { id: 5, name: 'Şubemiz', image: 'assets/entremet.jpg' }
+    { id: 1, name: 'Günün Taze', categoryId: 'fistikli', image: 'assets/croissant.jpg' },
+    { id: 2, name: 'Entremet', categoryId: 'pastane', image: 'assets/entremet.jpg' },
+    { id: 3, name: 'Taş Fırın', categoryId: 'firin', image: 'assets/hero-bakery.jpg' },
+    { id: 4, name: 'Kahveler', categoryId: 'icecek', image: 'assets/croissant.jpg' },
+    { id: 5, name: 'Tümü', categoryId: 'all', image: 'assets/entremet.jpg' }
   ];
 
   public selectStory(story: any): void {
-    this.selectedCategory.set('all');
+    this.selectedCategory.set(story.categoryId);
   }
 
   public addFeaturedToCart(): void {

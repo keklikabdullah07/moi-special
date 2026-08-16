@@ -1,6 +1,7 @@
 import { Component, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CartService } from '../../services/cart.service';
+import { ReservationService } from '../../services/reservation.service';
 
 @Component({
   selector: 'app-header',
@@ -56,7 +57,9 @@ import { CartService } from '../../services/cart.service';
           </button>
 
           <!-- Reservation Button (Desktop) -->
-          <button class="hidden sm:inline-flex items-center justify-center px-5 py-2.5 rounded-full bg-[#B87333] hover:bg-[#784000] active:scale-95 text-white font-medium text-xs tracking-wider uppercase transition-all duration-300 shadow-md hover:shadow-lg cursor-pointer">
+          <button 
+            (click)="reservationService.openModal()"
+            class="hidden sm:inline-flex items-center justify-center px-5 py-2.5 rounded-full bg-[#B87333] hover:bg-[#784000] active:scale-95 text-white font-medium text-xs tracking-wider uppercase transition-all duration-300 shadow-md hover:shadow-lg cursor-pointer">
             Masa Rezerve Et
           </button>
 
@@ -109,7 +112,7 @@ import { CartService } from '../../services/cart.service';
           </nav>
           
           <button 
-            (click)="isMobileMenuOpen.set(false)"
+            (click)="isMobileMenuOpen.set(false); reservationService.openModal()"
             class="w-full py-3.5 rounded-full bg-[#B87333] text-white font-medium text-xs tracking-wider uppercase text-center shadow-md cursor-pointer">
             Masa Rezerve Et
           </button>
@@ -120,6 +123,7 @@ import { CartService } from '../../services/cart.service';
 })
 export class HeaderComponent {
   public readonly cartService = inject(CartService);
+  public readonly reservationService = inject(ReservationService);
   public readonly isMobileMenuOpen = signal<boolean>(false);
 
   public onImgError(event: Event): void {

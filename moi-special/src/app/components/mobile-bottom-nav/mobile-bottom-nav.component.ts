@@ -1,6 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CartService } from '../../services/cart.service';
+import { ReservationService } from '../../services/reservation.service';
 
 @Component({
   selector: 'app-mobile-bottom-nav',
@@ -44,13 +45,15 @@ import { CartService } from '../../services/cart.service';
           <span class="label-caps text-[9px]">Sepet</span>
         </button>
 
-        <!-- Reservation CTA -->
-        <a href="#contact" class="flex flex-col items-center gap-1 text-[#526E48] py-1 px-3">
+        <!-- Reservation Modal Trigger -->
+        <button 
+          (click)="reservationService.openModal()"
+          class="flex flex-col items-center gap-1 text-[#526E48] py-1 px-3 cursor-pointer">
           <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-[#526E48]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
           </svg>
           <span class="label-caps text-[9px] font-bold">Rezerve</span>
-        </a>
+        </button>
 
       </div>
     </div>
@@ -58,4 +61,5 @@ import { CartService } from '../../services/cart.service';
 })
 export class MobileBottomNavComponent {
   public readonly cartService = inject(CartService);
+  public readonly reservationService = inject(ReservationService);
 }
