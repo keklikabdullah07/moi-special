@@ -1,6 +1,6 @@
-import { Injectable, inject, signal } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { environment } from '../../environments/environment';
+import { Injectable, signal } from '@angular/core';
+
+declare const google: any;
 
 export interface LiveGoogleReview {
   author_name: string;
@@ -21,62 +21,72 @@ export interface LivePlaceDetails {
   providedIn: 'root'
 })
 export class GooglePlacesService {
-  private readonly http = inject(HttpClient);
-
   public readonly placeDetails = signal<LivePlaceDetails | null>(null);
   public readonly isLoading = signal<boolean>(false);
   public readonly hasError = signal<boolean>(false);
 
   public initLiveReviews(): void {
-    const key = environment.googleApiKey;
-    if (!key) return;
+    if (typeof window === 'undefined') return;
 
     this.isLoading.set(true);
-    this.hasError.set(false);
 
-    if (environment.googlePlaceId) {
-      this.fetchDetailsByPlaceId(environment.googlePlaceId, key);
-    } else {
-      // Find Place by text query automatically
-      const query = encodeURIComponent('Moi Fırın Sırrın Karşıyaka Şanlıurfa');
-      const findUrl = `https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=${query}&inputtype=textquery&fields=place_id&key=${key}`;
+    // Wait for Google Maps JS SDK to load if not available immediately
+    const checkAndFetch = (attempts: number = 0) => {
+      if (typeof google !== 'undefined' && google.maps && google.maps.places) {
+        this.fetchWithGoogleSdk();
+      } else if (attempts < 20) {
+        setTimeout(() => checkAndFetch(attempts + 1), 300);
+      } else {
+        this.isLoading.set(false);
+      }
+    };
 
-      this.http.get<any>(findUrl).subscribe({
-        next: (findRes: any) => {
-          const placeId = findRes?.candidates?.[0]?.place_id;
-          if (placeId) {
-            this.fetchDetailsByPlaceId(placeId, key);
-          } else {
+    checkAndFetch();
+  }
+
+  private fetchWithGoogleSdk(): void {
+    try {
+      const dummyElem = document.createElement('div');
+      const service = new google.maps.places.PlacesService(dummyElem);
+
+      service.findPlaceFromQuery({
+        query: 'Moi Fırın Sırrın Karşıyaka Şanlıurfa',
+        fields: ['place_id', 'name']
+      }, (results: any[], status: any) => {
+        if (status === google.maps.places.PlacesServiceStatus.OK && results && results[0]) {
+          const placeId = results[0].place_id;
+
+          service.getDetails({
+            placeId: placeId,
+            fields: ['name', 'rating', 'user_ratings_total', 'reviews']
+          }, (place: any, detailStatus: any) => {
+            if (detailStatus === google.maps.places.PlacesServiceStatus.OK && place) {
+              const liveReviews: LiveGoogleReview[] = (place.reviews || []).map((r: any) => ({
+                author_name: r.author_name,
+                profile_photo_url: r.profile_photo_url || '',
+                rating: r.rating || 5,
+                relative_time_description: r.relative_time_description || 'Google Yorumu',
+                text: r.text
+              }));
+
+              this.placeDetails.set({
+                name: place.name,
+                rating: place.rating || 5.0,
+                user_ratings_total: place.user_ratings_total || (place.reviews ? place.reviews.length : 0),
+                reviews: liveReviews
+              });
+            }
             this.isLoading.set(false);
-          }
-        },
-        error: () => {
+          });
+
+        } else {
           this.isLoading.set(false);
         }
       });
+    } catch (e) {
+      console.error('Google Places SDK Error:', e);
+      this.hasError.set(true);
+      this.isLoading.set(false);
     }
-  }
-
-  private fetchDetailsByPlaceId(placeId: string, apiKey: string): void {
-    const detailsUrl = `https://maps.googleapis.com/maps/api/place/details/json?place_id=${placeId}&fields=name,rating,reviews,user_ratings_total&key=${apiKey}&language=tr`;
-
-    this.http.get<any>(detailsUrl).subscribe({
-      next: (res: any) => {
-        if (res.result) {
-          this.placeDetails.set({
-            name: res.result.name,
-            rating: res.result.rating || 5.0,
-            user_ratings_total: res.result.user_ratings_total || 0,
-            reviews: res.result.reviews || []
-          });
-        }
-        this.isLoading.set(false);
-      },
-      error: (err: any) => {
-        console.error('Google Places Details error:', err);
-        this.hasError.set(true);
-        this.isLoading.set(false);
-      }
-    });
   }
 }
