@@ -1,5 +1,5 @@
 import { Injectable, inject, signal } from '@angular/core';
-import { HttpClient } from '@angular/common';
+import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 
 export interface LiveGoogleReview {
@@ -42,7 +42,7 @@ export class GooglePlacesService {
       const findUrl = `https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=${query}&inputtype=textquery&fields=place_id&key=${key}`;
 
       this.http.get<any>(findUrl).subscribe({
-        next: (findRes) => {
+        next: (findRes: any) => {
           const placeId = findRes?.candidates?.[0]?.place_id;
           if (placeId) {
             this.fetchDetailsByPlaceId(placeId, key);
@@ -61,7 +61,7 @@ export class GooglePlacesService {
     const detailsUrl = `https://maps.googleapis.com/maps/api/place/details/json?place_id=${placeId}&fields=name,rating,reviews,user_ratings_total&key=${apiKey}&language=tr`;
 
     this.http.get<any>(detailsUrl).subscribe({
-      next: (res) => {
+      next: (res: any) => {
         if (res.result) {
           this.placeDetails.set({
             name: res.result.name,
@@ -72,7 +72,7 @@ export class GooglePlacesService {
         }
         this.isLoading.set(false);
       },
-      error: (err) => {
+      error: (err: any) => {
         console.error('Google Places Details error:', err);
         this.hasError.set(true);
         this.isLoading.set(false);
