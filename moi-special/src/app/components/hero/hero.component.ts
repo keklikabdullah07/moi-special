@@ -1,4 +1,4 @@
-import { Component, AfterViewInit, ElementRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, ViewChild, afterNextRender } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { gsap } from 'gsap';
 
@@ -113,23 +113,26 @@ import { gsap } from 'gsap';
     </section>
   `
 })
-export class HeroComponent implements AfterViewInit {
+export class HeroComponent {
   @ViewChild('heroText') heroText!: ElementRef;
   @ViewChild('heroImage') heroImage!: ElementRef;
 
-  public ngAfterViewInit(): void {
-    if (typeof window !== 'undefined') {
-      gsap.fromTo(
-        this.heroText.nativeElement,
-        { opacity: 0, y: 30 },
-        { opacity: 1, y: 0, duration: 1, ease: 'power3.out' }
-      );
-      gsap.fromTo(
-        this.heroImage.nativeElement,
-        { opacity: 0, scale: 0.95 },
-        { opacity: 1, scale: 1, duration: 1.2, delay: 0.2, ease: 'power3.out' }
-      );
-    }
+  constructor() {
+    // afterNextRender ensures GSAP ONLY runs after Angular client hydration has fully completed!
+    afterNextRender(() => {
+      if (this.heroText?.nativeElement && this.heroImage?.nativeElement) {
+        gsap.fromTo(
+          this.heroText.nativeElement,
+          { opacity: 0, y: 30 },
+          { opacity: 1, y: 0, duration: 1, ease: 'power3.out' }
+        );
+        gsap.fromTo(
+          this.heroImage.nativeElement,
+          { opacity: 0, scale: 0.95 },
+          { opacity: 1, scale: 1, duration: 1.2, delay: 0.2, ease: 'power3.out' }
+        );
+      }
+    });
   }
 
   public onHeroImgError(event: Event): void {
