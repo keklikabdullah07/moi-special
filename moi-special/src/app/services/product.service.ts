@@ -8,17 +8,17 @@ export class ProductService {
   public readonly categories = signal<Category[]>([
     { id: 'all', name: 'Tüm Ürünler', description: 'Moi Special seçkin lezzet koleksiyonu' },
     { id: 'fistikli', name: 'Fıstıklı Özel', description: 'Antep fıstığının en gurme hali' },
-    { id: 'pastane', name: 'Artisan Pastane', description: 'Günlük taze fransıı ve mezopotamya entremetleri' },
+    { id: 'pastane', name: 'Artisan Pastane', description: 'Günlük taze Fransız & Mezopotamya entremetleri' },
     { id: 'firin', name: 'Taş Fırın & Ekmek', description: 'Odun ateşinde pişen ekşi mayalı özel ekmekler' },
-    { id: 'icecek', name: 'Gurme İçecekler', description: 'Özel harman nitelikli kahveler ve meşrubatlar' }
+    { id: 'icecek', name: 'Gurme İçecekler', description: 'Özel harman nitelikli kahveler ve özel içecekler' }
   ]);
 
   public readonly products = signal<Product[]>([
     {
       id: 'fistikli-croissant',
-      name: 'Antep Fıstıklı Artisan Kruvasan',
+      name: 'Antep Fıstıklı Artisan Croissant',
       category: 'fistikli',
-      description: 'Kat kat Fransız tereyağlı hamur, içi bol Antep fıstığı kreması ve üzeri zümrüt fıstık taneleri ile.',
+      description: 'Kat kat Fransız tereyağlı çıtır hamur, içi bol Antep fıstığı kreması ve üzeri zümrüt fıstık taneleri ile.',
       price: 185,
       imageUrl: 'assets/croissant.jpg',
       isSpecialty: true,
@@ -40,7 +40,7 @@ export class ProductService {
       id: 'urfa-sourdough',
       name: 'Mezopotamya Taş Fırın Ekmeği',
       category: 'firin',
-      description: '72 saat soğuk fermentasyon geçiren, geleneksel Urfa odun fıranında pişen çıtır kabuklu ekşi maya ekmeği.',
+      description: '72 saat soğuk fermentasyon geçiren, geleneksel Urfa odun fırınında pişen çıtır kabuklu ekşi maya ekmeği.',
       price: 95,
       imageUrl: 'assets/hero-bakery.jpg',
       isSpecialty: false,

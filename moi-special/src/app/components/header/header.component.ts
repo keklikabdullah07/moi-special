@@ -25,7 +25,7 @@ import { CartService } from '../../services/cart.service';
             Ana Sayfa
           </a>
           <a href="#menu" class="label-caps text-xs text-[#1F1B14] hover:text-[#526E48] transition-colors py-1 relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[2px] after:bg-[#526E48] hover:after:w-full after:transition-all">
-            Menü Showcase
+            Menü Koleksiyonu
           </a>
           <a href="#about" class="label-caps text-xs text-[#1F1B14] hover:text-[#526E48] transition-colors py-1 relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[2px] after:bg-[#526E48] hover:after:w-full after:transition-all">
             Hikayemiz
@@ -45,7 +45,7 @@ import { CartService } from '../../services/cart.service';
             <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-[#526E48]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
               <path stroke-linecap="round" stroke-linejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
             </svg>
-            <span class="label-caps text-xs hidden sm:inline">Bag</span>
+            <span class="label-caps text-xs hidden sm:inline">Sepet</span>
             <span class="bg-[#B87333] text-white text-[11px] font-bold px-2 py-0.5 rounded-full min-w-[20px] text-center shadow-sm">
               {{ cartService.itemCount() }}
             </span>
@@ -88,7 +88,7 @@ import { CartService } from '../../services/cart.service';
               (click)="isMobileMenuOpen.set(false)"
               href="#menu" 
               class="label-caps text-sm text-[#1F1B14] hover:text-[#526E48] py-2 border-b border-[#D6C9B6]/40">
-              Menü Showcase
+              Menü Koleksiyonu
             </a>
             <a 
               (click)="isMobileMenuOpen.set(false)"

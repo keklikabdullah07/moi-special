@@ -91,7 +91,7 @@ import { gsap } from 'gsap';
                   <div class="flex items-center justify-between">
                     <div>
                       <span class="label-caps text-[10px] text-[#B87333]">Şefin Özel Seçimi</span>
-                      <h4 class="font-serif font-bold text-base text-[#1F1B14]">Antep Fıstıklı Artisan Kruvasan</h4>
+                      <h4 class="font-serif font-bold text-base text-[#1F1B14]">Antep Fıstıklı Artisan Croissant</h4>
                     </div>
                     <span class="font-serif text-lg font-bold text-[#526E48]">185 ₺</span>
                   </div>

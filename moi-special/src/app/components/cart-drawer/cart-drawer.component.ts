@@ -53,10 +53,10 @@ import { CartService } from '../../services/cart.service';
               </svg>
             </div>
             <p class="font-serif text-lg font-bold text-[#1F1B14]">Çantanız Henüz Boş</p>
-            <p class="text-xs max-w-xs">Menüden zümrüt fıstıklı kruvasan veya taze lezzetlerimizden ekleyebilirsiniz.</p>
+            <p class="text-xs max-w-xs">Menüden Antep fıstıklı Croissant veya taze lezzetlerimizden ekleyebilirsiniz.</p>
             <button 
               (click)="cartService.closeDrawer()"
-              class="px-6 py-2.5 rounded-full bg-[#526E48] text-white text-xs font-semibold uppercase tracking-wider">
+              class="px-6 py-2.5 rounded-full bg-[#526E48] text-white text-xs font-semibold uppercase tracking-wider cursor-pointer">
               Lezzetleri İncele
             </button>
           </div>
@@ -71,13 +71,13 @@ import { CartService } from '../../services/cart.service';
                 <div class="flex items-center gap-3 mt-2">
                   <button 
                     (click)="cartService.updateQuantity(item.product.id, -1)"
-                    class="w-6 h-6 rounded-full bg-[#FFF8F2] border border-[#D6C9B6] text-xs font-bold hover:bg-[#D6C9B6] transition-colors flex items-center justify-center">
+                    class="w-6 h-6 rounded-full bg-[#FFF8F2] border border-[#D6C9B6] text-xs font-bold hover:bg-[#D6C9B6] transition-colors flex items-center justify-center cursor-pointer">
                     -
                   </button>
                   <span class="text-xs font-bold text-[#1F1B14] min-w-[16px] text-center">{{ item.quantity }}</span>
                   <button 
                     (click)="cartService.updateQuantity(item.product.id, 1)"
-                    class="w-6 h-6 rounded-full bg-[#FFF8F2] border border-[#D6C9B6] text-xs font-bold hover:bg-[#D6C9B6] transition-colors flex items-center justify-center">
+                    class="w-6 h-6 rounded-full bg-[#FFF8F2] border border-[#D6C9B6] text-xs font-bold hover:bg-[#D6C9B6] transition-colors flex items-center justify-center cursor-pointer">
                     +
                   </button>
                 </div>
@@ -89,7 +89,7 @@ import { CartService } from '../../services/cart.service';
                 </span>
                 <button 
                   (click)="cartService.removeItem(item.product.id)"
-                  class="text-[10px] text-red-600 hover:underline">
+                  class="text-[10px] text-red-600 hover:underline cursor-pointer">
                   Kaldır
                 </button>
               </div>
@@ -102,7 +102,7 @@ import { CartService } from '../../services/cart.service';
       @if (cartService.items().length > 0) {
         <div class="p-6 border-t border-[#D6C9B6] bg-[#EDE4D8]/50 space-y-4">
           <div class="flex items-center justify-between text-sm">
-            <span class="label-caps text-xs text-[#434840]">Toplam Ara Tutar</span>
+            <span class="label-caps text-xs text-[#434840]">Toplam Tutar</span>
             <span class="font-serif text-2xl font-bold text-[#3B5532]">
               {{ cartService.totalPrice() }} ₺
             </span>
