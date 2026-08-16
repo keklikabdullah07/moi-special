@@ -29,7 +29,7 @@ import { ImageUploadService } from '../../services/image-upload.service';
           <div class="flex items-center justify-between border-b border-[#D6C9B6]/60 pb-4">
             <div class="space-y-0.5">
               <span class="label-caps text-[9px] text-[#B87333] font-bold">
-                👑 Abdullah Keklik • Görsel Yüklemeli WebCMS Editörü
+                👑 Abdullah Keklik • Akıllı Görsel Ölçeklemeli WebCMS
               </span>
               <h3 class="font-serif text-2xl font-bold text-[#1F1B14]">
                 @if (assetService.activeSectionEditing() === 'header') {
@@ -90,7 +90,7 @@ import { ImageUploadService } from '../../services/image-upload.service';
             </form>
           }
 
-          <!-- SECTION 2: MENU PRODUCT EDIT / ADD FORM WITH FILE UPLOADER -->
+          <!-- SECTION 2: MENU PRODUCT EDIT / ADD FORM WITH SMART CANVAS SCALER -->
           @if (assetService.activeSectionEditing() === 'menu') {
             <form (ngSubmit)="saveProductForm()" class="space-y-4">
               <div class="space-y-1">
@@ -114,28 +114,31 @@ import { ImageUploadService } from '../../services/image-upload.service';
                 </div>
               </div>
 
-              <!-- IMAGE FILE UPLOADER WIDGET -->
-              <div class="space-y-2 p-3 rounded-2xl bg-[#EDE4D8]/60 border border-[#D6C9B6]">
-                <label class="label-caps text-[10px] text-[#B87333] font-bold block">
-                  📁 Görsel Yükle (Cihazınızdan Seçin)
-                </label>
+              <!-- SMART CANVAS IMAGE SCALER WIDGET -->
+              <div class="space-y-2 p-3.5 rounded-2xl bg-[#EDE4D8]/60 border border-[#D6C9B6]">
+                <div class="flex items-center justify-between">
+                  <label class="label-caps text-[10px] text-[#B87333] font-bold block">
+                    🎨 Akıllı Otomatik Ölçekli Görsel Yükle (4:3 Oranı)
+                  </label>
+                  <span class="text-[9px] bg-[#526E48] text-white px-2 py-0.5 rounded-full font-bold">Auto-Crop Active</span>
+                </div>
                 
                 <div class="flex items-center gap-3">
                   @if (prodImage) {
-                    <div class="w-16 h-16 rounded-xl overflow-hidden border border-[#D6C9B6] shrink-0 bg-white shadow-xs">
+                    <div class="w-20 h-16 rounded-xl overflow-hidden border border-[#D6C9B6] shrink-0 bg-white shadow-xs">
                       <img [src]="prodImage" alt="Önizleme" class="w-full h-full object-cover" />
                     </div>
                   }
                   <div class="flex-1 space-y-1">
                     <label class="px-4 py-2 rounded-full bg-[#526E48] hover:bg-[#3B5532] text-white text-[11px] font-bold uppercase tracking-wider shadow-sm inline-block cursor-pointer active:scale-95 transition-all">
-                      <span>📁 Fotoğraf Seç</span>
+                      <span>📁 Fotoğraf Yükle (Otomatik Ölçekle)</span>
                       <input type="file" accept="image/*" (change)="onFileSelected($event, 'product')" class="hidden" />
                     </label>
-                    <span class="text-[9px] text-[#434840] block">Format: JPG, PNG, WEBP, AVIF</span>
+                    <span class="text-[9px] text-[#434840] block">Otomatik 4:3 (800x600px) Kusursuz Kadrajlanır</span>
                   </div>
                 </div>
 
-                <div class="pt-1">
+                <div class="pt-1 border-t border-[#D6C9B6]/50">
                   <span class="label-caps text-[9px] text-[#434840] block mb-1">Veya Hazır Galeriden Seçin:</span>
                   <div class="flex gap-1.5 overflow-x-auto no-scrollbar">
                     @for (preset of imageUploadService.presetGallery; track preset.id) {
@@ -163,7 +166,7 @@ import { ImageUploadService } from '../../services/image-upload.service';
             </form>
           }
 
-          <!-- SECTION 3: HERO EDIT FORM WITH FILE UPLOADER -->
+          <!-- SECTION 3: HERO EDIT FORM WITH SMART CANVAS SCALER -->
           @if (assetService.activeSectionEditing() === 'hero') {
             <form (ngSubmit)="saveHeroSection()" class="space-y-4">
               <div class="space-y-1">
@@ -181,23 +184,27 @@ import { ImageUploadService } from '../../services/image-upload.service';
                 <textarea [(ngModel)]="heroSubtitle" name="heroSubtitle" rows="3" class="w-full px-4 py-2.5 rounded-2xl bg-[#EDE4D8]/50 border border-[#D6C9B6] text-xs text-[#1F1B14]"></textarea>
               </div>
 
-              <!-- HERO IMAGE FILE UPLOADER -->
-              <div class="space-y-2 p-3 rounded-2xl bg-[#EDE4D8]/60 border border-[#D6C9B6]">
-                <label class="label-caps text-[10px] text-[#B87333] font-bold block">
-                  📁 Hero Croissant Görseli Yükle
-                </label>
+              <!-- HERO IMAGE CANVAS SCALER -->
+              <div class="space-y-2 p-3.5 rounded-2xl bg-[#EDE4D8]/60 border border-[#D6C9B6]">
+                <div class="flex items-center justify-between">
+                  <label class="label-caps text-[10px] text-[#B87333] font-bold block">
+                    📁 Hero Croissant Görseli Yükle (3:4 Oranı)
+                  </label>
+                  <span class="text-[9px] bg-[#B87333] text-white px-2 py-0.5 rounded-full font-bold">Auto-Crop 3:4</span>
+                </div>
                 
                 <div class="flex items-center gap-3">
                   @if (heroImg) {
-                    <div class="w-16 h-16 rounded-xl overflow-hidden border border-[#D6C9B6] shrink-0 bg-white shadow-xs">
+                    <div class="w-16 h-20 rounded-xl overflow-hidden border border-[#D6C9B6] shrink-0 bg-white shadow-xs">
                       <img [src]="heroImg" alt="Önizleme" class="w-full h-full object-cover" />
                     </div>
                   }
                   <div class="flex-1 space-y-1">
                     <label class="px-4 py-2 rounded-full bg-[#526E48] hover:bg-[#3B5532] text-white text-[11px] font-bold uppercase tracking-wider shadow-sm inline-block cursor-pointer active:scale-95 transition-all">
-                      <span>📁 Hero Fotoğrafı Seç</span>
+                      <span>📁 Hero Fotoğrafı Seç (Otomatik Ölçekle)</span>
                       <input type="file" accept="image/*" (change)="onFileSelected($event, 'hero')" class="hidden" />
                     </label>
+                    <span class="text-[9px] text-[#434840] block">Otomatik 3:4 (750x1000px) Kemerli Orana Oturtulur</span>
                   </div>
                 </div>
               </div>
@@ -210,7 +217,7 @@ import { ImageUploadService } from '../../services/image-upload.service';
             </form>
           }
 
-          <!-- SECTION 4: ABOUT EDIT FORM WITH FILE UPLOADER -->
+          <!-- SECTION 4: ABOUT EDIT FORM WITH SMART CANVAS SCALER -->
           @if (assetService.activeSectionEditing() === 'about') {
             <form (ngSubmit)="saveAboutSection()" class="space-y-4">
               <div class="space-y-1">
@@ -223,21 +230,24 @@ import { ImageUploadService } from '../../services/image-upload.service';
                 <textarea [(ngModel)]="aboutBody" name="aboutBody" rows="4" class="w-full px-4 py-2.5 rounded-2xl bg-[#EDE4D8]/50 border border-[#D6C9B6] text-xs text-[#1F1B14]"></textarea>
               </div>
 
-              <!-- ABOUT IMAGE FILE UPLOADER -->
-              <div class="space-y-2 p-3 rounded-2xl bg-[#EDE4D8]/60 border border-[#D6C9B6]">
-                <label class="label-caps text-[10px] text-[#B87333] font-bold block">
-                  📁 Taş Fırın Görseli Yükle
-                </label>
+              <!-- ABOUT IMAGE CANVAS SCALER -->
+              <div class="space-y-2 p-3.5 rounded-2xl bg-[#EDE4D8]/60 border border-[#D6C9B6]">
+                <div class="flex items-center justify-between">
+                  <label class="label-caps text-[10px] text-[#B87333] font-bold block">
+                    📁 Taş Fırın Görseli Yükle (4:5 Portre)
+                  </label>
+                  <span class="text-[9px] bg-[#526E48] text-white px-2 py-0.5 rounded-full font-bold">Auto-Crop 4:5</span>
+                </div>
                 
                 <div class="flex items-center gap-3">
                   @if (aboutImg) {
-                    <div class="w-16 h-16 rounded-xl overflow-hidden border border-[#D6C9B6] shrink-0 bg-white shadow-xs">
+                    <div class="w-16 h-20 rounded-xl overflow-hidden border border-[#D6C9B6] shrink-0 bg-white shadow-xs">
                       <img [src]="aboutImg" alt="Önizleme" class="w-full h-full object-cover" />
                     </div>
                   }
                   <div class="flex-1 space-y-1">
                     <label class="px-4 py-2 rounded-full bg-[#526E48] hover:bg-[#3B5532] text-white text-[11px] font-bold uppercase tracking-wider shadow-sm inline-block cursor-pointer active:scale-95 transition-all">
-                      <span>📁 Fırın Fotoğrafı Seç</span>
+                      <span>📁 Fırın Fotoğrafı Seç (Otomatik Ölçekle)</span>
                       <input type="file" accept="image/*" (change)="onFileSelected($event, 'about')" class="hidden" />
                     </label>
                   </div>
@@ -369,11 +379,20 @@ export class LiveSectionEditorModalComponent {
     if (input.files && input.files[0]) {
       const file = input.files[0];
       try {
-        const base64 = await this.imageUploadService.fileToBase64(file);
-        if (target === 'product') this.prodImage = base64;
-        if (target === 'hero') this.heroImg = base64;
-        if (target === 'about') this.aboutImg = base64;
-        this.toastService.show('📁 Fotoğraf Yüklendi ve Canlı Önizlendi! 📸');
+        let scaledBase64 = '';
+        if (target === 'product') {
+          scaledBase64 = await this.imageUploadService.autoScaleAndCrop(file, 800, 600, 'cover');
+          this.prodImage = scaledBase64;
+          this.toastService.show('🎨 Fotoğraf Otomatik 4:3 Ürün Formatına Ölçeklendi!');
+        } else if (target === 'hero') {
+          scaledBase64 = await this.imageUploadService.autoScaleAndCrop(file, 750, 1000, 'cover');
+          this.heroImg = scaledBase64;
+          this.toastService.show('🎨 Fotoğraf Otomatik 3:4 Hero Formatına Ölçeklendi!');
+        } else if (target === 'about') {
+          scaledBase64 = await this.imageUploadService.autoScaleAndCrop(file, 800, 1000, 'cover');
+          this.aboutImg = scaledBase64;
+          this.toastService.show('🎨 Fotoğraf Otomatik 4:5 Portre Formatına Ölçeklendi!');
+        }
       } catch (e) {
         this.toastService.show('Fotoğraf işlenirken hata oluştu.');
       }
