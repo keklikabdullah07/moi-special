@@ -11,6 +11,8 @@ import { ReservationModalComponent } from './components/reservation-modal/reserv
 import { StoryModalComponent } from './components/story-modal/story-modal.component';
 import { AuthModalComponent } from './components/auth-modal/auth-modal.component';
 import { UserProfileModalComponent } from './components/user-profile-modal/user-profile-modal.component';
+import { SuperAdminBarComponent } from './components/super-admin-bar/super-admin-bar.component';
+import { LiveSectionEditorModalComponent } from './components/live-section-editor-modal/live-section-editor-modal.component';
 import { ToastComponent } from './components/toast/toast.component';
 import { FooterComponent } from './components/footer/footer.component';
 
@@ -30,6 +32,8 @@ import { FooterComponent } from './components/footer/footer.component';
     StoryModalComponent,
     AuthModalComponent,
     UserProfileModalComponent,
+    SuperAdminBarComponent,
+    LiveSectionEditorModalComponent,
     ToastComponent,
     FooterComponent
   ],

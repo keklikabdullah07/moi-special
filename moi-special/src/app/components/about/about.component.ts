@@ -1,17 +1,29 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReservationService } from '../../services/reservation.service';
+import { SiteAssetService } from '../../services/site-asset.service';
 
 @Component({
   selector: 'app-about',
   standalone: true,
   imports: [CommonModule],
   template: `
-    <section id="about" class="py-20 bg-[#FFF8F2] relative overflow-hidden border-b border-[#D6C9B6]/40">
+    <section id="about" class="py-20 bg-[#FFF8F2] relative overflow-hidden border-b border-[#D6C9B6]/40 group/about">
       
       <!-- Background Ambient Blobs -->
       <div class="absolute -top-20 right-0 w-96 h-96 bg-[#CFEFC0]/20 rounded-full blur-3xl pointer-events-none"></div>
       <div class="absolute -bottom-20 -left-20 w-96 h-96 bg-[#FFDCC2]/30 rounded-full blur-3xl pointer-events-none"></div>
+
+      <!-- SUPER ADMIN LIVE EDIT OVERLAY BADGE -->
+      @if (assetService.isEditMode()) {
+        <div class="absolute top-4 right-4 z-30 animate-bounce">
+          <button 
+            (click)="assetService.openSectionEditor('about')"
+            class="px-5 py-2.5 rounded-full bg-[#526E48] hover:bg-[#3B5532] text-white text-xs font-bold uppercase tracking-wider shadow-2xl border-2 border-white flex items-center gap-2 active:scale-95 transition-all cursor-pointer">
+            <span>✏️ Hikayeyi Canlı Düzenle</span>
+          </button>
+        </div>
+      }
 
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         
@@ -21,7 +33,7 @@ import { ReservationService } from '../../services/reservation.service';
           <div class="lg:col-span-5 relative flex justify-center">
             <div class="relative w-full max-w-md aspect-[4/5] rounded-3xl overflow-hidden border border-[#D6C9B6] shadow-2xl group">
               <img 
-                src="assets/hero-bakery.jpg" 
+                [src]="assetService.heroBakeryImage()" 
                 alt="Moi Special Taş Fırın Ustalığı" 
                 class="w-full h-full object-cover transform transition-transform duration-700 group-hover:scale-105" />
               
@@ -49,12 +61,11 @@ import { ReservationService } from '../../services/reservation.service';
             </div>
 
             <h2 class="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-[#1F1B14] leading-tight">
-              Tarihi Taş Fırın Kültürü, <br />
-              <span class="italic font-normal text-[#526E48]">Fransız Zarafetiyle Buluşuyor</span>
+              {{ assetService.aboutTitle() }}
             </h2>
 
             <p class="font-sans text-sm sm:text-base text-[#434840] leading-relaxed">
-              Móí Special, Şanlıurfa'nın köklü taş fırın geleneğini modern Fransız patisserie ustalığı ile harmanlayarak doğdu. Sırrın Karşıyaka / Gap Vadisi Bulvarı şubemizde her sabah gün ışımadan başlayan pişirim yolculuğumuzda, katkısız saf tereyağı ve bölgenin en seçkin zümrüt Antep fıstıkları kullanılır.
+              {{ assetService.aboutBody() }}
             </p>
 
             <!-- 3 Pillar Features -->
@@ -103,4 +114,5 @@ import { ReservationService } from '../../services/reservation.service';
 })
 export class AboutComponent {
   public readonly reservationService = inject(ReservationService);
+  public readonly assetService = inject(SiteAssetService);
 }

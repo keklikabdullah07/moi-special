@@ -8,11 +8,22 @@ import { SiteAssetService } from '../../services/site-asset.service';
   standalone: true,
   imports: [CommonModule],
   template: `
-    <section id="hero" class="relative overflow-hidden bg-[#FFF8F2] pt-12 pb-20 lg:pt-20 lg:pb-32 border-b border-[#D6C9B6]/40">
+    <section id="hero" class="relative overflow-hidden bg-[#FFF8F2] pt-12 pb-20 lg:pt-20 lg:pb-32 border-b border-[#D6C9B6]/40 group/hero">
       
       <!-- Ambient Glow Blobs -->
       <div class="absolute top-1/4 -left-20 w-96 h-96 bg-[#CFEFC0]/30 rounded-full blur-3xl pointer-events-none animate-pulse"></div>
       <div class="absolute bottom-10 right-0 w-96 h-96 bg-[#FFDCC2]/40 rounded-full blur-3xl pointer-events-none animate-pulse"></div>
+
+      <!-- SUPER ADMIN LIVE EDIT OVERLAY BADGE -->
+      @if (assetService.isEditMode()) {
+        <div class="absolute top-4 right-4 z-30 animate-bounce">
+          <button 
+            (click)="assetService.openSectionEditor('hero')"
+            class="px-5 py-2.5 rounded-full bg-[#B87333] hover:bg-[#784000] text-white text-xs font-bold uppercase tracking-wider shadow-2xl border-2 border-white flex items-center gap-2 active:scale-95 transition-all cursor-pointer">
+            <span>✏️ Hero Alanını Canlı Düzenle</span>
+          </button>
+        </div>
+      }
 
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
@@ -24,19 +35,18 @@ import { SiteAssetService } from '../../services/site-asset.service';
             <div class="hero-item inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#EDE4D8] border border-[#D6C9B6] text-[#526E48] transition-all hover:scale-105">
               <span class="w-2 h-2 rounded-full bg-[#526E48] animate-ping"></span>
               <span class="label-caps text-[11px] font-semibold tracking-widest text-[#3B5532]">
-                Sırrın Karşıyaka, Şanlıurfa • Modern Artisan Pastane & Fırın
+                {{ assetService.heroEyebrow() }}
               </span>
             </div>
 
             <!-- Headline -->
             <h1 class="hero-item font-serif text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-[#1F1B14] leading-[1.15]">
-              Mezopotamya Gün Işığında <br class="hidden sm:inline" />
-              <span class="italic font-normal text-[#526E48]">Artisan Fırın Sanatı</span>
+              {{ assetService.heroHeadline() }}
             </h1>
 
             <!-- Subtitle -->
             <p class="hero-item font-sans text-base sm:text-lg text-[#434840] max-w-2xl leading-relaxed">
-              Tarihi Şanlıurfa taş fırın kültürünün geleneksel ustalığı, Fransız patisserie inceliği ve zümrüt Antep fıstığının en eşsiz haliyle buluşuyor. Günlük taze pişen lezzetlerimizi keşfedin.
+              {{ assetService.heroSubtitle() }}
             </p>
 
             <!-- Action Buttons -->

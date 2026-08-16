@@ -1,5 +1,8 @@
 <div class="min-h-screen bg-[#FFF8F2] flex flex-col font-sans selection:bg-[#526E48] selection:text-white">
   
+  <!-- SUPER ADMIN TOP CONTROL BAR (Visible only when Abdullah Keklik is logged in) -->
+  <app-super-admin-bar></app-super-admin-bar>
+
   <!-- DESKTOP EDITORIAL LAYOUT (Hidden on mobile < md) -->
   <div class="hidden md:flex flex-col flex-1">
     <app-header></app-header>
@@ -27,6 +30,7 @@
   <app-story-modal></app-story-modal>
   <app-auth-modal></app-auth-modal>
   <app-user-profile-modal></app-user-profile-modal>
+  <app-live-section-editor-modal></app-live-section-editor-modal>
   <app-toast></app-toast>
 
   <!-- MOBILE FIXED BOTTOM TAB BAR -->
