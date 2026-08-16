@@ -1,15 +1,15 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { SiteAssetService } from '../../services/site-asset.service';
 import { AdminAnalyticsService } from '../../services/admin-analytics.service';
-import { ErpModalService } from '../../services/erp-modal.service';
 import { ToastService } from '../../services/toast.service';
 
 @Component({
   selector: 'app-super-admin-bar',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterModule],
   template: `
     @if (authService.isSuperAdmin()) {
       <!-- Sticky Top Super Admin Control Bar -->
@@ -50,12 +50,12 @@ import { ToastService } from '../../services/toast.service';
 
           <!-- Right Quick Metrics, ERP Panel & Safety Actions -->
           <div class="flex items-center gap-2 sm:gap-3">
-            <!-- ERP DASHBOARD LAUNCHER BUTTON -->
-            <button 
-              (click)="erpModalService.open()"
-              class="px-3.5 py-1.5 rounded-full bg-[#526E48] hover:bg-[#3B5532] text-white font-bold uppercase tracking-wider text-[10px] shadow-md active:scale-95 transition-all cursor-pointer flex items-center gap-1">
-              <span>💼 Kurumsal ERP Paneli</span>
-            </button>
+            <!-- STANDALONE /ADMIN ROUTE LAUNCHER BUTTON -->
+            <a 
+              routerLink="/admin"
+              class="px-4 py-1.5 rounded-full bg-[#526E48] hover:bg-[#3B5532] text-white font-bold uppercase tracking-wider text-[10px] shadow-md active:scale-95 transition-all cursor-pointer flex items-center gap-1">
+              <span>💼 Kurumsal ERP Paneli (/admin) →</span>
+            </a>
 
             <!-- Safety Master Template Restore Button -->
             <button 
@@ -63,12 +63,6 @@ import { ToastService } from '../../services/toast.service';
               title="Yanlış değişikliklerde sitenin orijinal ana şablonuna geri döner"
               class="px-3 py-1.5 rounded-full bg-white/10 hover:bg-red-900/60 text-white/90 hover:text-white border border-white/20 text-[10px] font-bold uppercase tracking-wider transition-all active:scale-95 flex items-center gap-1 cursor-pointer">
               <span>🔄 Fabrika Şablonuna Dön</span>
-            </button>
-
-            <button 
-              (click)="authService.isProfileModalOpen.set(true)"
-              class="px-3.5 py-1.5 rounded-full bg-[#B87333] hover:bg-[#784000] text-white font-bold uppercase tracking-wider text-[10px] shadow-sm active:scale-95 transition-all cursor-pointer">
-              Yönetici Paneli →
             </button>
           </div>
 
@@ -81,7 +75,6 @@ export class SuperAdminBarComponent {
   public readonly authService = inject(AuthService);
   public readonly assetService = inject(SiteAssetService);
   public readonly analyticsService = inject(AdminAnalyticsService);
-  public readonly erpModalService = inject(ErpModalService);
   public readonly toastService = inject(ToastService);
 
   public setEditMode(editMode: boolean): void {
