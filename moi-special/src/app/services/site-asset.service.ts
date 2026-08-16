@@ -61,6 +61,24 @@ export class SiteAssetService {
     } catch (e) {}
   }
 
+  public updateHeroImage(url: string): void {
+    if (!url) return;
+    this.heroBakeryImage.set(url);
+    this.saveAssets();
+  }
+
+  public updateCroissantImage(url: string): void {
+    if (!url) return;
+    this.croissantImage.set(url);
+    this.saveAssets();
+  }
+
+  public updateStoreAddress(address: string): void {
+    if (!address) return;
+    this.storeAddress.set(address);
+    this.saveAssets();
+  }
+
   public updateHeroSection(eyebrow: string, headline: string, subtitle: string, image: string): void {
     if (eyebrow) this.heroEyebrow.set(eyebrow);
     if (headline) this.heroHeadline.set(headline);
