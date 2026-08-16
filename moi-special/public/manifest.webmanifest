@@ -1,0 +1,25 @@
+{
+  "name": "Moi Special | Artisan Patisserie & Luxury Bakery",
+  "short_name": "Moi Special",
+  "theme_color": "#FFF8F2",
+  "background_color": "#FFF8F2",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "scope": "/",
+  "start_url": "/",
+  "description": "Şanlıurfa merkezli lüks fırın, pastane & kafe lezzetleri. Geleneksel taş fırın ve Fransız patisserie inceliği.",
+  "icons": [
+    {
+      "src": "assets/wordmark.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "assets/wordmark.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
