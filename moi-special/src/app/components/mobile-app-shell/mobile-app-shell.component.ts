@@ -1,5 +1,6 @@
 import { Component, inject, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
 import { ProductService, Product } from '../../services/product.service';
 import { CartService } from '../../services/cart.service';
 import { ReservationService } from '../../services/reservation.service';
@@ -7,33 +8,67 @@ import { StoryService } from '../../services/story.service';
 import { GooglePlacesService } from '../../services/google-places.service';
 import { AuthService } from '../../services/auth.service';
 import { ToastService } from '../../services/toast.service';
+import { SiteAssetService } from '../../services/site-asset.service';
 
 @Component({
   selector: 'app-mobile-app-shell',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterModule],
   template: `
     <div class="relative bg-[#FFF8F2] min-h-screen pb-24">
       
-      <!-- App Header Bar -->
-      <header class="sticky top-0 z-40 bg-[#FFF8F2]/95 backdrop-blur-md border-b border-[#D6C9B6]/40 px-4 py-3 flex items-center justify-between shadow-xs">
+      <!-- App Mobile Top Header Bar -->
+      <header class="sticky top-0 z-40 bg-[#FFF8F2]/95 backdrop-blur-md border-b border-[#D6C9B6]/50 px-4 py-2.5 flex items-center justify-between shadow-xs">
         
-        <!-- Brand & Location -->
-        <div class="flex items-center gap-2.5">
-          <div class="w-9 h-9 rounded-full bg-[#526E48] text-white font-serif font-bold text-lg flex items-center justify-center shadow-xs">
-            M
-          </div>
-          <div>
-            <h2 class="font-serif font-bold text-base text-[#1F1B14] leading-none">Móí Special</h2>
-            <span class="label-caps text-[8px] text-[#B87333] tracking-wider block mt-0.5">Sırrın Karşıyaka • Taş Fırın</span>
-          </div>
+        <!-- Brand & Location Logo Emblem -->
+        <div (click)="scrollToTop()" class="flex items-center gap-2 cursor-pointer active:scale-95 transition-transform">
+          <svg viewBox="0 0 160 50" class="h-10 w-auto shrink-0" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="moiMobileGold" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#C68244" />
+                <stop offset="50%" stop-color="#B87333" />
+                <stop offset="100%" stop-color="#784000" />
+              </linearGradient>
+            </defs>
+            <text x="2" y="34" font-family="'Playfair Display', Georgia, serif" font-weight="900" font-size="34" fill="url(#moiMobileGold)" letter-spacing="1">MOÍ</text>
+            <path d="M98 10 Q104 6 110 12 Q104 18 98 10 Z" fill="#526E48" />
+            <path d="M101 16 Q107 12 113 18 Q107 24 101 16 Z" fill="#526E48" />
+            <path d="M104 22 Q110 18 116 24 Q110 30 104 22 Z" fill="#B87333" />
+            <path d="M100 34 C101 26 104 18 110 8" stroke="#526E48" stroke-width="2" stroke-linecap="round" />
+            <text x="4" y="46" font-family="'Inter', sans-serif" font-weight="700" font-size="7.5" fill="#B87333" letter-spacing="2">ŞANLIURFA • ARTISAN</text>
+          </svg>
         </div>
 
-        <!-- Cart Quick Badge -->
+        <!-- Right Quick Actions (ERP Launcher, Login Profile & Cart Badge) -->
         <div class="flex items-center gap-2">
+          
+          <!-- Super Admin ERP Quick Access Button (Strictly Guarded for Super Admin Abdullah Keklik) -->
+          @if (authService.isSuperAdmin()) {
+            <a 
+              routerLink="/admin"
+              class="px-3 py-1.5 rounded-full bg-[#526E48] text-white text-[10px] font-bold uppercase tracking-wider shadow-sm flex items-center gap-1 active:scale-95 transition-transform">
+              <span>ERP Paneli</span>
+            </a>
+          }
+
+          <!-- User Login / Profile Avatar Button -->
+          <button 
+            (click)="handleUserButtonClick()"
+            class="px-3 py-1.5 rounded-full border border-[#D6C9B6] bg-[#EDE4D8]/60 hover:bg-[#EDE4D8] text-[#1F1B14] text-[10px] font-bold uppercase tracking-wider flex items-center gap-1.5 active:scale-95 transition-all cursor-pointer">
+            <span class="w-2 h-2 rounded-full" [class.bg-emerald-600]="authService.isLoggedIn()" [class.bg-amber-600]="!authService.isLoggedIn()"></span>
+            <span class="max-w-[70px] truncate">
+              @if (authService.currentUser()) {
+                {{ authService.currentUser()?.name }}
+              } @else {
+                Giriş
+              }
+            </span>
+          </button>
+
+          <!-- Cart Quick Drawer Pill Trigger -->
           <button 
             (click)="cartService.toggleDrawer()"
-            class="relative p-2 rounded-full bg-[#EDE4D8] text-[#1F1B14] hover:bg-[#D6C9B6] transition-colors cursor-pointer">
+            class="relative p-2 rounded-full bg-[#EDE4D8] text-[#1F1B14] hover:bg-[#D6C9B6] transition-colors cursor-pointer active:scale-95">
             <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
             </svg>
@@ -43,6 +78,7 @@ import { ToastService } from '../../services/toast.service';
               </span>
             }
           </button>
+
         </div>
 
       </header>
@@ -50,22 +86,24 @@ import { ToastService } from '../../services/toast.service';
       <!-- App Story Highlights (Instagram / Native App Style) -->
       <div class="py-4 px-4 overflow-x-auto no-scrollbar flex items-center gap-4 border-b border-[#D6C9B6]/40 bg-[#EDE4D8]/30">
         
-        <!-- Owner Add Story Button (+) RESTRICTED TO ADMIN ONLY -->
-        <button 
-          (click)="handleAddStoryClick()"
-          class="flex flex-col items-center gap-1.5 shrink-0 group active:scale-95 transition-transform cursor-pointer">
-          <div class="w-16 h-16 rounded-full border-2 border-dashed border-[#526E48] bg-[#526E48]/10 flex items-center justify-center text-[#526E48] relative">
-            <svg xmlns="http://www.w3.org/2000/svg" class="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-            </svg>
-            <span class="absolute -bottom-1 -right-1 bg-[#B87333] text-white rounded-full w-5 h-5 text-[10px] font-bold flex items-center justify-center shadow-sm">
-              +
+        <!-- Owner Add Story Button (+) STRICTLY RESTRICTED TO SUPER ADMIN -->
+        @if (authService.isSuperAdmin()) {
+          <button 
+            (click)="handleAddStoryClick()"
+            class="flex flex-col items-center gap-1.5 shrink-0 group active:scale-95 transition-transform cursor-pointer">
+            <div class="w-16 h-16 rounded-full border-2 border-dashed border-[#526E48] bg-[#526E48]/10 flex items-center justify-center text-[#526E48] relative">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+              </svg>
+              <span class="absolute -bottom-1 -right-1 bg-[#B87333] text-white rounded-full w-5 h-5 text-[10px] font-bold flex items-center justify-center shadow-sm">
+                +
+              </span>
+            </div>
+            <span class="label-caps text-[9px] text-[#526E48] font-bold">
+              + Hikaye Ekle
             </span>
-          </div>
-          <span class="label-caps text-[9px] text-[#526E48] font-bold">
-            {{ authService.isAdmin() ? '+ Hikaye Ekle' : 'Yönetici Paylaşımı' }}
-          </span>
-        </button>
+          </button>
+        }
 
         <!-- Instagram Story Rings -->
         @for (group of storyService.storyGroups(); track group.id) {
@@ -133,9 +171,10 @@ import { ToastService } from '../../services/toast.service';
               (click)="selectedCategory.set(cat.id)"
               [class.bg-[#526E48]]="selectedCategory() === cat.id"
               [class.text-white]="selectedCategory() === cat.id"
+              [class.shadow-sm]="selectedCategory() === cat.id"
               [class.bg-[#EDE4D8]]="selectedCategory() !== cat.id"
               [class.text-[#1F1B14]]="selectedCategory() !== cat.id"
-              class="px-4 py-2 rounded-full text-[11px] font-semibold tracking-wider whitespace-nowrap border border-[#D6C9B6]/60 transition-all active:scale-95 cursor-pointer">
+              class="px-4.5 py-2 rounded-full text-[11px] font-bold uppercase tracking-wider whitespace-nowrap border border-[#D6C9B6]/60 transition-all active:scale-95 cursor-pointer">
               {{ cat.name }}
             </button>
           }
@@ -146,13 +185,29 @@ import { ToastService } from '../../services/toast.service';
       <div class="px-4 py-2">
         <div class="flex gap-4 overflow-x-auto no-scrollbar pb-4 snap-x snap-mandatory">
           @for (product of filteredProducts(); track product.id) {
-            <div class="snap-start shrink-0 w-64 bg-[#EDE4D8]/50 border border-[#D6C9B6] rounded-3xl p-3 flex flex-col justify-between shadow-sm active:scale-[0.98] transition-transform">
+            <div class="snap-start shrink-0 w-64 bg-white border border-[#D6C9B6] rounded-3xl p-3 flex flex-col justify-between shadow-sm active:scale-[0.98] transition-transform relative">
               
+              <!-- SUPER ADMIN INLINE EDIT BUTTONS ON MOBILE CARD -->
+              @if (authService.isSuperAdmin() && assetService.isEditMode()) {
+                <div class="absolute top-2 left-2 right-2 z-30 flex items-center justify-between">
+                  <button 
+                    (click)="editProduct(product)"
+                    class="px-2.5 py-1 rounded-full bg-[#B87333] text-white text-[9px] font-bold uppercase shadow-md">
+                    Düzenle
+                  </button>
+                  <button 
+                    (click)="deleteProduct(product)"
+                    class="px-2.5 py-1 rounded-full bg-red-800 text-white text-[9px] font-bold uppercase shadow-md">
+                    Sil
+                  </button>
+                </div>
+              }
+
               <!-- Image -->
               <div class="relative w-full h-40 rounded-2xl overflow-hidden mb-3 bg-[#EDE4D8]">
                 <img [src]="product.imageUrl" [alt]="product.name" class="w-full h-full object-cover" />
                 @if (product.isSpecialty) {
-                  <span class="absolute top-2 left-2 bg-[#B87333] text-white label-caps text-[8px] px-2 py-0.5 rounded-full shadow-sm">
+                  <span class="absolute top-2 left-2 bg-[#B87333] text-white label-caps text-[8px] px-2 py-0.5 rounded-full shadow-sm font-bold">
                     İmza Lezzet
                   </span>
                 }
@@ -168,7 +223,7 @@ import { ToastService } from '../../services/toast.service';
               <div class="flex items-center justify-between pt-2 border-t border-[#D6C9B6]/60">
                 <span class="font-serif font-bold text-base text-[#3B5532]">{{ product.price }} ₺</span>
                 <button 
-                  (click)="cartService.addItem(product)"
+                  (click)="addToCart(product)"
                   class="w-9 h-9 rounded-full bg-[#526E48] text-white flex items-center justify-center shadow-md active:scale-90 transition-transform cursor-pointer">
                   <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
@@ -234,6 +289,7 @@ export class MobileAppShellComponent {
   public readonly googlePlacesService = inject(GooglePlacesService);
   public readonly authService = inject(AuthService);
   public readonly toastService = inject(ToastService);
+  public readonly assetService = inject(SiteAssetService);
 
   public readonly selectedCategory = signal<string>('all');
 
@@ -252,12 +308,36 @@ export class MobileAppShellComponent {
     return all.filter(p => p.category === cat);
   });
 
+  public handleUserButtonClick(): void {
+    if (this.authService.isLoggedIn()) {
+      this.authService.isProfileModalOpen.set(true);
+    } else {
+      this.authService.isAuthModalOpen.set(true);
+    }
+  }
+
+  public addToCart(product: Product): void {
+    this.cartService.addItem(product);
+    this.toastService.showCart(`"${product.name}" sepete eklendi!`);
+  }
+
+  public editProduct(product: Product): void {
+    this.productService.editingProduct.set(product);
+    this.assetService.openSectionEditor('menu');
+  }
+
+  public deleteProduct(product: Product): void {
+    if (confirm(`"${product.name}" ürününü menüden silmek istediğinize emin misiniz?`)) {
+      this.productService.deleteProduct(product.id);
+      this.toastService.show(`"${product.name}" menüden silindi.`);
+    }
+  }
+
   public handleAddStoryClick(): void {
-    if (this.authService.isAdmin()) {
+    if (this.authService.isSuperAdmin()) {
       this.storyService.isAdminAddOpen.set(true);
     } else {
-      this.toastService.show('🔒 Hikaye paylaşımı yalnızca Yönetici (Sayın Abdullah Keklik) tarafından yapılabilir.');
-      this.authService.isAuthModalOpen.set(true);
+      this.toastService.show('🔒 Hikaye paylaşımı yalnızca Süper Yönetici (Sayın Abdullah Keklik) tarafından yapılabilir.');
     }
   }
 
@@ -268,6 +348,12 @@ export class MobileAppShellComponent {
       if (elem) {
         elem.scrollIntoView({ behavior: 'smooth' });
       }
+    }
+  }
+
+  public scrollToTop(): void {
+    if (typeof window !== 'undefined') {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   }
 
@@ -300,7 +386,7 @@ export class MobileAppShellComponent {
   public addFeaturedToCart(): void {
     const croissant = this.productService.products().find(p => p.id === 'p1');
     if (croissant) {
-      this.cartService.addItem(croissant);
+      this.addToCart(croissant);
     }
   }
 }

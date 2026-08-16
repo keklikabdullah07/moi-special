@@ -22,7 +22,7 @@ import { SiteAssetService } from '../../services/site-asset.service';
           <button 
             (click)="assetService.openSectionEditor('header')"
             class="px-4 py-1.5 rounded-full bg-[#B87333] hover:bg-[#784000] text-white text-[10px] font-bold uppercase tracking-wider shadow-lg border border-white flex items-center gap-1.5 active:scale-95 transition-all cursor-pointer">
-            <span>✏️ Header & Menü Linklerini Canlı Düzenle</span>
+            <span>Header & Menü Linklerini Canlı Düzenle</span>
           </button>
         </div>
       }
@@ -51,17 +51,16 @@ import { SiteAssetService } from '../../services/site-asset.service';
             </div>
           </div>
 
-          <!-- ULTRA-STYLISH FLOATING HEADER NAVIGATION MENU BAR -->
-          <nav class="hidden md:flex items-center gap-1 p-1.5 rounded-full bg-[#EDE4D8]/60 border border-[#D6C9B6] shadow-xs">
+          <!-- HIGH-FASHION MINIMALIST HEADER NAVIGATION MENU BAR (NO EMOJIS, CLEAN LUXURY) -->
+          <nav class="hidden md:flex items-center gap-1.5 p-1.5 rounded-full bg-[#EDE4D8]/60 border border-[#D6C9B6] shadow-xs">
             <button 
               (click)="scrollToSection('hero')" 
               [class.bg-[#526E48]]="activeNav() === 'hero'"
               [class.text-white]="activeNav() === 'hero'"
               [class.shadow-sm]="activeNav() === 'hero'"
               [class.text-[#1F1B14]]="activeNav() !== 'hero'"
-              class="px-5 py-2.5 rounded-full font-sans text-xs font-bold uppercase tracking-widest hover:bg-[#526E48] hover:text-white transition-all duration-300 cursor-pointer flex items-center gap-1.5">
-              @if (activeNav() === 'hero') { <span class="text-[9px]">✦</span> }
-              <span>{{ assetService.navHome() }}</span>
+              class="px-6 py-2.5 rounded-full font-sans text-xs font-bold uppercase tracking-widest hover:bg-[#526E48] hover:text-white transition-all duration-300 cursor-pointer">
+              {{ assetService.navHome() }}
             </button>
             
             <button 
@@ -70,9 +69,8 @@ import { SiteAssetService } from '../../services/site-asset.service';
               [class.text-white]="activeNav() === 'menu'"
               [class.shadow-sm]="activeNav() === 'menu'"
               [class.text-[#1F1B14]]="activeNav() !== 'menu'"
-              class="px-5 py-2.5 rounded-full font-sans text-xs font-bold uppercase tracking-widest hover:bg-[#526E48] hover:text-white transition-all duration-300 cursor-pointer flex items-center gap-1.5">
-              @if (activeNav() === 'menu') { <span class="text-[9px]">✦</span> }
-              <span>{{ assetService.navMenu() }}</span>
+              class="px-6 py-2.5 rounded-full font-sans text-xs font-bold uppercase tracking-widest hover:bg-[#526E48] hover:text-white transition-all duration-300 cursor-pointer">
+              {{ assetService.navMenu() }}
             </button>
 
             <button 
@@ -81,9 +79,8 @@ import { SiteAssetService } from '../../services/site-asset.service';
               [class.text-white]="activeNav() === 'about'"
               [class.shadow-sm]="activeNav() === 'about'"
               [class.text-[#1F1B14]]="activeNav() !== 'about'"
-              class="px-5 py-2.5 rounded-full font-sans text-xs font-bold uppercase tracking-widest hover:bg-[#526E48] hover:text-white transition-all duration-300 cursor-pointer flex items-center gap-1.5">
-              @if (activeNav() === 'about') { <span class="text-[9px]">✦</span> }
-              <span>{{ assetService.navStory() }}</span>
+              class="px-6 py-2.5 rounded-full font-sans text-xs font-bold uppercase tracking-widest hover:bg-[#526E48] hover:text-white transition-all duration-300 cursor-pointer">
+              {{ assetService.navStory() }}
             </button>
 
             <button 
@@ -92,9 +89,8 @@ import { SiteAssetService } from '../../services/site-asset.service';
               [class.text-white]="activeNav() === 'contact'"
               [class.shadow-sm]="activeNav() === 'contact'"
               [class.text-[#1F1B14]]="activeNav() !== 'contact'"
-              class="px-5 py-2.5 rounded-full font-sans text-xs font-bold uppercase tracking-widest hover:bg-[#526E48] hover:text-white transition-all duration-300 cursor-pointer flex items-center gap-1.5">
-              @if (activeNav() === 'contact') { <span class="text-[9px]">✦</span> }
-              <span>{{ assetService.navContact() }}</span>
+              class="px-6 py-2.5 rounded-full font-sans text-xs font-bold uppercase tracking-widest hover:bg-[#526E48] hover:text-white transition-all duration-300 cursor-pointer">
+              {{ assetService.navContact() }}
             </button>
           </nav>
 
@@ -104,7 +100,7 @@ import { SiteAssetService } from '../../services/site-asset.service';
             <!-- User Login / Profile Avatar Button -->
             <button 
               (click)="handleUserButtonClick()"
-              class="px-4 py-2.5 rounded-full border border-[#D6C9B6] hover:border-[#526E48] bg-[#EDE4D8]/50 hover:bg-[#EDE4D8] text-[#1F1B14] text-xs font-bold uppercase tracking-wider flex items-center gap-2 transition-all cursor-pointer">
+              class="px-5 py-2.5 rounded-full border border-[#D6C9B6] hover:border-[#526E48] bg-[#EDE4D8]/50 hover:bg-[#EDE4D8] text-[#1F1B14] text-xs font-bold uppercase tracking-wider flex items-center gap-2 transition-all cursor-pointer">
               <span class="w-2.5 h-2.5 rounded-full" [class.bg-emerald-600]="authService.isLoggedIn()" [class.bg-amber-600]="!authService.isLoggedIn()"></span>
               <span>
                 @if (authService.currentUser()) {

@@ -21,9 +21,9 @@ import { SiteAssetService } from '../../services/site-asset.service';
         <!-- Section Header -->
         <div class="text-center space-y-4 max-w-3xl mx-auto">
           <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#EDE4D8] border border-[#D6C9B6] text-[#526E48] shadow-xs">
-            <span class="w-2 h-2 rounded-full bg-[#526E48] animate-ping"></span>
+            <span class="w-2 h-2 rounded-full bg-[#526E48]"></span>
             <span class="label-caps text-[10px] font-bold tracking-widest text-[#3B5532]">
-              👑 Şanlıurfa Taş Fırın Ustalığı • Günlük Taze Pişirim
+              ŞANLIURFA TAŞ FIRIN USTALIĞI • GÜNLÜK TAZE PİŞİRİM
             </span>
           </div>
 
@@ -47,16 +47,16 @@ import { SiteAssetService } from '../../services/site-asset.service';
           }
         </div>
 
-        <!-- Luxury Category Filter Tabs -->
-        <div class="flex flex-wrap items-center justify-center gap-2.5 sm:gap-3 p-1.5 rounded-full bg-[#EDE4D8]/60 border border-[#D6C9B6] max-w-3xl mx-auto shadow-xs">
+        <!-- Luxury Category Filter Tabs (No Emojis, Pure Minimalist Elegance) -->
+        <div class="flex flex-wrap items-center justify-center gap-2 sm:gap-3 p-1.5 rounded-full bg-[#EDE4D8]/60 border border-[#D6C9B6] max-w-3xl mx-auto shadow-xs">
           <button 
             (click)="setCategory('all')"
             [class.bg-[#526E48]]="productService.selectedCategory() === 'all'"
             [class.text-white]="productService.selectedCategory() === 'all'"
             [class.shadow-md]="productService.selectedCategory() === 'all'"
             [class.text-[#1F1B14]]="productService.selectedCategory() !== 'all'"
-            class="px-5 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider transition-all duration-300 cursor-pointer">
-            ✨ Tüm Lezzetler
+            class="px-6 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider transition-all duration-300 cursor-pointer">
+            Tüm Lezzetler
           </button>
 
           <button 
@@ -65,8 +65,8 @@ import { SiteAssetService } from '../../services/site-asset.service';
             [class.text-white]="productService.selectedCategory() === 'fistikli'"
             [class.shadow-md]="productService.selectedCategory() === 'fistikli'"
             [class.text-[#1F1B14]]="productService.selectedCategory() !== 'fistikli'"
-            class="px-5 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider transition-all duration-300 cursor-pointer">
-            💚 Fıstıklı Özel
+            class="px-6 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider transition-all duration-300 cursor-pointer">
+            Fıstıklı Özel
           </button>
 
           <button 
@@ -75,8 +75,8 @@ import { SiteAssetService } from '../../services/site-asset.service';
             [class.text-white]="productService.selectedCategory() === 'pastane'"
             [class.shadow-md]="productService.selectedCategory() === 'pastane'"
             [class.text-[#1F1B14]]="productService.selectedCategory() !== 'pastane'"
-            class="px-5 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider transition-all duration-300 cursor-pointer">
-            🍰 Artisan Pastane
+            class="px-6 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider transition-all duration-300 cursor-pointer">
+            Artisan Pastane
           </button>
 
           <button 
@@ -85,8 +85,8 @@ import { SiteAssetService } from '../../services/site-asset.service';
             [class.text-white]="productService.selectedCategory() === 'firin'"
             [class.shadow-md]="productService.selectedCategory() === 'firin'"
             [class.text-[#1F1B14]]="productService.selectedCategory() !== 'firin'"
-            class="px-5 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider transition-all duration-300 cursor-pointer">
-            🥖 Taş Fırın & Ekmek
+            class="px-6 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider transition-all duration-300 cursor-pointer">
+            Taş Fırın & Ekmek
           </button>
 
           <button 
@@ -95,12 +95,12 @@ import { SiteAssetService } from '../../services/site-asset.service';
             [class.text-white]="productService.selectedCategory() === 'icecek'"
             [class.shadow-md]="productService.selectedCategory() === 'icecek'"
             [class.text-[#1F1B14]]="productService.selectedCategory() !== 'icecek'"
-            class="px-5 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider transition-all duration-300 cursor-pointer">
-            ☕ Gurme İçecekler
+            class="px-6 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider transition-all duration-300 cursor-pointer">
+            Gurme İçecekler
           </button>
         </div>
 
-        <!-- Product Cards Grid (Chic Luxury Card Design) -->
+        <!-- Product Cards Grid (Clean Luxury Architecture) -->
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 sm:gap-10">
           @for (prod of productService.filteredProducts(); track prod.id) {
             <div class="group bg-white border border-[#D6C9B6] rounded-3xl overflow-hidden shadow-sm hover:shadow-2xl hover:-translate-y-1 transition-all duration-500 flex flex-col relative">
@@ -111,12 +111,12 @@ import { SiteAssetService } from '../../services/site-asset.service';
                   <button 
                     (click)="editProduct(prod)"
                     class="px-3 py-1.5 rounded-full bg-[#B87333] hover:bg-[#784000] text-white text-[10px] font-bold uppercase tracking-wider shadow-lg border border-white flex items-center gap-1 cursor-pointer">
-                    <span>✏️ Düzenle</span>
+                    <span>Düzenle</span>
                   </button>
                   <button 
                     (click)="deleteProduct(prod)"
                     class="px-3 py-1.5 rounded-full bg-red-800 hover:bg-red-900 text-white text-[10px] font-bold uppercase tracking-wider shadow-lg border border-white flex items-center gap-1 cursor-pointer">
-                    <span>🗑️ Sil</span>
+                    <span>Sil</span>
                   </button>
                 </div>
               }
@@ -192,7 +192,7 @@ export class MenuShowcaseComponent {
 
   public addToCart(product: Product): void {
     this.cartService.addItem(product);
-    this.toastService.showCart(`"${product.name}" sepete eklendi! 🥐`);
+    this.toastService.showCart(`"${product.name}" sepete eklendi!`);
   }
 
   public editProduct(product: Product): void {
