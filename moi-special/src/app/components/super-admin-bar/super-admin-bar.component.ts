@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { AuthService } from '../../services/auth.service';
 import { SiteAssetService } from '../../services/site-asset.service';
 import { AdminAnalyticsService } from '../../services/admin-analytics.service';
+import { ToastService } from '../../services/toast.service';
 
 @Component({
   selector: 'app-super-admin-bar',
@@ -46,12 +47,15 @@ import { AdminAnalyticsService } from '../../services/admin-analytics.service';
             </button>
           </div>
 
-          <!-- Right Quick Metrics & Actions -->
+          <!-- Right Quick Metrics & Safety Reset Action -->
           <div class="flex items-center gap-3">
-            <div class="hidden lg:flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 text-[11px]">
-              <span class="text-white/70">Canlı Ciro:</span>
-              <strong class="text-[#CFEFC0] font-serif">{{ analyticsService.totalTurnover() | number }} ₺</strong>
-            </div>
+            <!-- Safety Master Template Restore Button -->
+            <button 
+              (click)="restoreMasterTemplate()"
+              title="Yanlış değişikliklerde sitenin orijinal ana şablonuna geri döner"
+              class="px-3 py-1.5 rounded-full bg-white/10 hover:bg-red-900/60 text-white/90 hover:text-white border border-white/20 text-[10px] font-bold uppercase tracking-wider transition-all active:scale-95 flex items-center gap-1 cursor-pointer">
+              <span>🔄 Fabrika Şablonuna Dön</span>
+            </button>
 
             <button 
               (click)="authService.isProfileModalOpen.set(true)"
@@ -69,8 +73,16 @@ export class SuperAdminBarComponent {
   public readonly authService = inject(AuthService);
   public readonly assetService = inject(SiteAssetService);
   public readonly analyticsService = inject(AdminAnalyticsService);
+  public readonly toastService = inject(ToastService);
 
   public setEditMode(editMode: boolean): void {
     this.assetService.isEditMode.set(editMode);
+  }
+
+  public restoreMasterTemplate(): void {
+    if (confirm('Sitenin tüm görselleri ve yazıları ilk orijinal fabrika şablonuna sıfırlansın mı?')) {
+      this.assetService.resetToMasterTemplate();
+      this.toastService.show('🔄 Site Orijinal Ana Fabrika Şablonuna Başarıyla Sıfırlandı!');
+    }
   }
 }
